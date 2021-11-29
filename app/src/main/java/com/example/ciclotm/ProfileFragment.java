@@ -65,7 +65,7 @@ public class ProfileFragment extends Fragment {
         super.onResume();
 
         // Set title bar
-        ((MapsActivity) getActivity())
+        ((MenuActivity) getActivity())
                 .setActionBarTitle("Profil");
 
     }

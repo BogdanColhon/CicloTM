@@ -65,7 +65,7 @@ public class RulesFragment extends Fragment {
         super.onResume();
 
         // Set title bar
-        ((MapsActivity) getActivity())
+        ((MenuActivity) getActivity())
                 .setActionBarTitle("Legislație");
 
     }
