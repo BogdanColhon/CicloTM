@@ -3,10 +3,14 @@ package com.example.ciclotm;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,7 +18,10 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class FurturiFragment extends Fragment {
-
+    private ArrayList<Post> postsList;
+    private RecyclerView recyclerView;
+    recycleViewAdapter adapter;
+    RecyclerView.LayoutManager layoutManager;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -59,6 +66,20 @@ public class FurturiFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_furturi, container, false);
+        View view = inflater.inflate(R.layout.fragment_general, container, false);
+        recyclerView=(RecyclerView) view.findViewById(R.id.generalRView);
+        layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        postsList=new ArrayList<>();
+        setPostInfo();
+        recyclerView.setAdapter(new recycleViewAdapter(getContext(),postsList));
+        return view;
+    }
+    private void  setPostInfo(){
+        postsList.add(new Post("Furt 1","Data 1.12.2021 ora 19.00"));
+        postsList.add(new Post("Furt 2","Plecare la ora 9.00"));
+        postsList.add(new Post("Furt 3","Plecare la ora 12:00"));
+        postsList.add(new Post("Furt 4","Plecare la ora 12:00"));
+
     }
 }

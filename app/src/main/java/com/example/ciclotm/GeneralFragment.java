@@ -5,19 +5,28 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link GeneralFragment#newInstance} factory method to
+ * Use the {@link TureFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class GeneralFragment extends Fragment {
 
+    private ArrayList<Post> postsList;
+    private RecyclerView recyclerView;
+    recycleViewAdapter adapter;
+    RecyclerView.LayoutManager layoutManager;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -37,7 +46,7 @@ public class GeneralFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment GeneralFragment.
+     * @return A new instance of fragment TureFragment.
      */
     // TODO: Rename and change types and number of parameters
     public static GeneralFragment newInstance(String param1, String param2) {
@@ -48,6 +57,7 @@ public class GeneralFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,13 +72,31 @@ public class GeneralFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_general, container, false);
+        View view = inflater.inflate(R.layout.fragment_general, container, false);
+        recyclerView=(RecyclerView) view.findViewById(R.id.generalRView);
+        layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        postsList=new ArrayList<>();
+        setPostInfo();
+        recyclerView.setAdapter(new recycleViewAdapter(getContext(),postsList));
+        return view;
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public static TureFragment newInstance(){
+        return new TureFragment();
+    }
 
+    private void setAdapter(){
+        recycleViewAdapter adapter = new recycleViewAdapter(getContext(),postsList);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
+    }
+    private void  setPostInfo(){
+        postsList.add(new Post("Accident 1","Data 1.12.2021 ora 19.00"));
+        postsList.add(new Post("Accident 2","Plecare la ora 9.00"));
+        postsList.add(new Post("Accident 3","Plecare la ora 12:00"));
 
     }
 }

@@ -40,44 +40,4 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
         return 3;
     }
 
-    public ArrayList<String> getFragmentTitle() {
-        return fragmentTitle;
-    }
-
-    public void addFragment(Fragment fragment) {
-        fragmentArrayList.add(fragment);
-    }
-
-    @NonNull
-    public Fragment getItem(int position) {
-        return fragmentArrayList.get(position);
-    }
-    /* private final ArrayList<Fragment> fragmentArrayList = new ArrayList<>();
-    private final ArrayList<String> fragmentTitle = new ArrayList<>();
-
-    public ViewPagerAdapter(@NonNull FragmentManager fm, int behavior) {
-        super(fm, behavior);
-    }
-
-    @NonNull
-    @Override
-    public Fragment getItem(int position) {
-        return fragmentArrayList.get(position);
-    }
-
-    @Override
-    public int getCount() {
-        return 0;
-    }
-
-    public void addFragment(Fragment fragment, String title){
-        fragmentArrayList.add(fragment);
-        fragmentTitle.add(title);
-    }
-
-    @Nullable
-    @Override
-    public CharSequence getPageTitle(int position) {
-        return fragmentTitle.get(position);
-    }*/
 }

@@ -5,11 +5,16 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -18,6 +23,10 @@ import android.widget.TextView;
  */
 public class TureFragment extends Fragment {
 
+    private ArrayList<Post> postsList;
+    private RecyclerView recyclerView;
+    recycleViewAdapter adapter;
+    RecyclerView.LayoutManager layoutManager;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -49,6 +58,7 @@ public class TureFragment extends Fragment {
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,13 +72,34 @@ public class TureFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_ture, container, false);
+        View view = inflater.inflate(R.layout.fragment_ture, container, false);
+        recyclerView=(RecyclerView) view.findViewById(R.id.tureRView);
+        layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        postsList=new ArrayList<>();
+        setPostInfo();
+        //postsList.add(new Post("Accident","S-a produs un acciden.."));
+        //postsList.add(new Post("Unealta","Are cineva o cheie.."));
+        //postsList.add(new Post("Competitie","X-bike 2021 este o comp.."));
+        recyclerView.setAdapter(new recycleViewAdapter(getContext(),postsList));
+        return view;
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        TextView textView =view.findViewById(R.id.textViewf2);
+    public static TureFragment newInstance(){
+        return new TureFragment();
+    }
+
+    private void setAdapter(){
+        recycleViewAdapter adapter = new recycleViewAdapter(getContext(),postsList);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
+    }
+    private void  setPostInfo(){
+        postsList.add(new Post("Tura 50km","Data 1.12.2021 ora 19.00"));
+        postsList.add(new Post("Tura Granita Serbia","Plecare la ora 9.00"));
+        postsList.add(new Post("Tura Padure Giroc","Plecare la ora 12:00"));
 
     }
 }
