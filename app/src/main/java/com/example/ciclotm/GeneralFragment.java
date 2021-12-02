@@ -2,8 +2,6 @@ package com.example.ciclotm;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -23,9 +20,9 @@ import java.util.ArrayList;
  */
 public class GeneralFragment extends Fragment {
 
-    private ArrayList<Post> postsList;
+    private ArrayList<generalPost> postsList;
     private RecyclerView recyclerView;
-    recycleViewAdapter adapter;
+    generalRecycleViewAdapter adapter;
     RecyclerView.LayoutManager layoutManager;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -73,30 +70,31 @@ public class GeneralFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_general, container, false);
-        recyclerView=(RecyclerView) view.findViewById(R.id.generalRView);
+        recyclerView = (RecyclerView) view.findViewById(R.id.generalRView);
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        postsList=new ArrayList<>();
+        postsList = new ArrayList<>();
         setPostInfo();
-        recyclerView.setAdapter(new recycleViewAdapter(getContext(),postsList));
+        recyclerView.setAdapter(new generalRecycleViewAdapter(getContext(), postsList));
         return view;
     }
 
-    public static TureFragment newInstance(){
+    public static TureFragment newInstance() {
         return new TureFragment();
     }
 
-    private void setAdapter(){
-        recycleViewAdapter adapter = new recycleViewAdapter(getContext(),postsList);
+    private void setAdapter() {
+        generalRecycleViewAdapter adapter = new generalRecycleViewAdapter(getContext(), postsList);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
     }
-    private void  setPostInfo(){
-        postsList.add(new Post("Accident 1","Data 1.12.2021 ora 19.00"));
-        postsList.add(new Post("Accident 2","Plecare la ora 9.00"));
-        postsList.add(new Post("Accident 3","Plecare la ora 12:00"));
+
+    private void setPostInfo() {
+        postsList.add(new generalPost("Accident 1", "Data 1.12.2021 ora 19.00"));
+        postsList.add(new generalPost("Accident 2", "Plecare la ora 9.00"));
+        postsList.add(new generalPost("Accident 3", "Plecare la ora 12:00"));
 
     }
 }

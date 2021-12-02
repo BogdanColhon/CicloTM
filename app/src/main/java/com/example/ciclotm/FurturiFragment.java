@@ -18,9 +18,9 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class FurturiFragment extends Fragment {
-    private ArrayList<Post> postsList;
+    private ArrayList<generalPost> postsList;
     private RecyclerView recyclerView;
-    recycleViewAdapter adapter;
+    generalRecycleViewAdapter adapter;
     RecyclerView.LayoutManager layoutManager;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -67,19 +67,20 @@ public class FurturiFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_general, container, false);
-        recyclerView=(RecyclerView) view.findViewById(R.id.generalRView);
+        recyclerView = (RecyclerView) view.findViewById(R.id.generalRView);
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        postsList=new ArrayList<>();
+        postsList = new ArrayList<>();
         setPostInfo();
-        recyclerView.setAdapter(new recycleViewAdapter(getContext(),postsList));
+        recyclerView.setAdapter(new generalRecycleViewAdapter(getContext(), postsList));
         return view;
     }
-    private void  setPostInfo(){
-        postsList.add(new Post("Furt 1","Data 1.12.2021 ora 19.00"));
-        postsList.add(new Post("Furt 2","Plecare la ora 9.00"));
-        postsList.add(new Post("Furt 3","Plecare la ora 12:00"));
-        postsList.add(new Post("Furt 4","Plecare la ora 12:00"));
+
+    private void setPostInfo() {
+        postsList.add(new generalPost("Furt 1", "Data 1.12.2021 ora 19.00"));
+        postsList.add(new generalPost("Furt 2", "Plecare la ora 9.00"));
+        postsList.add(new generalPost("Furt 3", "Plecare la ora 12:00"));
+        postsList.add(new generalPost("Furt 4", "Plecare la ora 12:00"));
 
     }
 }

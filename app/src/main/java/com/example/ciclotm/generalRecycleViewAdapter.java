@@ -11,12 +11,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class recycleViewAdapter extends RecyclerView.Adapter<recycleViewAdapter.MyViewHolder>{
+public class generalRecycleViewAdapter extends RecyclerView.Adapter<generalRecycleViewAdapter.MyViewHolder>{
     Context context;
 
-    private ArrayList<Post> postsList;
+    private ArrayList<generalPost> postsList;
 
-    public recycleViewAdapter(Context context, ArrayList<Post> postsList){
+    public generalRecycleViewAdapter(Context context, ArrayList<generalPost> postsList){
         this.context=context;
         this.postsList=postsList;
     }
@@ -32,13 +32,13 @@ public class recycleViewAdapter extends RecyclerView.Adapter<recycleViewAdapter.
     }
     @NonNull
     @Override
-    public recycleViewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public generalRecycleViewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.community_general_card_layout,parent,false);
         return new MyViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull recycleViewAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull generalRecycleViewAdapter.MyViewHolder holder, int position) {
         String title= postsList.get(position).getTitle();
         holder.title.setText(title);
         String content= postsList.get(position).getContent();

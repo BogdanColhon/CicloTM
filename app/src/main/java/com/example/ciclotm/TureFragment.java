@@ -2,8 +2,7 @@ package com.example.ciclotm;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -23,9 +21,9 @@ import java.util.ArrayList;
  */
 public class TureFragment extends Fragment {
 
-    private ArrayList<Post> postsList;
+    private ArrayList<turePost> postsList;
     private RecyclerView recyclerView;
-    recycleViewAdapter adapter;
+    generalRecycleViewAdapter adapter;
     RecyclerView.LayoutManager layoutManager;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -73,33 +71,24 @@ public class TureFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_ture, container, false);
-        recyclerView=(RecyclerView) view.findViewById(R.id.tureRView);
+        recyclerView = (RecyclerView) view.findViewById(R.id.tureRView);
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        postsList=new ArrayList<>();
+        postsList = new ArrayList<>();
         setPostInfo();
-        //postsList.add(new Post("Accident","S-a produs un acciden.."));
-        //postsList.add(new Post("Unealta","Are cineva o cheie.."));
-        //postsList.add(new Post("Competitie","X-bike 2021 este o comp.."));
-        recyclerView.setAdapter(new recycleViewAdapter(getContext(),postsList));
+        recyclerView.setAdapter(new tureRecycleViewAdapter(getContext(), postsList));
         return view;
     }
 
-    public static TureFragment newInstance(){
+    public static TureFragment newInstance() {
         return new TureFragment();
     }
 
-    private void setAdapter(){
-        recycleViewAdapter adapter = new recycleViewAdapter(getContext(),postsList);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getContext());
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
-    }
-    private void  setPostInfo(){
-        postsList.add(new Post("Tura 50km","Data 1.12.2021 ora 19.00"));
-        postsList.add(new Post("Tura Granita Serbia","Plecare la ora 9.00"));
-        postsList.add(new Post("Tura Padure Giroc","Plecare la ora 12:00"));
+
+    private void setPostInfo() {
+        postsList.add(new turePost("Distanta - 40", "Ora plecare - 12:00", "Punct de plecare - Giratoriu AEM", "Participanti - 1", ResourcesCompat.getDrawable(getResources(), R.drawable.user_photo, null)));
+        postsList.add(new turePost("Distanta - 20", "Ora plecare - 18:00", "Punct de plecare - Stadion", "Participanti - 2", ResourcesCompat.getDrawable(getResources(), R.drawable.user_photo, null)));
+        postsList.add(new turePost("Distanta - 15", "Ora plecare - 12:00", "Punct de plecare - Stadion", "Participanti - 1", ResourcesCompat.getDrawable(getResources(), R.drawable.user_photo, null)));
 
     }
 }

@@ -1,10 +1,10 @@
 package com.example.ciclotm;
 
-public class Post {
+public class generalPost {
     private String title;
     private String content;
 
-    public Post(String title,String content){
+    public generalPost(String title, String content){
         this.title=title;
         this.content=content;
     }

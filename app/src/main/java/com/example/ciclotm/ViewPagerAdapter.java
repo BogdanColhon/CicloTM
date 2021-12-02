@@ -17,6 +17,7 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
 
     ArrayList<Fragment> fragmentArrayList = new ArrayList<>();
     ArrayList<String> fragmentTitle;
+
     public ViewPagerAdapter(@NonNull CommunityFragment fragmentActivity) {
         super(fragmentActivity);
     }
@@ -25,7 +26,7 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
     @Override
     public Fragment createFragment(int position) {
 
-        switch (position){
+        switch (position) {
             case 1:
                 return new TureFragment();
             case 2:
