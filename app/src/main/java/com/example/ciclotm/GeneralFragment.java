@@ -2,6 +2,7 @@ package com.example.ciclotm;
 
 import android.os.Bundle;
 
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -92,9 +93,9 @@ public class GeneralFragment extends Fragment {
     }
 
     private void setPostInfo() {
-        postsList.add(new generalPost("Accident 1", "Data 1.12.2021 ora 19.00"));
-        postsList.add(new generalPost("Accident 2", "Plecare la ora 9.00"));
-        postsList.add(new generalPost("Accident 3", "Plecare la ora 12:00"));
+        postsList.add(new generalPost("Accident 1", "Data 1.12.2021 ora 19.00", ResourcesCompat.getDrawable(getResources(), R.drawable.user_photo, null)));
+        postsList.add(new generalPost("Accident 2", "Plecare la ora 9.00",ResourcesCompat.getDrawable(getResources(), R.drawable.user_photo, null)));
+        postsList.add(new generalPost("Accident 3", "Plecare la ora 12:00",ResourcesCompat.getDrawable(getResources(), R.drawable.user_photo, null)));
 
     }
 }

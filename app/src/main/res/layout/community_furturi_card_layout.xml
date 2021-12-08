@@ -18,9 +18,9 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/user_photo"
-                android:layout_width="60dp"
-                android:layout_height="80dp"
+                android:id="@+id/bike_photo"
+                android:layout_width="151dp"
+                android:layout_height="104dp"
                 android:layout_weight="0"
                 tools:srcCompat="@tools:sample/avatars" />
 
@@ -32,26 +32,31 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="16"
                 android:gravity="center"
+                android:layout_weight="16"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/upperTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Titlu"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:text="Data"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/middleTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:textColor="@color/black"
-                    android:textSize="25dp" />
+                    android:text="Locatie" />
 
                 <TextView
                     android:id="@+id/lowerTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Continut"
-                    android:textSize="18dp"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    android:text="Descriere bicicleta" />
+
 
             </LinearLayout>
 

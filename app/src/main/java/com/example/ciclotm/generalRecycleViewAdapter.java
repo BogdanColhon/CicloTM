@@ -1,9 +1,11 @@
 package com.example.ciclotm;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,10 +26,12 @@ public class generalRecycleViewAdapter extends RecyclerView.Adapter<generalRecyc
     public class MyViewHolder extends RecyclerView.ViewHolder{
         TextView title;
         TextView content;
+        ImageView user_photo;
         public MyViewHolder(final View view){
             super(view);
             title=(TextView) view.findViewById(R.id.upperTextView);
             content=(TextView) view.findViewById(R.id.lowerTextView);
+            user_photo=(ImageView) view.findViewById(R.id.user_photo);
         }
     }
     @NonNull
@@ -43,6 +47,8 @@ public class generalRecycleViewAdapter extends RecyclerView.Adapter<generalRecyc
         holder.title.setText(title);
         String content= postsList.get(position).getContent();
         holder.content.setText(content);
+        Drawable user_photo=postsList.get(position).getUser_photo();
+        holder.user_photo.setImageDrawable(user_photo);
     }
 
     @Override

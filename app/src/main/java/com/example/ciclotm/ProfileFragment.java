@@ -7,6 +7,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -15,6 +19,9 @@ import android.view.ViewGroup;
  */
 public class ProfileFragment extends Fragment {
 
+
+    String [] button_names = {"Biciclete","Statistici","Postări comunitate","Editează profil"};
+    ArrayList<profileListViewButton> profile_buttons = new ArrayList<>();
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -59,7 +66,16 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        ListView profileListView = (ListView) view.findViewById(R.id.profileListView);
+        for(int i=0;i<button_names.length;i++)
+        {
+         profileListViewButton button = new profileListViewButton(button_names[i],">");
+         profile_buttons.add(button);
+        }
+        profileListViewAdapter adapter = new profileListViewAdapter (getContext(),profile_buttons);
+        profileListView.setAdapter(adapter);
+        return view;
     }
     public void onResume(){
         super.onResume();

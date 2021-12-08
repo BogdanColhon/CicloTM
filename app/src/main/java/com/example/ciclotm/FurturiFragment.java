@@ -2,6 +2,7 @@ package com.example.ciclotm;
 
 import android.os.Bundle;
 
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class FurturiFragment extends Fragment {
-    private ArrayList<generalPost> postsList;
+    private ArrayList<furturiPost> postsList;
     private RecyclerView recyclerView;
     generalRecycleViewAdapter adapter;
     RecyclerView.LayoutManager layoutManager;
@@ -66,21 +67,20 @@ public class FurturiFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_general, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.generalRView);
+        View view = inflater.inflate(R.layout.fragment_furturi, container, false);
+        recyclerView = (RecyclerView) view.findViewById(R.id.furturiRView);
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         postsList = new ArrayList<>();
         setPostInfo();
-        recyclerView.setAdapter(new generalRecycleViewAdapter(getContext(), postsList));
+        recyclerView.setAdapter(new furturiRecycleViewAdapter(getContext(), postsList));
         return view;
     }
 
     private void setPostInfo() {
-        postsList.add(new generalPost("Furt 1", "Data 1.12.2021 ora 19.00"));
-        postsList.add(new generalPost("Furt 2", "Plecare la ora 9.00"));
-        postsList.add(new generalPost("Furt 3", "Plecare la ora 12:00"));
-        postsList.add(new generalPost("Furt 4", "Plecare la ora 12:00"));
+        postsList.add(new furturiPost("02.12.2021", "Iulius Mall", "Cursiera Triban neagra", ResourcesCompat.getDrawable(getResources(), R.drawable.bike2, null)));
+        postsList.add(new furturiPost("20.11.2021", "Calea Martirilor nr 42 SC A", "Bicicleta de oras Diamant, neagra", ResourcesCompat.getDrawable(getResources(), R.drawable.bike1, null)));
+
 
     }
 }
