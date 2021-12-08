@@ -19,14 +19,14 @@
             android:layout_width="match_parent"
             android:layout_weight="2"
             android:layout_height="0dp" />
-
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imageView2"
             android:layout_width="100dp"
             android:layout_height="0dp"
             android:layout_gravity="center"
             android:layout_weight="5"
-            android:src="@drawable/user_photo" />
+            android:src="@drawable/user_photo"/>
+
 
         <Space
             android:layout_width="match_parent"
@@ -60,7 +60,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="5"
-                android:src="@drawable/bike" />
+                android:src="@drawable/bike1" />
 
             <Space
                 android:layout_width="0dp"
@@ -84,7 +84,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="5"
-                android:src="@drawable/bike" />
+                android:src="@drawable/bike2" />
 
             <Space
                 android:layout_width="0dp"
@@ -100,10 +100,17 @@
                 android:background="@drawable/gallery_button" />
         </LinearLayout>
 
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="20"
+            android:layout_weight="15"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
             android:orientation="vertical">
 
             <ListView
