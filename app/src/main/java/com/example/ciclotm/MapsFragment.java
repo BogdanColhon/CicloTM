@@ -7,15 +7,20 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -24,9 +29,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
  * Use the {@link MapsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MapsFragment extends Fragment{
-
+public class MapsFragment extends Fragment {
+    private final int REQ_PERMISSION = 5;
     private MapView mapView;
+    private GoogleMap map;
+
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -74,13 +81,58 @@ public class MapsFragment extends Fragment{
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_maps, container, false);
         mapView = view.findViewById(R.id.mapView);
+        mapView.onCreate(savedInstanceState);
+        try {
+            MapsInitializer.initialize(getActivity().getApplicationContext());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        mapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap mMap) {
+                MapsInitializer.initialize(getContext());
+                map = mMap;
+                map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                if (checkPermission()) {
+                    mMap.setMyLocationEnabled(true);
+                } else
+                    askPermission();
+
+                LatLng city_center = new LatLng(45.75804742621145, 21.228941951330423);
+                LatLng uzina_apa = new LatLng(45.75816629861165, 21.264868478011984);
+                CameraPosition city= CameraPosition.builder().target(city_center).zoom(16).build();
+                map.addMarker(new MarkerOptions()
+                        .position(uzina_apa)
+                        .title("Uzina de apă"));
+                map.moveCamera(CameraUpdateFactory.newCameraPosition(city));
+
+
+
+            }
+        });
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mapView.onCreate(savedInstanceState);
+    }
+
+
+    // Check for permission to access Location
+    private boolean checkPermission() {
+        // Ask for permission if it wasn't granted yet
+        return (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED);
+    }
+
+    // Asks for permission
+    private void askPermission() {
+        ActivityCompat.requestPermissions(
+                getActivity(),
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                REQ_PERMISSION
+        );
     }
 
     @Override
