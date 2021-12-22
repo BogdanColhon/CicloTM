@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class ProfileFragment extends Fragment {
 
 
-    String[] button_names = {"Biciclete", "Statistici", "Postări comunitate", "Editează profil"};
+    String[] button_names = {"Biciclete", "Statistici", "Postări comunitate"};
     ArrayList<profileListViewButton> profile_buttons = new ArrayList<>();
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -91,10 +91,6 @@ public class ProfileFragment extends Fragment {
                         break;
                     case 2:
                         i = new Intent(getActivity(), CommunityPostsActivity.class);
-                        startActivity(i);
-                        break;
-                    case 3:
-                        i = new Intent(getActivity(), EditProfileActivity.class);
                         startActivity(i);
                         break;
                 }
