@@ -15,6 +15,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clicked(View view) {
-        startActivity(new Intent(MainActivity.this,MapsActivity.class));
+        startActivity(new Intent(MainActivity.this, MenuActivity.class));
     }
 }

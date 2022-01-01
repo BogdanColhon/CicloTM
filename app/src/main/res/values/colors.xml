@@ -8,4 +8,5 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="navBar_color">#020202</color>
+    <color name="reportColor">#EEEEEE</color>
 </resources>
