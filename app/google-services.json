@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "16477269425",
+    "project_id": "ciclotm",
+    "storage_bucket": "ciclotm.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:16477269425:android:0c89018d5ab9af2f57a190",
+        "android_client_info": {
+          "package_name": "com.example.ciclotm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "16477269425-s7ki9306epknm9hvo6r5nmc8hu778gu0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBsQT-d5vnPmfOwaIXwFR1OnsOfLJQN6sU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "16477269425-s7ki9306epknm9hvo6r5nmc8hu778gu0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
