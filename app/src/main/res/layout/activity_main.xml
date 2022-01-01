@@ -80,7 +80,7 @@
                 android:layout_height="40sp"
                 android:background="@drawable/login_button_shape"
                 android:focusable="true"
-                android:onClick="clicked"
+                android:onClick="clickedLogin"
                 android:paddingStart="10dp"
                 android:paddingTop="0dp"
                 android:paddingEnd="10dp"
@@ -95,7 +95,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/buttonRegister"
             android:layout_width="wrap_content"
             android:layout_height="40sp"
             android:background="@drawable/login_button_shape"
@@ -110,6 +110,7 @@
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="17sp"
+            android:onClick="clickedRegister"
             app:backgroundTint="@null" />
 
         <Space
