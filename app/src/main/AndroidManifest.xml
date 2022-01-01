@@ -35,8 +35,7 @@
             android:exported="false" />
         <activity
             android:name=".BicyclesActivity"
-            android:exported="false"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+            android:exported="false" />
         <activity
             android:name=".MenuActivity"
             android:exported="false" />
