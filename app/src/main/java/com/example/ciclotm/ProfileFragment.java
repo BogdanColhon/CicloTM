@@ -1,6 +1,8 @@
 package com.example.ciclotm;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,10 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -22,7 +26,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -43,6 +52,8 @@ public class ProfileFragment extends Fragment {
     private DatabaseReference reference;
     private String userID;
     private Calendar today, birthday;
+    ImageView userProfileImageView;
+    private StorageReference storageReference;
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -94,6 +105,7 @@ public class ProfileFragment extends Fragment {
 
         final TextView nameTextView = (TextView) view.findViewById(R.id.profileNameTextView);
         final TextView ageTextView = (TextView) view.findViewById(R.id.profileAgeTextView);
+        userProfileImageView = (ImageView) view.findViewById(R.id.userProfileImageView);
 
         reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -115,6 +127,11 @@ public class ProfileFragment extends Fragment {
 
                     nameTextView.setText(firstname + " " + lastname);
                     ageTextView.setText(String.valueOf(age));
+                    try {
+                        getUserProfilePhoto();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
@@ -159,6 +176,17 @@ public class ProfileFragment extends Fragment {
 
 
         return view;
+    }
+    public void getUserProfilePhoto() throws IOException {
+        storageReference = FirebaseStorage.getInstance().getReference().child("UsersProfilePictures/person.png");
+        File localFile= File.createTempFile("tempFile","png");
+        storageReference.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                userProfileImageView.setImageBitmap(bitmap);
+            }
+        });
     }
 
     public void onResume() {
