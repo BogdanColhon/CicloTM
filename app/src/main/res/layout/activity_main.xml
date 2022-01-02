@@ -33,13 +33,13 @@
             android:orientation="vertical">
 
             <EditText
-                android:id="@+id/editTextTextPersonName2"
+                android:id="@+id/editTextTextLoginEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:background="@drawable/login_edit_text"
                 android:ems="10"
-                android:hint="utilizator"
+                android:hint="Email"
                 android:inputType="textPersonName" />
 
             <Space
@@ -48,13 +48,13 @@
                 android:layout_weight="1"/>
 
             <EditText
-                android:id="@+id/editTextTextPersonName"
+                android:id="@+id/editTextTextLoginPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:background="@drawable/login_edit_text"
                 android:ems="10"
-                android:hint="parola"
+                android:hint="Parola"
                 android:inputType="textPersonName" />
         </LinearLayout>
         <LinearLayout

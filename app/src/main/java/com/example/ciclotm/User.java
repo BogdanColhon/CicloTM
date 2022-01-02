@@ -1,9 +1,14 @@
 package com.example.ciclotm;
 
-public class User {
-    public String LastName,FirstName,BirthDate,PhoneNumber,PhoneId,Email;
+import java.util.Date;
 
-    public User(String LastName,String FirstName,String BirthDate, String PhoneNumber, String PhoneId, String Email){
+public class User {
+    public String LastName,FirstName,PhoneNumber,PhoneId,Email;
+    public Date BirthDate;
+
+    public User(){}
+
+    public User(String LastName,String FirstName,Date BirthDate, String PhoneNumber, String PhoneId, String Email){
         this.LastName=LastName;
         this.FirstName=FirstName;
         this.BirthDate=BirthDate;
