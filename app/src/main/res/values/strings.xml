@@ -5,6 +5,9 @@
     <string name="title_activity_main2">MainActivity2</string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
+    <string name="phoneid_info">Această informație este utilizată pentru a impiedica crearea mai multor conturi de pe același dispozitiv. Astfel, se încearcă reducerea </string>
+    <string name="agree_to_terms">Accept condiția</string>
+    <string name="db_instance">https://ciclotm-default-rtdb.europe-west1.firebasedatabase.app/</string>
     <string name="google_maps_api_key" templateMergeStrategy="preserve" translatable="false">
         AIzaSyBxKIIdJjBiOeXunsR0MX3h-KDCiNmTqrk
     </string>
