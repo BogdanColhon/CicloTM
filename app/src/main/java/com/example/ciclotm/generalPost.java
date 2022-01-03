@@ -2,15 +2,23 @@ package com.example.ciclotm;
 
 import android.graphics.drawable.Drawable;
 
+import java.util.Date;
+
 public class generalPost {
     private String title;
     private String content;
-    private Drawable user_photo;
+    private Date date;
+    private String uid;
 
-    public generalPost(String title, String content, Drawable user_photo) {
+    public generalPost(){
+
+    }
+
+    public generalPost(String title, String content, Date date, String uid) {
         this.title = title;
         this.content = content;
-        this.user_photo = user_photo;
+        this.date = date;
+        this.uid = uid;
     }
 
     public String getContent() {
@@ -21,9 +29,14 @@ public class generalPost {
         return title;
     }
 
-    public Drawable getUser_photo() {
-        return user_photo;
+    public Date getDate() {
+        return date;
     }
+
+    public String getUid() {
+        return uid;
+    }
+
 
     public void setContent(String content) {
         this.content = content;
@@ -33,7 +46,12 @@ public class generalPost {
         this.title = title;
     }
 
-    public void setUser_photo(Drawable user_photo) {
-        this.user_photo = user_photo;
+    public void setDate(Date date) {
+        this.date = date;
     }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
 }

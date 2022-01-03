@@ -178,7 +178,7 @@ public class ProfileFragment extends Fragment {
         return view;
     }
     public void getUserProfilePhoto() throws IOException {
-        storageReference = FirebaseStorage.getInstance().getReference().child("UsersProfilePictures/person.png");
+        storageReference = FirebaseStorage.getInstance().getReference().child("UsersProfilePicture/person.png");
         File localFile= File.createTempFile("tempFile","png");
         storageReference.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
             @Override

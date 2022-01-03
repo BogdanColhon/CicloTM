@@ -1,16 +1,29 @@
 package com.example.ciclotm;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.TextView;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -21,10 +34,13 @@ import java.util.ArrayList;
  */
 public class GeneralFragment extends Fragment {
 
-    private ArrayList<generalPost> postsList;
+    private ArrayList<generalPost> postsList=new ArrayList<>();
+    TextView generalPostsNumberTextView;
     private RecyclerView recyclerView;
     generalRecycleViewAdapter adapter;
     RecyclerView.LayoutManager layoutManager;
+    private DatabaseReference reference;
+    private int counter=0;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -74,9 +90,20 @@ public class GeneralFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.generalRView);
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        postsList = new ArrayList<>();
-        setPostInfo();
-        recyclerView.setAdapter(new generalRecycleViewAdapter(getContext(), postsList));
+        adapter= new generalRecycleViewAdapter(getContext(),postsList);
+        recyclerView.setAdapter(adapter);
+        fetchPostsInfo();
+        fetchPostsNumber();
+        System.out.println(postsList.size());
+        ImageButton addPost = (ImageButton) view.findViewById(R.id.addPostImageButton);
+        addPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), GeneralPostActivity.class));
+            }
+        });
+        generalPostsNumberTextView = (TextView) view.findViewById(R.id.generalPostsNumberTextView);
+
         return view;
     }
 
@@ -92,10 +119,53 @@ public class GeneralFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
-    private void setPostInfo() {
-        postsList.add(new generalPost("Accident 1", "Data 1.12.2021 ora 19.00", ResourcesCompat.getDrawable(getResources(), R.drawable.user_photo, null)));
-        postsList.add(new generalPost("Accident 2", "Plecare la ora 9.00",ResourcesCompat.getDrawable(getResources(), R.drawable.user_photo, null)));
-        postsList.add(new generalPost("Accident 3", "Plecare la ora 12:00",ResourcesCompat.getDrawable(getResources(), R.drawable.user_photo, null)));
+    private void fetchPostsInfo() {
+        reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("GeneralPosts");
+        reference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                generalPost newPost = snapshot.getValue(generalPost.class);
+                    postsList.add(newPost);
+                    adapter.notifyDataSetChanged();
+            }
 
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void fetchPostsNumber(){
+        reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("GeneralPosts");
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snap: dataSnapshot.getChildren()) {
+                    Log.e(snap.getKey(),snap.getChildrenCount() + "");
+                    generalPostsNumberTextView.setText(String.valueOf((int) snap.getChildrenCount()));
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }});
     }
 }

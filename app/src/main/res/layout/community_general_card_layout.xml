@@ -17,12 +17,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/user_photo"
                 android:layout_width="60dp"
                 android:layout_height="80dp"
                 android:layout_weight="0"
-                tools:srcCompat="@tools:sample/avatars" />
+                android:src="@drawable/user_photo" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -41,9 +41,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Titlu"
+                    android:singleLine="true"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                     android:textColor="@color/black"
                     android:textSize="25dp" />
+
+                <TextView
+                    android:id="@+id/middleGeneralTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="10dp"
+                    android:text="-" />
 
                 <TextView
                     android:id="@+id/lowerTextView"
@@ -51,6 +60,7 @@
                     android:layout_height="wrap_content"
                     android:text="Continut"
                     android:textSize="18dp"
+                    android:singleLine="true"
                     android:textColor="@color/black" />
 
             </LinearLayout>
