@@ -1,7 +1,10 @@
 package com.example.ciclotm;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -11,6 +14,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.TextView;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -21,10 +33,12 @@ import java.util.ArrayList;
  */
 public class TureFragment extends Fragment {
 
-    private ArrayList<turePost> postsList;
+    private ArrayList<turePost> postsList = new ArrayList<>();
+    TextView turePostsNumberTextView;
     private RecyclerView recyclerView;
-    generalRecycleViewAdapter adapter;
+    tureRecycleViewAdapter adapter;
     RecyclerView.LayoutManager layoutManager;
+    private DatabaseReference reference;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -74,21 +88,67 @@ public class TureFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.tureRView);
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        postsList = new ArrayList<>();
-        setPostInfo();
-        recyclerView.setAdapter(new tureRecycleViewAdapter(getContext(), postsList));
+        adapter = new tureRecycleViewAdapter(getContext(), postsList);
+        recyclerView.setAdapter(adapter);
+        fetchPostsInfo();
+        fetchPostsNumber();
+        System.out.println(postsList.size());
+        ImageButton addPost = (ImageButton) view.findViewById(R.id.addPostImageButton);
+        addPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), TurePostActivity.class));
+            }
+        });
+        turePostsNumberTextView = (TextView) view.findViewById(R.id.turePostsNumberTextView);
         return view;
     }
 
-    public static TureFragment newInstance() {
-        return new TureFragment();
+    private void fetchPostsInfo() {
+        reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("TurePosts");
+        reference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                turePost newPost = snapshot.getValue(turePost.class);
+                postsList.add(0,newPost);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
+    private void fetchPostsNumber() {
+        reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Globals/GeneralPostsNumber");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                String count = snapshot.getValue().toString();
+                turePostsNumberTextView.setText(count);
+            }
 
-    private void setPostInfo() {
-        postsList.add(new turePost("Distanta - 40", "Ora plecare - 12:00", "Punct de plecare - Giratoriu AEM", "Participanti - 1", ResourcesCompat.getDrawable(getResources(), R.drawable.user_photo, null)));
-        postsList.add(new turePost("Distanta - 20", "Ora plecare - 18:00", "Punct de plecare - Stadion", "Participanti - 2", ResourcesCompat.getDrawable(getResources(), R.drawable.user_photo, null)));
-        postsList.add(new turePost("Distanta - 15", "Ora plecare - 12:00", "Punct de plecare - Stadion", "Participanti - 1", ResourcesCompat.getDrawable(getResources(), R.drawable.user_photo, null)));
-
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
     }
+
 }

@@ -1,9 +1,13 @@
 package com.example.ciclotm;
 
+import android.content.ClipData;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +33,7 @@ import java.util.Locale;
 public class generalRecycleViewAdapter extends RecyclerView.Adapter<generalRecycleViewAdapter.MyViewHolder>{
     Context context;
     private StorageReference storageReference;
-
+    private int ItemCount=0;
     private ArrayList<generalPost> postsList;
 
     public generalRecycleViewAdapter(Context context, ArrayList<generalPost> postsList){
@@ -83,11 +87,16 @@ public class generalRecycleViewAdapter extends RecyclerView.Adapter<generalRecyc
                 holder.user_photo.setImageBitmap(bitmap);
             }
         });
+        Bundle args = new Bundle();
+        args.putString("ItemCount", String.valueOf(ItemCount));
+        GeneralFragment GeneralFragment = new GeneralFragment();
+        GeneralFragment.setArguments(args);
 
     }
 
     @Override
     public int getItemCount() {
+        ItemCount=postsList.size();
         return postsList.size();
     }
 

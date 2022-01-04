@@ -11,4 +11,8 @@
     <string name="google_maps_api_key" templateMergeStrategy="preserve" translatable="false">
         AIzaSyBxKIIdJjBiOeXunsR0MX3h-KDCiNmTqrk
     </string>
+    <string name="title_activity_ture_post">TurePostActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>

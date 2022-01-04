@@ -22,7 +22,7 @@
         <activity
             android:name=".ForgotPasswordActivity"
             android:exported="false"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
             android:name=".RegisterActivity"
             android:exported="false"
@@ -46,6 +46,9 @@
             android:exported="false" />
         <activity
             android:name=".BicyclesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TurePostActivity"
             android:exported="false" />
         <activity
             android:name=".MenuActivity"

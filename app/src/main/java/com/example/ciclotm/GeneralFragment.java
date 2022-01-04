@@ -34,13 +34,13 @@ import java.util.ArrayList;
  */
 public class GeneralFragment extends Fragment {
 
-    private ArrayList<generalPost> postsList=new ArrayList<>();
+    private ArrayList<generalPost> postsList = new ArrayList<>();
     TextView generalPostsNumberTextView;
     private RecyclerView recyclerView;
     generalRecycleViewAdapter adapter;
     RecyclerView.LayoutManager layoutManager;
     private DatabaseReference reference;
-    private int counter=0;
+    private int counter = 0;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -90,7 +90,7 @@ public class GeneralFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.generalRView);
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        adapter= new generalRecycleViewAdapter(getContext(),postsList);
+        adapter = new generalRecycleViewAdapter(getContext(), postsList);
         recyclerView.setAdapter(adapter);
         fetchPostsInfo();
         fetchPostsNumber();
@@ -107,9 +107,6 @@ public class GeneralFragment extends Fragment {
         return view;
     }
 
-    public static TureFragment newInstance() {
-        return new TureFragment();
-    }
 
     private void setAdapter() {
         generalRecycleViewAdapter adapter = new generalRecycleViewAdapter(getContext(), postsList);
@@ -125,8 +122,8 @@ public class GeneralFragment extends Fragment {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 generalPost newPost = snapshot.getValue(generalPost.class);
-                    postsList.add(newPost);
-                    adapter.notifyDataSetChanged();
+                postsList.add(0,newPost);
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -151,21 +148,18 @@ public class GeneralFragment extends Fragment {
         });
     }
 
-    private void fetchPostsNumber(){
-        reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("GeneralPosts");
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+    private void fetchPostsNumber() {
+        reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Globals/GeneralPostsNumber");
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snap: dataSnapshot.getChildren()) {
-                    Log.e(snap.getKey(),snap.getChildrenCount() + "");
-                    generalPostsNumberTextView.setText(String.valueOf((int) snap.getChildrenCount()));
-
-                }
+            public void onDataChange(DataSnapshot snapshot) {
+                String count = snapshot.getValue().toString();
+                generalPostsNumberTextView.setText(count);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
-            }});
+            }
+        });
     }
 }
