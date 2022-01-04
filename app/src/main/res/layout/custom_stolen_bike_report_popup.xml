@@ -1,181 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="fill_parent"
-    android:layout_height="700dp"
-    android:layout_gravity="center"
-    android:background="@color/reportColor"
-    android:orientation="vertical"
-    android:padding="5dp">
-
-    <TextView
-        android:id="@+id/reportText"
-        android:layout_width="500dp"
-        android:layout_height="0dp"
-        android:layout_gravity="center"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:text="Raport furt"
-        android:textColor="@color/black"
-        android:textSize="30dp"
-        android:textStyle="bold" />
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="4"
-        android:background="@drawable/custom_report"
+        android:layout_height="match_parent"
+        android:background="@color/reportColor"
         android:orientation="vertical"
-        android:paddingStart="15dip"
-        android:paddingTop="20dip"
-        android:paddingEnd="15dip"
-        android:paddingBottom="20dip">
+        android:padding="5dp">
 
         <TextView
-            android:id="@+id/generalsTitleTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1.5"
-            android:text="Info general"
+            android:id="@+id/reportText"
+            android:layout_width="500dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Raport furt"
             android:textColor="@color/black"
-            android:textSize="20dp"
+            android:textSize="30dp"
             android:textStyle="bold" />
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="2"
-            android:text="Ora"
-            android:textSize="15dp" />
-
-        <EditText
-            android:id="@+id/addressReportEditText"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
-            android:text="Adresa"
-            android:textSize="15dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="5"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_report"
+            android:orientation="vertical"
+            android:paddingStart="15dip"
+            android:paddingTop="20dip"
+            android:paddingEnd="15dip"
+            android:paddingBottom="20dip">
+
+            <TextView
+                android:id="@+id/generalsTitleTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Info general"
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Ora"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/addressReportEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Adresa"
+                android:textSize="15dp" />
+
 
             <ImageButton
                 android:id="@+id/imageButton3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/ic_baseline_insert_photo_24" />
+
         </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="4"
-        android:background="@drawable/custom_report"
-        android:orientation="vertical"
-        android:paddingStart="15dip"
-        android:paddingTop="20dip"
-        android:paddingEnd="15dip"
-        android:paddingBottom="20dip">
-
-        <TextView
-            android:id="@+id/bikeInfoTitleTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1.5"
-            android:text="Info bicicletă"
-            android:textColor="@color/black"
-            android:textSize="20dp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/brandReportEditText"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="2"
-            android:text="marca"
-            android:textSize="15dp" />
-
-        <EditText
-            android:id="@+id/modelReportEditText"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
-            android:text="model"
-            android:textSize="15dp" />
-
-        <EditText
-            android:id="@+id/colorReportEditText"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
-            android:text="culoare"
-            android:textSize="15dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="4"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_report"
+            android:orientation="vertical"
+            android:paddingStart="15dip"
+            android:paddingTop="20dip"
+            android:paddingEnd="15dip"
+            android:paddingBottom="20dip">
 
-            <ImageButton
-                android:id="@+id/imageButton4"
+            <TextView
+                android:id="@+id/bikeInfoTitleTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/bike2" />
+                android:text="Info bicicletă"
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/brandReportEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="marca"
+                android:textSize="15dp" />
+
+            <EditText
+                android:id="@+id/modelReportEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="model"
+                android:textSize="15dp" />
+
+            <EditText
+                android:id="@+id/colorReportEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="culoare"
+                android:textSize="15dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/imageButton4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_baseline_insert_photo_24"  />
+            </LinearLayout>
+
         </LinearLayout>
 
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:background="@drawable/custom_report"
-        android:orientation="vertical"
-        android:paddingStart="15dip"
-        android:paddingTop="20dip"
-        android:paddingEnd="10dip"
-        android:paddingBottom="10dip">
-
-        <TextView
-            android:id="@+id/thiefInfoTitleTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.5"
-            android:text="Info hoț"
-            android:textColor="@color/black"
-            android:textSize="20dp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/thiefDescriptionReportEditText"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="80dip"
-            android:layout_marginBottom="20dip"
-            android:text="descriere"
-            android:textSize="15dp" />
+            android:background="@drawable/custom_report"
+            android:orientation="vertical"
+            android:paddingStart="15dip"
+            android:paddingTop="20dip"
+            android:paddingEnd="15dip"
+            android:paddingBottom="20dip">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/button3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:clickable="true"
-            android:onClick="showStolenBikeReportPopup"
-            android:src="@drawable/ic_baseline_check_24"
-            app:backgroundTint="@color/black" />
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/thiefInfoTitleTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Info hoț"
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                android:textStyle="bold" />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.5" />
-</LinearLayout>
+            <EditText
+                android:id="@+id/thiefDescriptionReportEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="descriere"
+                android:textSize="15dp" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/button3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="right"
+                android:clickable="true"
+                android:onClick="showStolenBikeReportPopup"
+                android:src="@drawable/ic_baseline_check_24"
+                app:backgroundTint="@color/black" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
 

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -88,12 +89,12 @@ public class GeneralFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_general, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.generalRView);
+        generalPostsNumberTextView = (TextView) view.findViewById(R.id.generalPostsNumberTextView);
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         adapter = new generalRecycleViewAdapter(getContext(), postsList);
         recyclerView.setAdapter(adapter);
         fetchPostsInfo();
-        fetchPostsNumber();
         System.out.println(postsList.size());
         ImageButton addPost = (ImageButton) view.findViewById(R.id.addPostImageButton);
         addPost.setOnClickListener(new View.OnClickListener() {
@@ -102,8 +103,15 @@ public class GeneralFragment extends Fragment {
                 startActivity(new Intent(getActivity(), GeneralPostActivity.class));
             }
         });
-        generalPostsNumberTextView = (TextView) view.findViewById(R.id.generalPostsNumberTextView);
-
+        final Handler handler = new Handler();
+        Runnable refresh = new Runnable() {
+            @Override
+            public void run() {
+                fetchPostsNumber();
+                handler.postDelayed(this, 100);
+            }
+        };
+        handler.postDelayed(refresh, 100);
         return view;
     }
 
@@ -122,7 +130,7 @@ public class GeneralFragment extends Fragment {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 generalPost newPost = snapshot.getValue(generalPost.class);
-                postsList.add(0,newPost);
+                postsList.add(0, newPost);
                 adapter.notifyDataSetChanged();
             }
 
@@ -148,18 +156,8 @@ public class GeneralFragment extends Fragment {
         });
     }
 
-    private void fetchPostsNumber() {
-        reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Globals/GeneralPostsNumber");
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                String count = snapshot.getValue().toString();
-                generalPostsNumberTextView.setText(count);
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
+    private void fetchPostsNumber() {
+        generalPostsNumberTextView.setText(String.valueOf(generalRecycleViewAdapter.generalPostsCount));
     }
 }

@@ -40,8 +40,9 @@ public class TurePostActivity extends AppCompatActivity {
         distanceEditText = findViewById(R.id.distanceEditText);
         startTimeEditText = findViewById(R.id.startTimeEditText);
         startPointEditText = findViewById(R.id.startPointEditText);
-        descriptionEditText= findViewById(R.id.descriptionEditText);
+        descriptionEditText = findViewById(R.id.descriptionEditText);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -62,7 +63,7 @@ public class TurePostActivity extends AppCompatActivity {
                 reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users");
                 String uid = user.getUid();
                 Date currentTime = Calendar.getInstance().getTime();
-                turePost post = new turePost(distance, startTime, startPoint,1,description, uid,currentTime);
+                turePost post = new turePost(distance, startTime, startPoint, 1, description, uid, currentTime);
 
                 FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("TurePosts").child(String.valueOf(currentTime))
                         .setValue(post).addOnCompleteListener(new OnCompleteListener<Void>() {

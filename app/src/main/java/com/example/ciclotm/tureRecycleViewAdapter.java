@@ -27,6 +27,7 @@ import java.util.Locale;
 
 public class tureRecycleViewAdapter extends RecyclerView.Adapter<tureRecycleViewAdapter.MyViewHolder> {
     Context context;
+    public static String turePostsCount;
     private StorageReference storageReference;
     private ArrayList<turePost> postsList;
 
@@ -61,7 +62,7 @@ public class tureRecycleViewAdapter extends RecyclerView.Adapter<tureRecycleView
 
     @Override
     public void onBindViewHolder(@NonNull tureRecycleViewAdapter.MyViewHolder holder, int position) {
-        String distance = "Distanța: " + postsList.get(position).getDistance() +" km";
+        String distance = "Distanța: " + postsList.get(position).getDistance() + " km";
         holder.distance.setText(distance);
 
         String start_point = "Punct plecare: " + postsList.get(position).getStart_point();
@@ -94,6 +95,9 @@ public class tureRecycleViewAdapter extends RecyclerView.Adapter<tureRecycleView
 
     @Override
     public int getItemCount() {
+
+        turePostsCount = String.valueOf(postsList.size());
+
         return postsList.size();
     }
 }

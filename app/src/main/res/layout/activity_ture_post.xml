@@ -27,7 +27,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_weight="1"
+                android:layout_weight="1.5"
                 android:text="Distanța:"
                 android:textColor="@color/black"
                 android:textSize="25sp"
@@ -39,14 +39,22 @@
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:textColor="@color/black"
-                android:layout_weight="2"
+                android:layout_weight="0.7"
                 android:layout_marginStart="5dp"
-                android:layout_marginEnd="20dp"
                 android:ems="10"
                 android:background="@null"
                 android:hint="-"
                 android:textSize="25sp"
                 android:inputType="text" />
+
+            <TextView
+                android:id="@+id/kmTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:textSize="25sp"
+                android:textColor="@color/black"
+                android:text="km" />
         </LinearLayout>
 
         <LinearLayout

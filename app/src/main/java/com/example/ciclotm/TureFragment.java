@@ -7,10 +7,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +27,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -90,8 +94,8 @@ public class TureFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         adapter = new tureRecycleViewAdapter(getContext(), postsList);
         recyclerView.setAdapter(adapter);
+        turePostsNumberTextView = (TextView) view.findViewById(R.id.turePostsNumberTextView);
         fetchPostsInfo();
-        fetchPostsNumber();
         System.out.println(postsList.size());
         ImageButton addPost = (ImageButton) view.findViewById(R.id.addPostImageButton);
         addPost.setOnClickListener(new View.OnClickListener() {
@@ -100,7 +104,15 @@ public class TureFragment extends Fragment {
                 startActivity(new Intent(getActivity(), TurePostActivity.class));
             }
         });
-        turePostsNumberTextView = (TextView) view.findViewById(R.id.turePostsNumberTextView);
+        final Handler handler = new Handler();
+        Runnable refresh = new Runnable() {
+            @Override
+            public void run() {
+                fetchPostsNumber();
+                handler.postDelayed(this, 100);
+            }
+        };
+        handler.postDelayed(refresh, 100);
         return view;
     }
 
@@ -110,8 +122,11 @@ public class TureFragment extends Fragment {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 turePost newPost = snapshot.getValue(turePost.class);
-                postsList.add(0,newPost);
-                adapter.notifyDataSetChanged();
+                if (newPost != null) {
+                    postsList.add(0, newPost);
+                    adapter.notifyDataSetChanged();
+                }
+
             }
 
             @Override
@@ -137,18 +152,8 @@ public class TureFragment extends Fragment {
     }
 
     private void fetchPostsNumber() {
-        reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Globals/GeneralPostsNumber");
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                String count = snapshot.getValue().toString();
-                turePostsNumberTextView.setText(count);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
+        turePostsNumberTextView.setText(String.valueOf(tureRecycleViewAdapter.turePostsCount));
     }
+
 
 }

@@ -30,52 +30,55 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class generalRecycleViewAdapter extends RecyclerView.Adapter<generalRecycleViewAdapter.MyViewHolder>{
+public class generalRecycleViewAdapter extends RecyclerView.Adapter<generalRecycleViewAdapter.MyViewHolder> {
     Context context;
+    public static String generalPostsCount;
     private StorageReference storageReference;
-    private int ItemCount=0;
+    private int ItemCount = 0;
     private ArrayList<generalPost> postsList;
 
-    public generalRecycleViewAdapter(Context context, ArrayList<generalPost> postsList){
-        this.context=context;
-        this.postsList=postsList;
+    public generalRecycleViewAdapter(Context context, ArrayList<generalPost> postsList) {
+        this.context = context;
+        this.postsList = postsList;
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView title;
         TextView content;
         TextView data;
         ImageView user_photo;
-        public MyViewHolder(final View view){
+
+        public MyViewHolder(final View view) {
             super(view);
-            title=(TextView) view.findViewById(R.id.upperTextView);
-            content=(TextView) view.findViewById(R.id.lowerTextView);
-            data= (TextView) view.findViewById(R.id.middleGeneralTextView);
-            user_photo=(ImageView) view.findViewById(R.id.user_photo);
+            title = (TextView) view.findViewById(R.id.upperTextView);
+            content = (TextView) view.findViewById(R.id.lowerTextView);
+            data = (TextView) view.findViewById(R.id.middleGeneralTextView);
+            user_photo = (ImageView) view.findViewById(R.id.user_photo);
         }
     }
+
     @NonNull
     @Override
     public generalRecycleViewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.community_general_card_layout,parent,false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.community_general_card_layout, parent, false);
         return new MyViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull generalRecycleViewAdapter.MyViewHolder holder, int position) {
-        String title= postsList.get(position).getTitle();
+        String title = postsList.get(position).getTitle();
         holder.title.setText(title);
-        String content= postsList.get(position).getContent();
+        String content = postsList.get(position).getContent();
         holder.content.setText(content);
-        Date date=postsList.get(position).getDate();
+        Date date = postsList.get(position).getDate();
         SimpleDateFormat df = new SimpleDateFormat("HH:mm  dd/MM/yyyy", Locale.getDefault());
-        String output=df.format(date);
+        String output = df.format(date);
         holder.data.setText(output);
-        String userProfilePicture="UsersProfilePicture/"+postsList.get(position).getUid()+".png";
+        String userProfilePicture = "UsersProfilePicture/" + postsList.get(position).getUid() + ".png";
         storageReference = FirebaseStorage.getInstance().getReference().child(userProfilePicture);
-        File localFile= null;
+        File localFile = null;
         try {
-            localFile = File.createTempFile("tempFile","png");
+            localFile = File.createTempFile("tempFile", "png");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -87,16 +90,13 @@ public class generalRecycleViewAdapter extends RecyclerView.Adapter<generalRecyc
                 holder.user_photo.setImageBitmap(bitmap);
             }
         });
-        Bundle args = new Bundle();
-        args.putString("ItemCount", String.valueOf(ItemCount));
-        GeneralFragment GeneralFragment = new GeneralFragment();
-        GeneralFragment.setArguments(args);
 
     }
 
     @Override
     public int getItemCount() {
-        ItemCount=postsList.size();
+        generalPostsCount = String.valueOf(postsList.size());
+
         return postsList.size();
     }
 
