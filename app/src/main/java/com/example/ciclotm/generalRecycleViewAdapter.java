@@ -66,13 +66,9 @@ public class generalRecycleViewAdapter extends RecyclerView.Adapter<generalRecyc
         Date date=postsList.get(position).getDate();
         SimpleDateFormat df = new SimpleDateFormat("HH:mm  dd/MM/yyyy", Locale.getDefault());
         String output=df.format(date);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(postsList.get(position).getDate());
-        String data= String.valueOf(calendar.get(Calendar.HOUR))+":"+String.valueOf(calendar.get(Calendar.MINUTE))+" "+String.valueOf(calendar.get(Calendar.DAY_OF_MONTH))+
-                String.valueOf(calendar.get(Calendar.MONTH))+String.valueOf(calendar.get(Calendar.YEAR));
         holder.data.setText(output);
-
-        storageReference = FirebaseStorage.getInstance().getReference().child("UsersProfilePicture/person.png");
+        String userProfilePicture="UsersProfilePicture/"+postsList.get(position).getUid()+".png";
+        storageReference = FirebaseStorage.getInstance().getReference().child(userProfilePicture);
         File localFile= null;
         try {
             localFile = File.createTempFile("tempFile","png");
