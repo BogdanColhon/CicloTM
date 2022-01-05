@@ -12,7 +12,13 @@
         AIzaSyBxKIIdJjBiOeXunsR0MX3h-KDCiNmTqrk
     </string>
     <string name="title_activity_ture_post">TurePostActivity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string-array name="bike_models">
+        <item>MTB</item>
+        <item>Cursieră</item>
+        <item>De oraș</item>
+        <item>BMX</item>
+        <item>Pliabilă</item>
+        <item>E-bike</item>
+        <item>Fat bike</item>
+    </string-array>
 </resources>

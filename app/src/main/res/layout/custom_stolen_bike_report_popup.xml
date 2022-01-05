@@ -44,16 +44,29 @@
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="Ora"
-                android:textSize="15sp" />
+                android:hint="data furtului"
+                android:background="@null"
+                android:textSize="@dimen/report_text_size" />
 
             <EditText
                 android:id="@+id/addressReportEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Adresa"
-                android:textSize="15dp" />
+                android:background="@null"
+                android:hint="adresa"
+                android:textSize="@dimen/report_text_size" />
 
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
+
+            <TextView
+                android:id="@+id/photoLocationTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="Poză locație (opțional)" />
 
             <ImageButton
                 android:id="@+id/imageButton3"
@@ -87,22 +100,51 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="marca"
-                android:textSize="15dp" />
+                android:background="@null"
+                android:textSize="@dimen/report_text_size" />
 
-            <EditText
-                android:id="@+id/modelReportEditText"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="model"
-                android:textSize="15dp" />
+                android:orientation="horizontal">
+
+
+                <EditText
+                    android:id="@+id/colorReportEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:hint="culoare"
+                    android:textSize="@dimen/report_text_size" />
+
+                <Spinner
+                    android:id="@+id/modelReportSpinner"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
 
             <EditText
-                android:id="@+id/colorReportEditText"
+                android:id="@+id/bikeDescriptionReportEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:textSize="@dimen/report_text_size"
+                android:inputType="textMultiLine"
+                android:hint="descriere.." />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
+
+            <TextView
+                android:id="@+id/photoBikeTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="culoare"
-                android:textSize="15dp" />
-
+                android:textColor="@color/black"
+                android:text="Poză bicicletă (opțional)" />
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -112,7 +154,7 @@
                     android:id="@+id/imageButton4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_baseline_insert_photo_24"  />
+                    app:srcCompat="@drawable/ic_baseline_insert_photo_24" />
             </LinearLayout>
 
         </LinearLayout>
@@ -140,8 +182,10 @@
                 android:id="@+id/thiefDescriptionReportEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="descriere"
-                android:textSize="15dp" />
+                android:hint="descriere.."
+                android:inputType="textMultiLine"
+                android:background="@null"
+                android:textSize="@dimen/report_text_size" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/button3"
