@@ -41,7 +41,8 @@
                 android:textSize="20dp"
                 android:textStyle="bold" />
 
-            <EditText
+            <TextView
+                android:id="@+id/dateReportTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="data furtului"
@@ -68,8 +69,8 @@
                 android:textColor="@color/black"
                 android:text="Poză locație (opțional)" />
 
-            <ImageButton
-                android:id="@+id/imageButton3"
+            <ImageView
+                android:id="@+id/locationReportImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/ic_baseline_insert_photo_24" />
@@ -150,8 +151,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <ImageButton
-                    android:id="@+id/imageButton4"
+                <ImageView
+                    android:id="@+id/stolenBikeImageView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/ic_baseline_insert_photo_24" />

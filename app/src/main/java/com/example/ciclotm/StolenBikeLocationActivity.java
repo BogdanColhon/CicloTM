@@ -1,24 +1,32 @@
 package com.example.ciclotm;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,10 +45,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class StolenBikeLocationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class StolenBikeLocationActivity extends AppCompatActivity {
 
     private final int REQ_PERMISSION = 5;
     private MapView mapView;
@@ -49,8 +59,7 @@ public class StolenBikeLocationActivity extends AppCompatActivity implements Ada
     FusedLocationProviderClient client;
     EditText search;
     String full_address;
-    Spinner modelReportSpinner;
-    Dialog StolenBikeReportDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,68 +75,15 @@ public class StolenBikeLocationActivity extends AppCompatActivity implements Ada
         Location loc = null;
         getCurrentLocation(loc);
 
-    }
-
-    public void showStolenBikeReportPopup(View v) {
-        TextView text;
-        EditText addressReportEditText;
-        EditText brandReportEditText;
-        EditText colorReportEditText;
-        EditText modelReportEditText;
-        EditText bikeDescriptionEditText;
-        EditText thiefDescriptionEditText;
-        Spinner modelReportSpinner;
-        FloatingActionButton camera;
-
-        StolenBikeReportDialog = new Dialog(StolenBikeLocationActivity.this);
-        StolenBikeReportDialog.setContentView(R.layout.custom_stolen_bike_report_popup);
-        modelReportSpinner = (Spinner) StolenBikeReportDialog.findViewById(R.id.modelReportSpinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(StolenBikeLocationActivity.this,
-                android.R.layout.simple_spinner_item,
-                getResources().getStringArray(R.array.bike_models));
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        modelReportSpinner.setAdapter(adapter);
-        modelReportSpinner.setOnItemSelectedListener(this);
-
-        text = (TextView) StolenBikeReportDialog.findViewById(R.id.reportText);
-        addressReportEditText = (EditText) StolenBikeReportDialog.findViewById(R.id.addressReportEditText);
-        addressReportEditText.setText(full_address);
-        camera = (FloatingActionButton) StolenBikeReportDialog.findViewById(R.id.button3);
-        modelReportSpinner = StolenBikeReportDialog.findViewById(R.id.modelReportSpinner);
-
-        text.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                StolenBikeReportDialog.dismiss();
-            }
-        });
-
-        camera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    Intent intent = new Intent();
-                    intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivity(intent);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        StolenBikeReportDialog.show();
 
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String modelBike = parent.getItemAtPosition(position).toString();
-        Toast.makeText(parent.getContext(), modelBike, Toast.LENGTH_SHORT).show();
+    public void startReportStolenBikeActivity(View v) {
+        Intent myIntent = new Intent(StolenBikeLocationActivity.this, ReportStolenBikeActivity.class);
+        myIntent.putExtra("location",full_address); //Optional parameters
+        StolenBikeLocationActivity.this.startActivity(myIntent);
     }
 
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
 
     public void getCurrentLocation(Location new_location) {
         try {
@@ -205,12 +161,12 @@ public class StolenBikeLocationActivity extends AppCompatActivity implements Ada
             List<Address> addresses = geo.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
             if (!addresses.isEmpty()) {
                 String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                String cityy = addresses.get(0).getLocality();
+                String city = addresses.get(0).getLocality();
                 String state = addresses.get(0).getAdminArea();
                 String country = addresses.get(0).getCountryName();
                 String postalCode = addresses.get(0).getPostalCode();
                 String knownName = addresses.get(0).getFeatureName();
-                full_address = address + cityy + state + country + postalCode + knownName;
+                full_address = address;
             }
         } catch (Exception e) {
             e.printStackTrace();
