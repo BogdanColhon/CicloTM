@@ -5,6 +5,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,8 +15,11 @@ import android.location.Location;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,7 +40,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.List;
 import java.util.Locale;
 
-public class StolenBikeLocationActivity extends AppCompatActivity {
+public class StolenBikeLocationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private final int REQ_PERMISSION = 5;
     private MapView mapView;
@@ -45,7 +49,9 @@ public class StolenBikeLocationActivity extends AppCompatActivity {
     FusedLocationProviderClient client;
     EditText search;
     String full_address;
+    Spinner modelReportSpinner;
     Dialog StolenBikeReportDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,39 +66,69 @@ public class StolenBikeLocationActivity extends AppCompatActivity {
         Location loc = null;
         getCurrentLocation(loc);
 
-        StolenBikeReportDialog = new Dialog(this);
     }
 
-        public void showStolenBikeReportPopup(View v)
-        {
-            TextView text;
-            FloatingActionButton camera;
-            StolenBikeReportDialog.setContentView(R.layout.custom_stolen_bike_report_popup);
-            text = (TextView) StolenBikeReportDialog.findViewById(R.id.reportText);
-            camera = (FloatingActionButton) StolenBikeReportDialog.findViewById(R.id.button3);
+    public void showStolenBikeReportPopup(View v) {
+        TextView text;
+        EditText addressReportEditText;
+        EditText brandReportEditText;
+        EditText colorReportEditText;
+        EditText modelReportEditText;
+        EditText bikeDescriptionEditText;
+        EditText thiefDescriptionEditText;
+        Spinner modelReportSpinner;
+        FloatingActionButton camera;
 
-            text.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    StolenBikeReportDialog.dismiss();
+        StolenBikeReportDialog = new Dialog(StolenBikeLocationActivity.this);
+        StolenBikeReportDialog.setContentView(R.layout.custom_stolen_bike_report_popup);
+        modelReportSpinner = (Spinner) StolenBikeReportDialog.findViewById(R.id.modelReportSpinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(StolenBikeLocationActivity.this,
+                android.R.layout.simple_spinner_item,
+                getResources().getStringArray(R.array.bike_models));
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        modelReportSpinner.setAdapter(adapter);
+        modelReportSpinner.setOnItemSelectedListener(this);
+
+        text = (TextView) StolenBikeReportDialog.findViewById(R.id.reportText);
+        addressReportEditText = (EditText) StolenBikeReportDialog.findViewById(R.id.addressReportEditText);
+        addressReportEditText.setText(full_address);
+        camera = (FloatingActionButton) StolenBikeReportDialog.findViewById(R.id.button3);
+        modelReportSpinner = StolenBikeReportDialog.findViewById(R.id.modelReportSpinner);
+
+        text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                StolenBikeReportDialog.dismiss();
+            }
+        });
+
+        camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    Intent intent = new Intent();
+                    intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivity(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            });
+            }
+        });
+        StolenBikeReportDialog.show();
 
-            camera.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        Intent intent = new Intent();
-                        intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivity(intent);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            StolenBikeReportDialog.show();
+    }
 
-        }
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String modelBike = parent.getItemAtPosition(position).toString();
+        Toast.makeText(parent.getContext(), modelBike, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
     public void getCurrentLocation(Location new_location) {
         try {
             MapsInitializer.initialize(this.getApplicationContext());
@@ -239,5 +275,4 @@ public class StolenBikeLocationActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         mapView.onSaveInstanceState(outState);
     }
-
 }

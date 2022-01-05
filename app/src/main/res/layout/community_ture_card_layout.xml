@@ -17,12 +17,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/user_photo"
                 android:layout_width="60dp"
                 android:layout_height="80dp"
                 android:layout_weight="0"
-                tools:srcCompat="@tools:sample/avatars" />
+                android:src="@drawable/user_photo" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -39,28 +39,36 @@
                     android:id="@+id/upperTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textStyle="bold"
                     android:text="Distanta"
+                    android:singleLine="true"
                     android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/firstMiddleTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textStyle="bold"
                     android:textColor="@color/black"
+                    android:singleLine="true"
                     android:text="Ora de plecare" />
 
                 <TextView
                     android:id="@+id/secondMiddleTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textStyle="bold"
                     android:textColor="@color/black"
+                    android:singleLine="true"
                     android:text="Punct de plecare" />
 
                 <TextView
                     android:id="@+id/lowerTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textStyle="bold"
                     android:text="Participanti"
+                    android:singleLine="true"
                     android:textColor="@color/black" />
 
             </LinearLayout>

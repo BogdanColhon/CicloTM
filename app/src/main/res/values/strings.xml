@@ -11,4 +11,14 @@
     <string name="google_maps_api_key" templateMergeStrategy="preserve" translatable="false">
         AIzaSyBxKIIdJjBiOeXunsR0MX3h-KDCiNmTqrk
     </string>
+    <string name="title_activity_ture_post">TurePostActivity</string>
+    <string-array name="bike_models">
+        <item>MTB</item>
+        <item>Cursieră</item>
+        <item>De oraș</item>
+        <item>BMX</item>
+        <item>Pliabilă</item>
+        <item>E-bike</item>
+        <item>Fat bike</item>
+    </string-array>
 </resources>
