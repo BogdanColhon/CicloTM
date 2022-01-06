@@ -24,20 +24,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <EditText
-        android:id="@+id/stolenBikeLocationEditText"
+    <SearchView
+        android:id="@+id/searchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dip"
-        android:layout_marginTop="10dip"
-        android:layout_marginRight="70dip"
-        android:background="@drawable/custom_search_location_edittext"
-        android:drawableRight="@drawable/ic_baseline_search_24"
-        android:ems="10"
-        android:hint="Adresa"
-        android:inputType="textPersonName"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:textSize="25dp" />
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="70dp"
+        android:background="@drawable/custom_search_view"
+        android:elevation="5dp"
+        android:iconifiedByDefault="false"
+        android:queryHint="Caută.." />
+
 
 </RelativeLayout>

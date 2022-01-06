@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,6 +46,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -57,7 +59,7 @@ public class StolenBikeLocationActivity extends AppCompatActivity {
     private GoogleMap map;
     private int i = 0;
     FusedLocationProviderClient client;
-    EditText search;
+    SearchView search;
     String full_address;
 
 
@@ -68,8 +70,34 @@ public class StolenBikeLocationActivity extends AppCompatActivity {
         mapView = findViewById(R.id.mapViewStolenBike);
         mapView.onCreate(savedInstanceState);
         FloatingActionButton checkButton = findViewById(R.id.checkFloatingButton);
-        search = findViewById(R.id.stolenBikeLocationEditText);
+        search = findViewById(R.id.searchView);
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                String location = search.getQuery().toString();
+                List<Address> addressList = null;
+                if(location != null || !location.equals((""))){
+                    Geocoder geocoder = new Geocoder(StolenBikeLocationActivity.this);
+                    try{
+                        addressList = geocoder.getFromLocationName(location,3);
+                    }catch (IOException e){
+                        e.printStackTrace();
+                    }
+                    if(addressList!=null){
+                        for(Address loc : addressList){
+                            MarkerOptions opts = new MarkerOptions()
+                                    .position(new LatLng(loc.getLatitude(), loc.getLongitude()))
+                                    .title(loc.getAddressLine(0));
+                            map.addMarker(opts);
+                }}}
+                return false;
+            }
 
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
         //Initialize fused location
         client = LocationServices.getFusedLocationProviderClient(this);
         Location loc = null;
@@ -127,7 +155,8 @@ public class StolenBikeLocationActivity extends AppCompatActivity {
                                     LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
                                     CameraPosition current_camera_position = CameraPosition.builder().target(current).zoom(16).build();
                                     convertCoordinatesToAddress(location);
-                                    search.setText(full_address);
+                                    search.setQuery(full_address, false);
+                                    search.clearFocus();
                                     map.moveCamera(CameraUpdateFactory.newCameraPosition(current_camera_position));
                                 }
 
@@ -138,7 +167,8 @@ public class StolenBikeLocationActivity extends AppCompatActivity {
                                             getCurrentLocation(location);
                                         }
                                         convertCoordinatesToAddress(location);
-                                        search.setText(full_address);
+                                        search.setQuery(full_address, false);
+                                        search.clearFocus();
                                         i++;
 
                                         return false;

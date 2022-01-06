@@ -207,7 +207,7 @@
         </LinearLayout>
     </ScrollView>
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/button3"
+            android:id="@+id/sendReportButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"

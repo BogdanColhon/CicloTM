@@ -13,6 +13,7 @@
     </string>
     <string name="title_activity_ture_post">TurePostActivity</string>
     <string-array name="bike_models">
+        <item>model</item>
         <item>MTB</item>
         <item>Cursieră</item>
         <item>De oraș</item>
