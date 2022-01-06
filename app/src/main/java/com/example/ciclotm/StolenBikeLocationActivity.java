@@ -20,6 +20,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -32,6 +33,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -44,9 +46,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -60,6 +67,7 @@ public class StolenBikeLocationActivity extends AppCompatActivity {
     private int i = 0;
     FusedLocationProviderClient client;
     SearchView search;
+    EditText searchPlaces;
     String full_address;
 
 
@@ -70,8 +78,23 @@ public class StolenBikeLocationActivity extends AppCompatActivity {
         mapView = findViewById(R.id.mapViewStolenBike);
         mapView.onCreate(savedInstanceState);
         FloatingActionButton checkButton = findViewById(R.id.checkFloatingButton);
-        search = findViewById(R.id.searchView);
-        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+        searchPlaces = (EditText) findViewById(R.id.stolenBikeLocationEditText);
+        Places.initialize(StolenBikeLocationActivity.this,getResources().getString(R.string.google_maps_api_key));
+        searchPlaces.setFocusable(false);
+        searchPlaces.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<Place.Field> fieldList = Arrays.asList(Place.Field.ADDRESS,
+                        Place.Field.LAT_LNG,Place.Field.NAME);
+                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY
+                        ,fieldList).build(StolenBikeLocationActivity.this);
+                startActivityForResult(intent,200);
+            }
+        });
+
+       // search = findViewById(R.id.searchView);
+      /*  search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 String location = search.getQuery().toString();
@@ -97,13 +120,22 @@ public class StolenBikeLocationActivity extends AppCompatActivity {
             public boolean onQueryTextChange(String newText) {
                 return false;
             }
-        });
+        });*/
         //Initialize fused location
         client = LocationServices.getFusedLocationProviderClient(this);
         Location loc = null;
         getCurrentLocation(loc);
 
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 200) {
+            Place place = Autocomplete.getPlaceFromIntent(data);
+            searchPlaces.setText(place.getAddress());
+        }
     }
 
     public void startReportStolenBikeActivity(View v) {
@@ -155,8 +187,7 @@ public class StolenBikeLocationActivity extends AppCompatActivity {
                                     LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
                                     CameraPosition current_camera_position = CameraPosition.builder().target(current).zoom(16).build();
                                     convertCoordinatesToAddress(location);
-                                    search.setQuery(full_address, false);
-                                    search.clearFocus();
+                                    searchPlaces.setText(full_address);
                                     map.moveCamera(CameraUpdateFactory.newCameraPosition(current_camera_position));
                                 }
 
@@ -167,8 +198,7 @@ public class StolenBikeLocationActivity extends AppCompatActivity {
                                             getCurrentLocation(location);
                                         }
                                         convertCoordinatesToAddress(location);
-                                        search.setQuery(full_address, false);
-                                        search.clearFocus();
+                                        searchPlaces.setText(full_address);
                                         i++;
 
                                         return false;
