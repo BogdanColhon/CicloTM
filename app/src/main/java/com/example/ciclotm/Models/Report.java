@@ -12,12 +12,14 @@ public class Report {
     private String bike_color;
     private String bike_description;
     private String thief_description;
+    private Double theftMarkerLat;
+    private Double theftMarkerLng;
 
     public Report() {
 
     }
 
-    public Report(Date publishDate, Date stolenDate, String address, String user_id, String bike_brand, String bike_model, String bike_color, String bike_description, String thief_description) {
+    public Report(Date publishDate, Date stolenDate, String address, String user_id, String bike_brand, String bike_model, String bike_color, String bike_description,String thief_description,Double theftMarkerLat,Double theftMarkerLng) {
         this.publishDate = publishDate;
         this.stolenDate = stolenDate;
         this.address = address;
@@ -27,6 +29,8 @@ public class Report {
         this.bike_color = bike_color;
         this.bike_description = bike_description;
         this.thief_description = thief_description;
+        this.theftMarkerLat = theftMarkerLat;
+        this.theftMarkerLng = theftMarkerLng;
     }
 
     public Date getPublishDate() {
@@ -99,5 +103,21 @@ public class Report {
 
     public void setThief_description(String thief_description) {
         this.thief_description = thief_description;
+    }
+
+    public Double getTheftMarkerLat() {
+        return theftMarkerLat;
+    }
+
+    public void setTheftMarkerLat(Double theftMarkerLat) {
+        this.theftMarkerLat = theftMarkerLat;
+    }
+
+    public Double getTheftMarkerLng() {
+        return theftMarkerLng;
+    }
+
+    public void setTheftMarkerLng(Double theftMarkerLng) {
+        this.theftMarkerLng = theftMarkerLng;
     }
 }

@@ -61,8 +61,8 @@
                     android:background="@null"
                     android:textSize="@dimen/report_text_size" />
 
-                <EditText
-                    android:id="@+id/addressReportEditText"
+                <TextView
+                    android:id="@+id/addressReportTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@null"

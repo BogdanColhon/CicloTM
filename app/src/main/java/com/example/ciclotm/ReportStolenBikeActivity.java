@@ -27,7 +27,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ciclotm.Models.MapMarker;
 import com.example.ciclotm.Models.Report;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -54,7 +57,7 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
     Uri stolenCaptureImageURI;
     Bitmap captureImageBitmap;
     TextView dateReportTextView;
-    EditText addressReportEditText;
+    TextView addressReportTextView;
     EditText brandReportEditText;
     EditText colorReportEditText;
     EditText bikeDescriptionEditText;
@@ -63,6 +66,7 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
     ImageView stolenBikeReportImageView;
     Spinner modelReportSpinner;
     FloatingActionButton sendReportButton;
+    LatLng theftMarker;
 
     private FirebaseUser user;
     private FirebaseStorage storage;
@@ -94,7 +98,7 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
         dateReportTextView = (TextView) findViewById(R.id.dateReportTextView);
         brandReportEditText = (EditText) findViewById(R.id.brandReportEditText);
         colorReportEditText = (EditText) findViewById(R.id.colorReportEditText);
-        addressReportEditText = (EditText) findViewById(R.id.addressReportEditText);
+        addressReportTextView = (TextView) findViewById(R.id.addressReportTextView);
         bikeDescriptionEditText = (EditText) findViewById(R.id.bikeDescriptionReportEditText);
         thiefDescriptionEditText = (EditText) findViewById(R.id.thiefDescriptionReportEditText);
 
@@ -106,7 +110,8 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
 
         Intent intent = getIntent();
         String full_address = intent.getStringExtra("location");
-        addressReportEditText.setText(full_address);
+        theftMarker = intent.getExtras().getParcelable("newTheftMarker");
+        addressReportTextView.setText(full_address);
 
         locationReportImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,7 +170,7 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
         sendReportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String address = addressReportEditText.getText().toString().trim();
+                String address = addressReportTextView.getText().toString().trim();
                 String bike_brand = brandReportEditText.getText().toString().trim();
                 String bike_color = colorReportEditText.getText().toString().trim();
                 String bike_model = bikeModel;
@@ -174,10 +179,12 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
                 String user_id = user_Id;
                 Date postDate = currentTime;
                 Date date_of_theft = calendar.getTime();
+                Double theftMarkerLat=theftMarker.latitude;
+                Double theftMarkerLng=theftMarker.longitude;
 
                 if (address.isEmpty()) {
-                    addressReportEditText.setError("Câmp obligatoriu!");
-                    addressReportEditText.requestFocus();
+                    addressReportTextView.setError("Câmp obligatoriu!");
+                    addressReportTextView.requestFocus();
                     return;
                 }
 
@@ -191,18 +198,26 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
                     bike_model = "-";
                 }
                 uploadPhotos();
-                Report report = new Report(postDate,date_of_theft,address,user_id,bike_brand,bike_model,bike_color,bike_description,thief_description);
+                Report report = new Report(postDate,date_of_theft,address,user_id,bike_brand,bike_model,bike_color,bike_description,thief_description,theftMarkerLat,theftMarkerLng);
                 FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("furturiPosts").child(String.valueOf(postDate))
                         .setValue(report).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(ReportStolenBikeActivity.this, "Raport adaugat", Toast.LENGTH_SHORT).show();
+                            StolenBikeLocationActivity.terminator.finish();
+                            MenuActivity.terminator.finish();
+                            Intent myIntent = new Intent(ReportStolenBikeActivity.this,MenuActivity.class);
+                            finish();
+                            ReportStolenBikeActivity.this.startActivity(myIntent);
                         }
                     }
                 });
                 FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users").child(user_id).child("Furturi").child(String.valueOf(postDate))
                         .setValue(report);
+                MapMarker marker = new MapMarker(theftMarkerLat,theftMarkerLng);
+                FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("StolenBikesMarkers").child("Coordonate").child(String.valueOf(postDate))
+                        .setValue(marker);
 
             }
         });

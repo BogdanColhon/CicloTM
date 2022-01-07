@@ -6,6 +6,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -62,12 +63,13 @@ import java.util.Locale;
 public class StolenBikeLocationActivity extends AppCompatActivity {
 
     private final int REQ_PERMISSION = 5;
+    public static Activity terminator;
     private MapView mapView;
     private GoogleMap map;
     private int i = 0;
+    private LatLng newTheftMarker;
     FusedLocationProviderClient client;
-    SearchView search;
-    EditText searchPlaces;
+    TextView searchPlaces;
     String full_address;
 
 
@@ -77,9 +79,10 @@ public class StolenBikeLocationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_stolen_bike_location);
         mapView = findViewById(R.id.mapViewStolenBike);
         mapView.onCreate(savedInstanceState);
+        terminator=this;
         FloatingActionButton checkButton = findViewById(R.id.checkFloatingButton);
 
-        searchPlaces = (EditText) findViewById(R.id.stolenBikeLocationEditText);
+        searchPlaces = (TextView) findViewById(R.id.stolenBikeLocationTextView);
         Places.initialize(StolenBikeLocationActivity.this,getResources().getString(R.string.google_maps_api_key));
         searchPlaces.setFocusable(false);
         searchPlaces.setOnClickListener(new View.OnClickListener() {
@@ -93,34 +96,7 @@ public class StolenBikeLocationActivity extends AppCompatActivity {
             }
         });
 
-       // search = findViewById(R.id.searchView);
-      /*  search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                String location = search.getQuery().toString();
-                List<Address> addressList = null;
-                if(location != null || !location.equals((""))){
-                    Geocoder geocoder = new Geocoder(StolenBikeLocationActivity.this);
-                    try{
-                        addressList = geocoder.getFromLocationName(location,3);
-                    }catch (IOException e){
-                        e.printStackTrace();
-                    }
-                    if(addressList!=null){
-                        for(Address loc : addressList){
-                            MarkerOptions opts = new MarkerOptions()
-                                    .position(new LatLng(loc.getLatitude(), loc.getLongitude()))
-                                    .title(loc.getAddressLine(0));
-                            map.addMarker(opts);
-                }}}
-                return false;
-            }
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });*/
         //Initialize fused location
         client = LocationServices.getFusedLocationProviderClient(this);
         Location loc = null;
@@ -132,15 +108,21 @@ public class StolenBikeLocationActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 200) {
-            Place place = Autocomplete.getPlaceFromIntent(data);
-            searchPlaces.setText(place.getAddress());
+        if (requestCode == 200 && resultCode !=0) {
+            if(data != null) {
+                System.out.println(data);
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                searchPlaces.setText(place.getAddress());
+                full_address = place.getAddress();
+                newTheftMarker=place.getLatLng();
+            }
         }
     }
 
     public void startReportStolenBikeActivity(View v) {
         Intent myIntent = new Intent(StolenBikeLocationActivity.this, ReportStolenBikeActivity.class);
-        myIntent.putExtra("location",full_address); //Optional parameters
+        myIntent.putExtra("location",full_address);
+        myIntent.putExtra("newTheftMarker",newTheftMarker);
         StolenBikeLocationActivity.this.startActivity(myIntent);
     }
 
