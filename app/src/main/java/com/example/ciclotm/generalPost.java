@@ -2,9 +2,10 @@ package com.example.ciclotm;
 
 import android.graphics.drawable.Drawable;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class generalPost {
+public class generalPost  implements Serializable {
     private String title;
     private String content;
     private Date date;

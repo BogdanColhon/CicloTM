@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,7 +34,7 @@ import java.util.ArrayList;
  * Use the {@link TureFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GeneralFragment extends Fragment {
+public class GeneralFragment extends Fragment implements generalRecycleViewAdapter.OnPostListener {
 
     private ArrayList<generalPost> postsList = new ArrayList<>();
     TextView generalPostsNumberTextView;
@@ -92,7 +93,7 @@ public class GeneralFragment extends Fragment {
         generalPostsNumberTextView = (TextView) view.findViewById(R.id.generalPostsNumberTextView);
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new generalRecycleViewAdapter(getContext(), postsList);
+        adapter = new generalRecycleViewAdapter(getContext(), postsList, this);
         recyclerView.setAdapter(adapter);
         fetchPostsInfo();
         System.out.println(postsList.size());
@@ -117,7 +118,7 @@ public class GeneralFragment extends Fragment {
 
 
     private void setAdapter() {
-        generalRecycleViewAdapter adapter = new generalRecycleViewAdapter(getContext(), postsList);
+        generalRecycleViewAdapter adapter = new generalRecycleViewAdapter(getActivity().getApplicationContext(), postsList, this);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -159,5 +160,12 @@ public class GeneralFragment extends Fragment {
 
     private void fetchPostsNumber() {
         generalPostsNumberTextView.setText(String.valueOf(generalRecycleViewAdapter.generalPostsCount));
+    }
+
+    @Override
+    public void onPostClick(int position) {
+        Intent intent = new Intent(getContext(), ExpandedGeneralPostActivity.class);
+        intent.putExtra("clicked_post", postsList.get(position));
+        startActivity(intent);
     }
 }
