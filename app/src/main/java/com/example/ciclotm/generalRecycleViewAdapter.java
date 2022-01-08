@@ -36,33 +36,48 @@ public class generalRecycleViewAdapter extends RecyclerView.Adapter<generalRecyc
     private StorageReference storageReference;
     private int ItemCount = 0;
     private ArrayList<generalPost> postsList;
+    private OnPostListener mOnPostListener;
 
-    public generalRecycleViewAdapter(Context context, ArrayList<generalPost> postsList) {
+
+    public generalRecycleViewAdapter(Context context, ArrayList<generalPost> postsList, OnPostListener onPostListener) {
         this.context = context;
         this.postsList = postsList;
-    }
-
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView title;
-        TextView content;
-        TextView data;
-        ImageView user_photo;
-
-        public MyViewHolder(final View view) {
-            super(view);
-            title = (TextView) view.findViewById(R.id.upperTextView);
-            content = (TextView) view.findViewById(R.id.lowerTextView);
-            data = (TextView) view.findViewById(R.id.middleGeneralTextView);
-            user_photo = (ImageView) view.findViewById(R.id.user_photo);
-        }
+        this.mOnPostListener = onPostListener;
     }
 
     @NonNull
     @Override
     public generalRecycleViewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.community_general_card_layout, parent, false);
-        return new MyViewHolder(itemView);
+        return new MyViewHolder(itemView, mOnPostListener);
     }
+
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        TextView title;
+        TextView content;
+        TextView data;
+        ImageView user_photo;
+        OnPostListener onPostListener;
+
+        public MyViewHolder(final View view, OnPostListener OnPostListener) {
+            super(view);
+            title = (TextView) view.findViewById(R.id.upperTextView);
+            content = (TextView) view.findViewById(R.id.lowerTextView);
+            data = (TextView) view.findViewById(R.id.middleGeneralTextView);
+            user_photo = (ImageView) view.findViewById(R.id.user_photo);
+            this.onPostListener = OnPostListener;
+
+            view.setOnClickListener(this);
+
+        }
+
+        @Override
+        public void onClick(View view) {
+            onPostListener.onPostClick(getAdapterPosition());
+
+        }
+    }
+
 
     @Override
     public void onBindViewHolder(@NonNull generalRecycleViewAdapter.MyViewHolder holder, int position) {
@@ -100,5 +115,8 @@ public class generalRecycleViewAdapter extends RecyclerView.Adapter<generalRecyc
         return postsList.size();
     }
 
+    public interface OnPostListener {
+        void onPostClick(int position);
+    }
 
 }
