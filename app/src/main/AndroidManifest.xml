@@ -18,9 +18,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CicloTM">
+        <activity
+            android:name=".BicyclePostActivity"
+            android:exported="false" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_api_key" />
+
         <activity
             android:name=".ReportStolenBikeActivity"
             android:exported="false" />
@@ -38,7 +43,6 @@
         <activity
             android:name=".StolenBikeLocationActivity"
             android:exported="false" />
-
         <activity
             android:name=".EditProfileActivity"
             android:exported="false" />

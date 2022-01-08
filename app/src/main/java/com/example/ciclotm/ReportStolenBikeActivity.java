@@ -208,14 +208,14 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
                             StolenBikeLocationActivity.terminator.finish();
                             MenuActivity.terminator.finish();
                             Intent myIntent = new Intent(ReportStolenBikeActivity.this,MenuActivity.class);
-                            finish();
                             ReportStolenBikeActivity.this.startActivity(myIntent);
+                            finish();
                         }
                     }
                 });
                 FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users").child(user_id).child("Furturi").child(String.valueOf(postDate))
                         .setValue(report);
-                MapMarker marker = new MapMarker(theftMarkerLat,theftMarkerLng);
+                MapMarker marker = new MapMarker(theftMarkerLat,theftMarkerLng,date_of_theft);
                 FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("StolenBikesMarkers").child("Coordonate").child(String.valueOf(postDate))
                         .setValue(marker);
 

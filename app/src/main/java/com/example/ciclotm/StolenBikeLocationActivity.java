@@ -179,6 +179,8 @@ public class StolenBikeLocationActivity extends AppCompatActivity {
                                         if (i >= 1) {
                                             getCurrentLocation(location);
                                         }
+                                        LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
+                                        newTheftMarker=current;
                                         convertCoordinatesToAddress(location);
                                         searchPlaces.setText(full_address);
                                         i++;

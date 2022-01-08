@@ -3,7 +3,9 @@ package com.example.ciclotm;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.FocusFinder;
@@ -26,7 +28,11 @@ public class MainActivity extends AppCompatActivity {
     private EditText editTextEmail, editTextPassword;
     private TextView forgotPasswordTextView;
     private FirebaseAuth mAuth;
+    String email;
 
+    SharedPreferences sharedPreferences;
+    public static final String fileName = "credentials";
+    public static final String Email = "email";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +41,14 @@ public class MainActivity extends AppCompatActivity {
         editTextEmail = (EditText) findViewById(R.id.editTextTextLoginEmail);
         editTextPassword = (EditText) findViewById(R.id.editTextTextLoginPassword);
         forgotPasswordTextView = (TextView)findViewById(R.id.forogtPasswordTextView);
+
+        sharedPreferences = getSharedPreferences(fileName, Context.MODE_PRIVATE);
+        String check_email = sharedPreferences.getString(Email,null);
+        if(check_email!=null){
+            Intent intent = new Intent(MainActivity.this,MenuActivity.class);
+            startActivity((intent));
+            finish();
+        }
         mAuth = FirebaseAuth.getInstance();
         forgotPasswordTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void userLogin() {
-        String email = editTextEmail.getText().toString();
+        email = editTextEmail.getText().toString();
         String password = editTextPassword.getText().toString();
 
         if (email.isEmpty()) {
@@ -74,6 +88,9 @@ public class MainActivity extends AppCompatActivity {
             editTextPassword.requestFocus();
             return;
         }
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(Email,email);
+        editor.apply();
 
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
