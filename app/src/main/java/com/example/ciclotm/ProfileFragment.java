@@ -1,6 +1,8 @@
 package com.example.ciclotm;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.util.SharedPreferencesUtils;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -166,6 +169,10 @@ public class ProfileFragment extends Fragment {
                         break;
                     case 3:
                         FirebaseAuth.getInstance().signOut();
+                        SharedPreferences preferences =getActivity().getSharedPreferences("credentials", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.clear();
+                        editor.apply();
                         i = new Intent(getActivity(), MainActivity.class);
                         startActivity(i);
                         getActivity().finish();

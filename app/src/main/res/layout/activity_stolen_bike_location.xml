@@ -11,12 +11,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        app:backgroundTint="@color/black"
         android:layout_marginTop="100dip"
         android:layout_marginEnd="15dip"
         android:clickable="true"
-        android:onClick="showStolenBikeReportPopup"
-        android:src="@drawable/ic_baseline_check_24" />
+        android:onClick="startReportStolenBikeActivity"
+        android:src="@drawable/ic_baseline_check_24"
+        app:backgroundTint="@color/black" />
 
 
     <com.google.android.gms.maps.MapView
@@ -24,8 +24,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <EditText
-        android:id="@+id/stolenBikeLocationEditText"
+    <TextView
+        android:id="@+id/stolenBikeLocationTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dip"
