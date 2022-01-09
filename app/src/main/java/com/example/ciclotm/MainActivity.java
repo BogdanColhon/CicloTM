@@ -88,9 +88,7 @@ public class MainActivity extends AppCompatActivity {
             editTextPassword.requestFocus();
             return;
         }
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(Email,email);
-        editor.apply();
+
 
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -110,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(Email,email);
+        editor.apply();
     }
 }

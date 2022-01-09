@@ -1,6 +1,7 @@
 package com.example.ciclotm;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -19,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -127,7 +129,7 @@ public class MapsFragment extends Fragment {
         mapLayerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "Stolen bike", Toast.LENGTH_SHORT).show();
+                showCustomDialog();
             }
         });
 
@@ -156,6 +158,18 @@ public class MapsFragment extends Fragment {
         return view;
     }
 
+    private void showCustomDialog() {
+        final Dialog dialog = new Dialog(getContext());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.custom_dialog_map_layers);
+
+        final TextView furturiLayer = dialog.findViewById(R.id.furturiLayer);
+        final TextView utileLayer = dialog.findViewById(R.id.utileLayer);
+
+        dialog.show();
+    }
+
     private void fetchMarkers() {
         reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("StolenBikesMarkers").child("Coordonate");
         reference.addChildEventListener(new ChildEventListener() {
@@ -165,12 +179,12 @@ public class MapsFragment extends Fragment {
                 LatLng latLng = new LatLng(newMarker.getLat(), newMarker.getLng());
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(newMarker.getDate());
-                int month=calendar.get(Calendar.MONTH)+1;
-                Marker marker=map.addMarker(new MarkerOptions()
+                int month = calendar.get(Calendar.MONTH) + 1;
+                Marker marker = map.addMarker(new MarkerOptions()
                         .position(latLng)
-                        .title("Furată pe "+calendar.get(Calendar.DAY_OF_MONTH)
-                                +"."+month
-                                +"."+calendar.get(Calendar.YEAR))
+                        .title("Furată pe " + calendar.get(Calendar.DAY_OF_MONTH)
+                                + "." + month
+                                + "." + calendar.get(Calendar.YEAR))
                         .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ic_baseline_dot)));
                 markers.add(marker.getId());
             }

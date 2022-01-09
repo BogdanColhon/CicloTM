@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -110,6 +111,16 @@ public class ProfileFragment extends Fragment {
         final TextView ageTextView = (TextView) view.findViewById(R.id.profileAgeTextView);
         userProfileImageView = (ImageView) view.findViewById(R.id.userProfileImageView);
 
+
+        Button editProfileButton = (Button) view.findViewById(R.id.editProfileButton);
+        editProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent (getContext(),EditProfileActivity.class);
+                intent.putExtra("uId",userID);
+                startActivity(intent);
+            }
+        });
         reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -169,7 +180,7 @@ public class ProfileFragment extends Fragment {
                         break;
                     case 3:
                         FirebaseAuth.getInstance().signOut();
-                        SharedPreferences preferences =getActivity().getSharedPreferences("credentials", Context.MODE_PRIVATE);
+                        SharedPreferences preferences = getActivity().getSharedPreferences("credentials", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = preferences.edit();
                         editor.clear();
                         editor.apply();
@@ -184,10 +195,11 @@ public class ProfileFragment extends Fragment {
 
         return view;
     }
+
     public void getUserProfilePhoto() throws IOException {
-        String userProfilePhoto="UsersProfilePicture/"+userID+".png";
+        String userProfilePhoto = "UsersProfilePicture/" + userID + ".jpg";
         storageReference = FirebaseStorage.getInstance().getReference().child(userProfilePhoto);
-        File localFile= File.createTempFile("tempFile","png");
+        File localFile = File.createTempFile("tempFile", "jpg");
         storageReference.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {

@@ -2,10 +2,10 @@
 <paths>
     <external-path
         name="external"
-        path="."></external-path>
+        path="/"></external-path>
     <external-files-path
         name="external_files"
-        path="."></external-files-path>
+        path="/"></external-files-path>
     <cache-path
         name="cache"
         path="."></cache-path>
@@ -14,6 +14,6 @@
         path="."></external-cache-path>
     <files-path
         name="files"
-        path="."></files-path>
+        path="/"></files-path>
 
 </paths>

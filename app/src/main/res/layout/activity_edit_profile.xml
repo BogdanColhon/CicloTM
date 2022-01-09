@@ -4,6 +4,78 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="25dp"
     tools:context=".EditProfileActivity">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="1dp">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/userProfileImageView"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="center"
+            android:src="@drawable/user_photo" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/firstNameEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:maxLines="1"
+                android:lines="1"
+                android:singleLine="true"
+                android:inputType="textPersonName"
+                android:hint="Prenume"/>
+
+            <EditText
+                android:id="@+id/lastNameEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:maxLines="1"
+                android:lines="1"
+                android:singleLine="true"
+                android:inputType="textPersonName"
+                android:hint="Nume" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/bioEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:hint="Bio" />
+
+
+        <EditText
+            android:id="@+id/genderET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Sex"></EditText>
+
+        <EditText
+            android:id="@+id/phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="phone"
+            android:maxLines="1"
+            android:lines="1"
+            android:singleLine="true"
+            android:hint="Nr. telefon" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

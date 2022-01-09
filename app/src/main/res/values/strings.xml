@@ -26,4 +26,9 @@
         <item>ore</item>
         <item>minute</item>
     </string-array>
+    <string-array name="gender">
+        <item>masculin</item>
+        <item>feminin</item>
+        <item>altul</item>
+    </string-array>
 </resources>
