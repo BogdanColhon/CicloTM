@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
@@ -14,7 +15,9 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.AdapterView;
@@ -48,11 +51,15 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 public class ReportStolenBikeActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
+    File f, f2;
+    Uri contentUri, contentUri2;
     Uri locationCaptureImageURI;
     Uri stolenCaptureImageURI;
     Bitmap captureImageBitmap;
@@ -71,11 +78,12 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
     private FirebaseUser user;
     private FirebaseStorage storage;
     private StorageReference Folder;
-    private final int PERMISSION_REQUEST_CODE =100;
+    private final int PERMISSION_REQUEST_CODE = 100;
     Date currentTime;
     String user_Id;
     String bikeModel;
     Calendar calendar = Calendar.getInstance();
+    String currentPhotoPath;
     private DatabaseReference reference;
 
     @Override
@@ -118,9 +126,7 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
             public void onClick(View v) {
                 try {
                     checkCameraPermission();
-                    Intent intent = new Intent();
-                    intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(intent, 100);
+                    dispatchTakePictureIntent(100);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -133,9 +139,7 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
             public void onClick(View v) {
                 try {
                     checkCameraPermission();
-                    Intent intent = new Intent();
-                    intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(intent, 101);
+                    dispatchTakePictureIntent(101);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -179,14 +183,15 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
                 String user_id = user_Id;
                 Date postDate = currentTime;
                 Date date_of_theft = calendar.getTime();
-                Double theftMarkerLat=theftMarker.latitude;
-                Double theftMarkerLng=theftMarker.longitude;
+
 
                 if (address.isEmpty()) {
                     addressReportTextView.setError("Câmp obligatoriu!");
                     addressReportTextView.requestFocus();
                     return;
                 }
+                Double theftMarkerLat = theftMarker.latitude;
+                Double theftMarkerLng = theftMarker.longitude;
 
                 if (bike_color.isEmpty()) {
                     colorReportEditText.setError("Câmp obligatoriu!");
@@ -198,7 +203,7 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
                     bike_model = "-";
                 }
                 uploadPhotos();
-                Report report = new Report(postDate,date_of_theft,address,user_id,bike_brand,bike_model,bike_color,bike_description,thief_description,theftMarkerLat,theftMarkerLng);
+                Report report = new Report(postDate, date_of_theft, address, user_id, bike_brand, bike_model, bike_color, bike_description, thief_description, theftMarkerLat, theftMarkerLng);
                 FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("furturiPosts").child(String.valueOf(postDate))
                         .setValue(report).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -207,7 +212,7 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
                             Toast.makeText(ReportStolenBikeActivity.this, "Raport adaugat", Toast.LENGTH_SHORT).show();
                             StolenBikeLocationActivity.terminator.finish();
                             MenuActivity.terminator.finish();
-                            Intent myIntent = new Intent(ReportStolenBikeActivity.this,MenuActivity.class);
+                            Intent myIntent = new Intent(ReportStolenBikeActivity.this, MenuActivity.class);
                             ReportStolenBikeActivity.this.startActivity(myIntent);
                             finish();
                         }
@@ -215,7 +220,7 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
                 });
                 FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users").child(user_id).child("Furturi").child(String.valueOf(postDate))
                         .setValue(report);
-                MapMarker marker = new MapMarker(theftMarkerLat,theftMarkerLng,date_of_theft);
+                MapMarker marker = new MapMarker(theftMarkerLat, theftMarkerLng, date_of_theft);
                 FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("StolenBikesMarkers").child("Coordonate").child(String.valueOf(postDate))
                         .setValue(marker);
 
@@ -224,43 +229,47 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
 
     }
 
-    private void checkCameraPermission(){
-        if(ContextCompat.checkSelfPermission(ReportStolenBikeActivity.this,Manifest.permission.CAMERA)!=PackageManager.PERMISSION_GRANTED
-        || ContextCompat.checkSelfPermission(ReportStolenBikeActivity.this,Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
+    private void checkCameraPermission() {
+        if (ContextCompat.checkSelfPermission(ReportStolenBikeActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(ReportStolenBikeActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(ReportStolenBikeActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 
-        }ActivityCompat.requestPermissions(ReportStolenBikeActivity.this,new String[]{
-                android.Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-        },PERMISSION_REQUEST_CODE);
+        }
+        ActivityCompat.requestPermissions(ReportStolenBikeActivity.this, new String[]{
+                android.Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE
+        }, PERMISSION_REQUEST_CODE);
     }
-    public void uploadPhotos(){
-        Folder=FirebaseStorage.getInstance().getReference().child(user_Id).child("ReportImages").child(currentTime.toString());
-        StorageReference locationImageName = Folder.child("locatie");
-        if(locationCaptureImageURI!=null){
-        locationImageName.putFile(locationCaptureImageURI)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
 
-            }
-        });}
-        StorageReference bikeImageName = Folder.child("bicicleta");
-        if(stolenCaptureImageURI!=null)
-        {
-        bikeImageName.putFile(locationCaptureImageURI)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
+    public void uploadPhotos() {
+        Folder = FirebaseStorage.getInstance().getReference().child(user_Id).child("ReportImages").child(currentTime.toString());
+        StorageReference locationImageName = Folder.child(f.getName());
+        if (contentUri != null) {
+            locationImageName.putFile(contentUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
 
-            }
-        });}
+                }
+            });
+        }
+        StorageReference bikeImageName = Folder.child(f2.getName());
+        if (contentUri2 != null) {
+            bikeImageName.putFile(contentUri2)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                }
+            });
+        }
     }
 
     @Override
@@ -277,29 +286,54 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100) {
-            if (data != null) {
-                captureImageBitmap = (Bitmap) data.getExtras().get("data");
-                locationReportImageView.setImageBitmap(captureImageBitmap);
-                locationCaptureImageURI=getImageURI(captureImageBitmap);
-            }
+            f = new File(currentPhotoPath);
+            Log.d("tag", "Absolute path URL" + Uri.fromFile(f));
+            locationReportImageView.setImageURI(Uri.fromFile(f));
+            contentUri = Uri.fromFile(f);
         }
         if (requestCode == 101) {
-            if (data != null) {
-                //captureImageURI= data.getData();
-                captureImageBitmap = (Bitmap) data.getExtras().get("data");
-                stolenBikeReportImageView.setImageBitmap(captureImageBitmap);
-                stolenCaptureImageURI=getImageURI(captureImageBitmap);
-            }
+            System.out.println(data);
+
+            f2 = new File(currentPhotoPath);
+            stolenBikeReportImageView.setImageURI(Uri.fromFile(f2));
+            contentUri2 = Uri.fromFile(f2);
         }
 
     }
 
-    public Uri getImageURI(Bitmap bitmap)
-    {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG,100,bytes);
-        String path = MediaStore.Images.Media.insertImage(getContentResolver(),bitmap,"title",null);
-        return Uri.parse(path);
+    private void dispatchTakePictureIntent(int request) {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.example.android.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, request);
+            }
+        }
     }
 
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,
+                ".jpg",
+                storageDir
+        );
+
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
 }

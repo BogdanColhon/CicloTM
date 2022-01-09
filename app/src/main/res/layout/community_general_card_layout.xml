@@ -45,9 +45,8 @@
                     android:text="Titlu"
                     android:singleLine="true"
                     android:textStyle="bold"
-                    android:textAllCaps="true"
                     android:textColor="#3A3A3A"
-                    android:textSize="17sp" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/middleGeneralTextView"
