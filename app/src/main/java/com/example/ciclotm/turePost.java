@@ -2,10 +2,16 @@ package com.example.ciclotm;
 
 import android.graphics.drawable.Drawable;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class turePost {
+public class turePost implements Serializable {
+
+    private String title;
     private String distance;
+
+
+    private String duration;
     private String start_time;
     private String start_point;
     private int no_participants;
@@ -13,19 +19,29 @@ public class turePost {
     private String uid;
     private Date date;
 
-    public turePost(){
+    public turePost() {
 
     }
 
-    public turePost(String distance, String start_time, String start_point, int no_participants,String description, String uid,Date date) {
+    public turePost(String title, String distance, String duration, String start_time, String start_point, int no_participants, String description, String uid, Date date) {
+        this.title = title;
         this.distance = distance;
+        this.duration = duration;
         this.start_time = start_time;
         this.start_point = start_point;
         this.no_participants = no_participants;
-        this.description=description;
+        this.description = description;
         this.uid = uid;
-        this.date=date;
+        this.date = date;
 
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDistance() {
@@ -82,6 +98,14 @@ public class turePost {
 
     public void setUid(String uid) {
         this.uid = uid;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
     }
 
 }

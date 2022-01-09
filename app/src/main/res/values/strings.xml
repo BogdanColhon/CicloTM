@@ -22,4 +22,8 @@
         <item>E-bike</item>
         <item>Fat bike</item>
     </string-array>
+    <string-array name="time_units">
+        <item>ore</item>
+        <item>minute</item>
+    </string-array>
 </resources>

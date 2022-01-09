@@ -35,7 +35,7 @@ import java.util.Observer;
  * Use the {@link TureFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TureFragment extends Fragment {
+public class TureFragment extends Fragment  implements tureRecycleViewAdapter.OnPostListener {
 
     private ArrayList<turePost> postsList = new ArrayList<>();
     TextView turePostsNumberTextView;
@@ -92,7 +92,7 @@ public class TureFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.tureRView);
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new tureRecycleViewAdapter(getContext(), postsList);
+        adapter = new tureRecycleViewAdapter(getContext(), postsList,this);
         recyclerView.setAdapter(adapter);
         turePostsNumberTextView = (TextView) view.findViewById(R.id.turePostsNumberTextView);
         fetchPostsInfo();
@@ -156,4 +156,10 @@ public class TureFragment extends Fragment {
     }
 
 
+    @Override
+    public void onPostClick(int position) {
+        Intent intent = new Intent(getContext(), ExpandedTurePostActivity.class);
+        intent.putExtra("clicked_post", postsList.get(position));
+        startActivity(intent);
+    }
 }

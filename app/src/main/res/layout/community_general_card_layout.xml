@@ -3,23 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="10dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="7dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/custom_border"
         android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp">
+        android:paddingEnd="20dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/user_photo"
-                android:layout_width="60dp"
+                android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_weight="0"
                 android:src="@drawable/user_photo" />
@@ -42,16 +44,18 @@
                     android:layout_height="wrap_content"
                     android:text="Titlu"
                     android:singleLine="true"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                    android:textColor="@color/black"
-                    android:textSize="25dp" />
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    android:textColor="#3A3A3A"
+                    android:textSize="17sp" />
 
                 <TextView
                     android:id="@+id/middleGeneralTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
-                    android:textSize="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:textSize="13sp"
                     android:text="-" />
 
                 <TextView
@@ -59,9 +63,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Continut"
-                    android:textSize="18dp"
+                    android:textSize="15sp"
                     android:singleLine="true"
-                    android:textColor="@color/black" />
+                    android:textColor="#3A3A3A" />
 
             </LinearLayout>
 
