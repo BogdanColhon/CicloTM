@@ -21,12 +21,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ciclotm.Models.ClusterMarker;
 import com.example.ciclotm.Models.MapMarker;
+import com.example.ciclotm.Models.PointOfInterestMarker;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -164,8 +166,25 @@ public class MapsFragment extends Fragment {
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.custom_dialog_map_layers);
 
-        final TextView furturiLayer = dialog.findViewById(R.id.furturiLayer);
-        final TextView utileLayer = dialog.findViewById(R.id.utileLayer);
+        final Button furturiLayer = dialog.findViewById(R.id.furturiLayer);
+        final Button utileLayer = dialog.findViewById(R.id.utileLayer);
+        furturiLayer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                map.clear();
+                fetchMarkers();
+                dialog.dismiss();
+            }
+        });
+        utileLayer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                map.clear();
+                fetchPointOfInterestMarkers();
+                dialog.dismiss();
+            }
+        });
+
 
         dialog.show();
     }
@@ -188,6 +207,60 @@ public class MapsFragment extends Fragment {
                         .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ic_baseline_dot)));
                 markers.add(marker.getId());
             }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void fetchPointOfInterestMarkers() {
+        reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("PointsOfInterestMarkers");
+        reference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                PointOfInterestMarker newMarker = snapshot.getValue(PointOfInterestMarker.class);
+                LatLng latLng = new LatLng(newMarker.getLat(), newMarker.getLng());
+                System.out.println("\n\n"+newMarker.getType());
+                if (String.valueOf(newMarker.getType()).equals("Service")) {
+                    Marker marker = map.addMarker(new MarkerOptions()
+                            .position(latLng)
+                            .title(newMarker.getTitle())
+                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ic_baseline_service)));
+                    markers.add(marker.getId());
+                }
+                if (String.valueOf(newMarker.getType()).equals("Magazin")) {
+                    Marker marker = map.addMarker(new MarkerOptions()
+                            .position(latLng)
+                            .title(newMarker.getTitle())
+                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ic_baseline_store_24)));
+                    markers.add(marker.getId());
+                }
+                if (String.valueOf(newMarker.getType()).equals("Cafenea")) {
+                    Marker marker = map.addMarker(new MarkerOptions()
+                            .position(latLng)
+                            .title(newMarker.getTitle())
+                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ic_baseline_coffee_24)));
+                    markers.add(marker.getId());
+                }
+            }
+
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -251,6 +324,8 @@ public class MapsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        ((MenuActivity) getActivity())
+                .setActionBarTitle("Hărți");
         mapView.onResume();
     }
 
