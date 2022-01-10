@@ -2,14 +2,25 @@ package com.example.ciclotm;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.example.ciclotm.Models.Report;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -19,10 +30,12 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class FurturiFragment extends Fragment {
-    private ArrayList<furturiPost> postsList;
+    private ArrayList<Report> postsList = new ArrayList<>();
+    TextView furturiPostsNumberTextView;
     private RecyclerView recyclerView;
-    generalRecycleViewAdapter adapter;
+    furturiRecycleViewAdapter adapter;
     RecyclerView.LayoutManager layoutManager;
+    private DatabaseReference reference;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -69,18 +82,58 @@ public class FurturiFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_furturi, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.furturiRView);
+        furturiPostsNumberTextView = (TextView) view.findViewById(R.id.furturiPostsNumberTextView);
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        postsList = new ArrayList<>();
-        setPostInfo();
-        recyclerView.setAdapter(new furturiRecycleViewAdapter(getContext(), postsList));
+        adapter = new furturiRecycleViewAdapter(getContext(), postsList);
+        recyclerView.setAdapter(adapter);
+        fetchPostsInfo();
+        final Handler handler = new Handler();
+        Runnable refresh = new Runnable() {
+            @Override
+            public void run() {
+                fetchPostsNumber();
+                handler.postDelayed(this, 100);
+            }
+        };
+        handler.postDelayed(refresh, 100);
         return view;
     }
+    private void fetchPostsInfo() {
+        reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("furturiPosts");
+        reference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Report newPost = snapshot.getValue(Report.class);
+                postsList.add(0, newPost);
+                adapter.notifyDataSetChanged();
+            }
 
-    private void setPostInfo() {
-        postsList.add(new furturiPost("02.12.2021", "Iulius Mall", "Cursiera Triban neagra", ResourcesCompat.getDrawable(getResources(), R.drawable.bike2, null)));
-        postsList.add(new furturiPost("20.11.2021", "Calea Martirilor nr 42 SC A", "Bicicleta de oras Diamant, neagra", ResourcesCompat.getDrawable(getResources(), R.drawable.bike1, null)));
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
+            }
 
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
+
+    private void fetchPostsNumber() {
+        furturiPostsNumberTextView.setText(String.valueOf(furturiRecycleViewAdapter.furturiPostsCount));
+    }
+
+
 }

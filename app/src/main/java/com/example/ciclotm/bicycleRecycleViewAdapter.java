@@ -78,7 +78,8 @@ public class bicycleRecycleViewAdapter extends RecyclerView.Adapter<bicycleRecyc
         holder.descriptionText.setText(description);
 
         String userProfilePicture = "UsersProfilePicture/" + bikeList.get(position).getOwner() + ".png";
-        storageReference = FirebaseStorage.getInstance().getReference().child(userProfilePicture);
+        String a="26mTrrDNEAgRHz2OoSZ8Q3Ig3N22/ReportImages/Thu Jan 06 18:38:03 GMT+02:00 2022/89c0becee797f6a54cd65c66191db2cf.jpg";
+        storageReference = FirebaseStorage.getInstance().getReference().child(a);
         File localFile = null;
         try {
             localFile = File.createTempFile("tempFile", "png");
