@@ -76,8 +76,8 @@ public class ExpandedTurePostActivity extends AppCompatActivity {
                 User userProfile = snapshot.getValue(User.class);
 
                 if (userProfile != null) {
-                    String firstname = userProfile.FirstName;
-                    String lastname = userProfile.LastName;
+                    String firstname = userProfile.getFirstName();
+                    String lastname = userProfile.getLastName();
 
                     usernameTextView.setText(firstname + " " + lastname);
                 }

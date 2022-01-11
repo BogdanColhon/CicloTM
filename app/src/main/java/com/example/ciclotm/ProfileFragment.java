@@ -33,6 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -127,9 +128,9 @@ public class ProfileFragment extends Fragment {
                 User userProfile = snapshot.getValue(User.class);
 
                 if (userProfile != null) {
-                    String firstname = userProfile.FirstName;
-                    String lastname = userProfile.LastName;
-                    Date birthDate = userProfile.BirthDate;
+                    String firstname = userProfile.getFirstName().toString();
+                    String lastname = userProfile.getLastName().toString();
+                    Date birthDate = userProfile.getBirthDate();
 
                     birthday = Calendar.getInstance();
                     birthday.setTime(birthDate);
@@ -142,7 +143,7 @@ public class ProfileFragment extends Fragment {
                     nameTextView.setText(firstname + " " + lastname);
                     ageTextView.setText(String.valueOf(age));
                     try {
-                        getUserProfilePhoto();
+                        getUserProfilePhoto(userProfile.getProfileImageUrl());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -196,17 +197,10 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
-    public void getUserProfilePhoto() throws IOException {
-        String userProfilePhoto = "UsersProfilePicture/" + userID + ".png";
-        storageReference = FirebaseStorage.getInstance().getReference().child(userProfilePhoto);
-        File localFile = File.createTempFile("tempFile", "png");
-        storageReference.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-                userProfileImageView.setImageBitmap(bitmap);
-            }
-        });
+    public void getUserProfilePhoto(String profileImageUrl) throws IOException {
+        if(!profileImageUrl.equals("")) {
+            Picasso.get().load(profileImageUrl).fit().centerInside().rotate(90).into(userProfileImageView);
+        }
     }
 
     public void onResume() {
