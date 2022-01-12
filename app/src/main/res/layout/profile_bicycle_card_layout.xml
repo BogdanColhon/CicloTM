@@ -1,96 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="350dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:background="@drawable/custom_border"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp">
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        android:background="@android:color/white"
+        app:cardElevation="20dp">
 
-        <LinearLayout
+        <ImageView
+            android:id="@+id/bike_photo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:background="@drawable/no_image_available"
+            android:scaleType="centerCrop" />
 
-            <TextView
-                android:id="@+id/nicknameTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:text="Nume"
-                android:textColor="@color/black"
-                android:textStyle="bold" />
-            <ImageView
-                android:id="@+id/bike_photo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_insert_photo_24" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="20dp">
 
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="30dp" />
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|bottom"
                 android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/bikeTypeTextView"
-                    android:layout_width="match_parent"
+                <!--Description Text-->
+                <FrameLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:text="Model"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/transparent_card">
 
-                <TextView
-                    android:id="@+id/bikeBrandTextView"
-                    android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/bikeBrandTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:text="Brand+Model"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/white"
+                        android:textSize="15sp" />
+                </FrameLayout>
+
+
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:text="Marca"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/transparent_card">
 
-                <TextView
-                    android:id="@+id/bikeWeightTextView"
-                    android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/weightTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:text="Weight"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/white"
+                        android:textSize="15sp" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:text="Greutatea (kg)"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/transparent_card">
 
-                <TextView
-                    android:id="@+id/bikePurchasingYearTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:text="An"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/detailsTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:text="Detalii"
-                    android:textColor="@color/black"
-                    android:inputType="textMultiLine"
-                    android:textStyle="bold" />
-
+                    <TextView
+                        android:id="@+id/descriptionTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:text="Description"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/white"
+                        android:textSize="15sp" />
+                </FrameLayout>
             </LinearLayout>
 
-        </LinearLayout>
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|top"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/transparent_card">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>
+                <TextView
+                    android:id="@+id/nicknameTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:text="Title"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp" />
+            </FrameLayout>
+        </FrameLayout>
+    </androidx.cardview.widget.CardView>
+</FrameLayout>

@@ -4,181 +4,232 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="25dp"
     tools:context=".BicyclePostActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <Space
+
+
+        <TextView
+            android:id="@+id/nicknameTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:text="Nume:"
+            android:layout_marginBottom="5dp"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
+
         <LinearLayout
-            android:id="@+id/nick_name"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/custom_linear_layout"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/nick_nameTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_weight="1.3"
-                android:text="Nume:"
-                android:textColor="@color/black"
-                android:textSize="25sp"
-                android:textStyle="bold" />
-
             <EditText
-                android:id="@+id/nick_nameEditText"
+                android:id="@+id/nicknameEditText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
                 android:textColor="@color/black"
-                android:layout_weight="4"
-                android:layout_marginStart="5dp"
+                android:layout_weight="0.7"
                 android:ems="10"
                 android:background="@null"
-                android:hint="-"
-                android:textSize="25sp"
+                android:hint="Nume"
                 android:inputType="text" />
+
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/photoTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Poză:"
+            android:layout_marginBottom="5dp"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
         <ImageView
             android:id="@+id/bike_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginBottom="30dp"
-            app:srcCompat="@drawable/ic_baseline_insert_photo_24"></ImageView>
-        <Spinner
-            android:id="@+id/modelSpinner"
+            android:adjustViewBounds="true"
+            android:layout_marginBottom="20dp"
+            app:srcCompat="@drawable/ic_baseline_insert_photo_24" />
+
+
+
+        <TextView
+            android:id="@+id/brandTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:text="Marca:"
+            android:layout_marginBottom="5dp"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:id="@+id/top"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/custom_linear_layout"
             android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/brandTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_weight="1.3"
-                android:text="Marca:"
-                android:textColor="@color/black"
-                android:textSize="25sp"
-                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/brandEditText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
                 android:textColor="@color/black"
-                android:layout_weight="4"
-                android:layout_marginStart="5dp"
+                android:layout_weight="0.7"
                 android:ems="10"
                 android:background="@null"
-                android:hint="-"
-                android:textSize="25sp"
+                android:hint="Marca"
                 android:inputType="text" />
         </LinearLayout>
-        <LinearLayout
-            android:id="@+id/bike_weight"
+        <TextView
+            android:id="@+id/durationTextView"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:text="Model:"
+            android:layout_marginBottom="5dp"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/custom_linear_layout"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/weightTextView"
+            <EditText
+                android:id="@+id/modelEditText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_weight="1.7"
-                android:text="Greutate:"
                 android:textColor="@color/black"
-                android:textSize="25sp"
-                android:textStyle="bold" />
+                android:layout_weight="0.7"
+                android:ems="10"
+                android:background="@null"
+                android:hint="Model"
+                android:inputType="text" />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/departureTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tip:"
+            android:layout_marginBottom="5dp"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/custom_linear_layout"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/typeSpinner"
+                android:layout_width="0dp"
+                android:layout_weight="1.5"
+                android:layout_height="wrap_content"></Spinner>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/yearTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="An:"
+            android:layout_marginBottom="5dp"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/custom_linear_layout"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/yearEditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:layout_weight="0.7"
+                android:ems="10"
+                android:background="@null"
+                android:hint="An"
+                android:inputType="text" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/weightHeaderTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Greutate:"
+            android:layout_marginBottom="5dp"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/custom_linear_layout"
+            android:orientation="horizontal">
 
             <EditText
                 android:id="@+id/weightEditText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
                 android:textColor="@color/black"
                 android:layout_weight="0.7"
-                android:layout_marginStart="5dp"
                 android:ems="10"
                 android:background="@null"
                 android:hint="-"
-                android:textSize="25sp"
                 android:inputType="text" />
 
             <TextView
                 android:id="@+id/kgTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:textSize="25sp"
+                android:layout_weight="1.5"
                 android:textColor="@color/black"
                 android:text="kg" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2" />
         </LinearLayout>
-        <LinearLayout
+        <TextView
+            android:id="@+id/descriptionHeaderTextView"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/yearTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_weight="1.5"
-                android:text="An:"
-                android:textColor="@color/black"
-                android:textSize="25sp"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/yearEditText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:layout_weight="8"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="20dp"
-                android:ems="10"
-                android:background="@null"
-                android:hint="-"
-                android:textSize="25sp"
-                android:inputType="text" />
-        </LinearLayout>
-
-
+            android:layout_height="wrap_content"
+            android:text="Detalii:"
+            android:layout_marginBottom="5dp"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/descriptionEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="20"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
             android:ems="10"
             android:gravity="top"
-            android:background="@null"
+            android:background="@drawable/custom_linear_layout"
             android:inputType="textMultiLine"
-            android:hint="Detalii bicicletă.." />
+            android:hint="-" />
     </LinearLayout>
-
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

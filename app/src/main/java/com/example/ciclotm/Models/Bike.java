@@ -10,13 +10,14 @@ public class Bike {
     private String Year;
     private String Details;
     private String Owner;
+    private String BikePhotoUrl;
 
     public Bike() {
 
     }
 
-    public Bike(String nick_name,String type, String brand, String model, String weight, String year, String details, String owner) {
-        Nick_name=nick_name;
+    public Bike(String nick_name, String type, String brand, String model, String weight, String year, String details, String owner, String bikePhotoUrl) {
+        Nick_name = nick_name;
         Type = type;
         Brand = brand;
         Model = model;
@@ -24,6 +25,7 @@ public class Bike {
         Year = year;
         Details = details;
         Owner = owner;
+        BikePhotoUrl = bikePhotoUrl;
     }
 
     public String getNick_name() {
@@ -89,4 +91,13 @@ public class Bike {
     public void setOwner(String owner) {
         Owner = owner;
     }
+
+    public String getBikePhotoUrl() {
+        return BikePhotoUrl;
+    }
+
+    public void setBikePhotoUrl(String bikePhotoUrl) {
+        BikePhotoUrl = bikePhotoUrl;
+    }
+
 }
