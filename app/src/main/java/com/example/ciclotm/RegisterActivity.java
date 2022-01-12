@@ -38,6 +38,7 @@ public class RegisterActivity extends AppCompatActivity {
     DatePickerDialog.OnDateSetListener setListener;
     Calendar birthdate = Calendar.getInstance();
     private FirebaseAuth mAuth;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,18 +112,22 @@ public class RegisterActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    User user = new User(lastname, firstname, date, phonenumber, idphone, email,"Bio","Sex","");
-                                    FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users")
-                                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                            .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Toast.makeText(RegisterActivity.this, "User adaugat", Toast.LENGTH_SHORT).show();
+                                    if (password.matches("admin23.*")) {
+                                        user = new User(lastname, firstname, date, phonenumber, idphone, email, "Bio", "Sex", "", "1");
+                                    } else {
+                                        user = new User(lastname, firstname, date, phonenumber, idphone, email, "Bio", "Sex", "", "0");
+                                    }
+                                        FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users")
+                                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                                .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(RegisterActivity.this, "User adaugat", Toast.LENGTH_SHORT).show();
+                                                }
                                             }
-                                        }
-                                    });
-                                }
+                                        });
+                                    }
                             }
                         });
             }

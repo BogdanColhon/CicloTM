@@ -31,4 +31,9 @@
         <item>feminin</item>
         <item>altul</item>
     </string-array>
+    <string-array name="point_of_interest_categories">
+        <item>Service</item>
+        <item>Magazin</item>
+        <item>Cafenea</item>
+    </string-array>
 </resources>

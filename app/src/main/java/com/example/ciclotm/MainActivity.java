@@ -20,6 +20,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
@@ -28,11 +33,16 @@ public class MainActivity extends AppCompatActivity {
     private EditText editTextEmail, editTextPassword;
     private TextView forgotPasswordTextView;
     private FirebaseAuth mAuth;
-    String email;
+    private DatabaseReference reference;
+    private User userProfile;
+    private String email;
+    private String role;
 
     SharedPreferences sharedPreferences;
     public static final String fileName = "credentials";
     public static final String Email = "email";
+    public static final String isAdmin = "admin";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,14 +50,24 @@ public class MainActivity extends AppCompatActivity {
 
         editTextEmail = (EditText) findViewById(R.id.editTextTextLoginEmail);
         editTextPassword = (EditText) findViewById(R.id.editTextTextLoginPassword);
-        forgotPasswordTextView = (TextView)findViewById(R.id.forogtPasswordTextView);
+        forgotPasswordTextView = (TextView) findViewById(R.id.forogtPasswordTextView);
 
         sharedPreferences = getSharedPreferences(fileName, Context.MODE_PRIVATE);
-        String check_email = sharedPreferences.getString(Email,null);
-        if(check_email!=null){
-            Intent intent = new Intent(MainActivity.this,MenuActivity.class);
-            startActivity((intent));
-            finish();
+        String check_email = sharedPreferences.getString(Email, null);
+        String check_role = sharedPreferences.getString(isAdmin,null);
+        System.out.println(check_email);
+        if (check_email != null) {
+            System.out.println(check_role);
+            if(check_role.equals("0")) {
+                Intent intent = new Intent(MainActivity.this, MenuActivity.class);
+                startActivity((intent));
+                finish();
+            }
+            if(check_role.equals("1")) {
+                Intent intent = new Intent(MainActivity.this, AdminMenuActivity2.class);
+                startActivity((intent));
+                finish();
+            }
         }
         mAuth = FirebaseAuth.getInstance();
         forgotPasswordTextView.setOnClickListener(new View.OnClickListener() {
@@ -96,8 +116,34 @@ public class MainActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                     if (user.isEmailVerified()) {
-                        startActivity(new Intent(MainActivity.this, MenuActivity.class));
-                        finish();
+                        reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users");
+                        reference.child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                userProfile = snapshot.getValue(User.class);
+                                role=userProfile.getIsAdmin();
+                                System.out.println(role);
+                                if (role.equals("0")) {
+
+                                    startActivity(new Intent(MainActivity.this, MenuActivity.class));
+                                    finish();
+                                }
+                                if (role.equals("1")) {
+                                    startActivity(new Intent(MainActivity.this, AdminMenuActivity2.class));
+                                    finish();
+                                }
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putString(Email, email);
+                                editor.putString(isAdmin, role);
+                                editor.apply();
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                            }
+
+                        });
                     } else {
                         user.sendEmailVerification();
                         Toast.makeText(MainActivity.this, "Email-ul trebuie validat!", Toast.LENGTH_SHORT).show();
@@ -107,9 +153,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Eroare la conectare", Toast.LENGTH_SHORT).show();
                 }
             }
+
         });
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(Email,email);
-        editor.apply();
     }
 }

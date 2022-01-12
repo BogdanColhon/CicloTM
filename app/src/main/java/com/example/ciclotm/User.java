@@ -4,21 +4,31 @@ import java.util.Date;
 
 public class User {
 
-    private String LastName,FirstName,PhoneNumber,PhoneId,Email,Bio,Gender,profileImageUrl;
+    private String LastName;
+    private String FirstName;
+    private String PhoneNumber;
+    private String PhoneId;
+    private String Email;
+    private String Bio;
+    private String Gender;
+    private String profileImageUrl;
+    private String isAdmin;
     private Date BirthDate;
 
-    public User(){}
+    public User() {
+    }
 
-    public User(String LastName,String FirstName,Date BirthDate, String PhoneNumber, String PhoneId, String Email,String Bio, String Gender,String profileImageUrl){
-        this.LastName=LastName;
-        this.FirstName=FirstName;
-        this.BirthDate=BirthDate;
-        this.PhoneNumber=PhoneNumber;
-        this.PhoneId=PhoneId;
-        this.Email=Email;
-        this.Bio=Bio;
-        this.Gender=Gender;
-        this.profileImageUrl=profileImageUrl;
+    public User(String LastName, String FirstName, Date BirthDate, String PhoneNumber, String PhoneId, String Email, String Bio, String Gender, String profileImageUrl,String isAdmin) {
+        this.LastName = LastName;
+        this.FirstName = FirstName;
+        this.BirthDate = BirthDate;
+        this.PhoneNumber = PhoneNumber;
+        this.PhoneId = PhoneId;
+        this.Email = Email;
+        this.Bio = Bio;
+        this.Gender = Gender;
+        this.profileImageUrl = profileImageUrl;
+        this.isAdmin = isAdmin;
     }
 
 
@@ -92,6 +102,14 @@ public class User {
 
     public void setBirthDate(Date birthDate) {
         BirthDate = birthDate;
+    }
+
+    public String getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(String isAdmin) {
+        this.isAdmin = isAdmin;
     }
 
 }

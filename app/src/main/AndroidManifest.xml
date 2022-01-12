@@ -20,6 +20,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CicloTM">
 
+        <activity
+            android:name=".AdminMenuActivity2"
+            android:exported="false" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.android.fileprovider"
@@ -27,8 +31,9 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+                android:resource="@xml/file_paths" />
         </provider>
+
         <activity
             android:name=".ExpandedTurePostActivity"
             android:exported="false" />

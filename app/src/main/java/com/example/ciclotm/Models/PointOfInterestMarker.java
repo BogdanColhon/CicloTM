@@ -15,7 +15,7 @@ public class PointOfInterestMarker {
 
     }
 
-    public PointOfInterestMarker(String title, String type, Double lat, Double lng, Date date) {
+    public PointOfInterestMarker(String title, String type, Double lat, Double lng) {
         Title = title;
         Type = type;
         Lat = lat;
@@ -45,6 +45,7 @@ public class PointOfInterestMarker {
     public void setTitle(String title) {
         Title = title;
     }
+
     public String getType() {
         return Type;
     }
