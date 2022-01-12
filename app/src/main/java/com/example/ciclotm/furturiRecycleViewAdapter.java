@@ -73,7 +73,8 @@ public class furturiRecycleViewAdapter extends RecyclerView.Adapter<furturiRecyc
         String description = postsList.get(position).getBike_model();
         holder.description.setText(description);
         String link = postsList.get(position).getBikeImageUrl();
-        Picasso.get().load(link).into(holder.bike_photo);
+        if(!link.equals(""))
+        Picasso.get().load(link).resize(500,500).centerInside().into(holder.bike_photo);
     }
 
 

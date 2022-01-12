@@ -141,7 +141,7 @@ public class ProfileFragment extends Fragment {
                     }
 
                     nameTextView.setText(firstname + " " + lastname);
-                    ageTextView.setText(String.valueOf(age));
+                    ageTextView.setText(String.valueOf(age)+" ani");
                     try {
                         getUserProfilePhoto(userProfile.getProfileImageUrl());
                     } catch (IOException e) {

@@ -5,10 +5,14 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -29,6 +33,7 @@ import android.widget.Toast;
 import com.example.ciclotm.Models.ClusterMarker;
 import com.example.ciclotm.Models.MapMarker;
 import com.example.ciclotm.Models.PointOfInterestMarker;
+import com.example.ciclotm.Models.Report;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -41,6 +46,8 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.TileOverlay;
+import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -48,26 +55,44 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.maps.android.clustering.ClusterManager;
+import com.google.maps.android.heatmaps.Gradient;
+import com.google.maps.android.heatmaps.HeatmapTileProvider;
+import com.google.maps.android.heatmaps.WeightedLatLng;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link MapsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MapsFragment extends Fragment {
+public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClickListener {
     private final int REQ_PERMISSION = 5;
     private MapView mapView;
     private GoogleMap map;
     private DatabaseReference reference;
+    private ArrayList<WeightedLatLng> arr = new ArrayList<>();
     ArrayList<String> markers = new ArrayList<>();
     TextView t_markerWindow;
     ImageView i_markerWindow;
+    int[] colors = {
+            Color.rgb(102, 225, 0), // green
+            Color.rgb(255, 0, 0)    // red
+    };
 
+    float[] startPoints = {
+            0.2f, 1f
+    };
+
+    Gradient gradient = new Gradient(colors, startPoints);
+
+    HashMap hash_markers = new HashMap();
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -168,6 +193,8 @@ public class MapsFragment extends Fragment {
 
         final Button furturiLayer = dialog.findViewById(R.id.furturiLayer);
         final Button utileLayer = dialog.findViewById(R.id.utileLayer);
+        final Button heatMapLayer = dialog.findViewById(R.id.heatMapLayer);
+
         furturiLayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -184,20 +211,37 @@ public class MapsFragment extends Fragment {
                 dialog.dismiss();
             }
         });
+        heatMapLayer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                map.clear();
+                System.out.println(arr.toString());
+                HeatmapTileProvider heatmapTileProvider = new HeatmapTileProvider.Builder()
+                        .weightedData(arr)
+                        .radius(10)
+                        .gradient(gradient)
+                        .build();
+                TileOverlayOptions tileoverlayoptions = new TileOverlayOptions().tileProvider(heatmapTileProvider);
+                TileOverlay tileoverlay = map.addTileOverlay(tileoverlayoptions);
+                tileoverlay.clearTileCache();
+                dialog.dismiss();
+            }
+        });
 
 
         dialog.show();
     }
 
     private void fetchMarkers() {
-        reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("StolenBikesMarkers").child("Coordonate");
+        reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("furturiPosts");
         reference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                MapMarker newMarker = snapshot.getValue(MapMarker.class);
-                LatLng latLng = new LatLng(newMarker.getLat(), newMarker.getLng());
+                Report newMarker = snapshot.getValue(Report.class);
+                LatLng latLng = new LatLng(newMarker.getTheftMarkerLat(), newMarker.getTheftMarkerLng());
+                System.out.println("\n\n"+newMarker.getTheftMarkerLat()+"\n\n");
                 Calendar calendar = Calendar.getInstance();
-                calendar.setTime(newMarker.getDate());
+                calendar.setTime(newMarker.getStolenDate());
                 int month = calendar.get(Calendar.MONTH) + 1;
                 Marker marker = map.addMarker(new MarkerOptions()
                         .position(latLng)
@@ -205,7 +249,28 @@ public class MapsFragment extends Fragment {
                                 + "." + month
                                 + "." + calendar.get(Calendar.YEAR))
                         .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ic_baseline_dot)));
-                markers.add(marker.getId());
+                hash_markers.put(marker.getId(),newMarker.getBikeImageUrl());
+                map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                    @Nullable
+                    @Override
+                    public View getInfoContents(@NonNull Marker marker) {
+                        View v = getLayoutInflater().inflate(R.layout.marker_info_window,null);
+                        String url = (String) hash_markers.get(marker.getId());
+                        TextView t1= (TextView) v.findViewById(R.id.textView);
+                        ImageView i1 = (ImageView) v.findViewById(R.id.markerInfoWindowImageView);
+                        Picasso.get().load(url).resize(500,500).centerInside().into(i1);
+                        t1.setText(marker.getTitle());
+                        return v;
+                    }
+
+                    @Nullable
+                    @Override
+                    public View getInfoWindow(@NonNull Marker marker) {
+                        return null;
+                    }
+                });
+                WeightedLatLng weightedLatLng = new WeightedLatLng(latLng,10);
+                arr.add(weightedLatLng);
             }
 
             @Override
@@ -243,21 +308,18 @@ public class MapsFragment extends Fragment {
                             .position(latLng)
                             .title(newMarker.getTitle())
                             .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ic_baseline_service)));
-                    markers.add(marker.getId());
                 }
                 if (String.valueOf(newMarker.getType()).equals("Magazin")) {
                     Marker marker = map.addMarker(new MarkerOptions()
                             .position(latLng)
                             .title(newMarker.getTitle())
                             .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ic_baseline_store_24)));
-                    markers.add(marker.getId());
                 }
                 if (String.valueOf(newMarker.getType()).equals("Cafenea")) {
                     Marker marker = map.addMarker(new MarkerOptions()
                             .position(latLng)
                             .title(newMarker.getTitle())
                             .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ic_baseline_coffee_24)));
-                    markers.add(marker.getId());
                 }
             }
 
@@ -359,4 +421,8 @@ public class MapsFragment extends Fragment {
         mapView.onSaveInstanceState(outState);
     }
 
+    @Override
+    public void onInfoWindowClick(@NonNull Marker marker) {
+
+    }
 }

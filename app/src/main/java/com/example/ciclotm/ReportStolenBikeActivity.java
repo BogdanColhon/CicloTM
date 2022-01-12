@@ -216,17 +216,17 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
                             uploadPhotos();
                             Toast.makeText(ReportStolenBikeActivity.this, "Raport adaugat", Toast.LENGTH_SHORT).show();
                              //might need to be commented
-                             StolenBikeLocationActivity.terminator.finish();
+                             /*StolenBikeLocationActivity.terminator.finish();
                              MenuActivity.terminator.finish();
                              Intent myIntent = new Intent(ReportStolenBikeActivity.this, MenuActivity.class);
                              ReportStolenBikeActivity.this.startActivity(myIntent);
-                            finish();
+                            finish();*/
                         }
                     }
                 });
                 FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users").child(user_id).child("Furturi").child(String.valueOf(postDate))
                         .setValue(report);
-                MapMarker marker = new MapMarker(theftMarkerLat, theftMarkerLng, date_of_theft);
+                MapMarker marker = new MapMarker(theftMarkerLat, theftMarkerLng, date_of_theft,bikeImageLink,locationImageLink);
                 FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("StolenBikesMarkers").child("Coordonate").child(String.valueOf(postDate))
                         .setValue(marker);
 

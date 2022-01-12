@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -84,20 +85,8 @@ public class tureRecycleViewAdapter extends RecyclerView.Adapter<tureRecycleView
 
         String userProfilePicture = "UsersProfilePicture/" + postsList.get(position).getUid() + ".png";
         storageReference = FirebaseStorage.getInstance().getReference().child(userProfilePicture);
-        File localFile = null;
-        try {
-            localFile = File.createTempFile("tempFile", "png");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        File finalLocalFile = localFile;
-        storageReference.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                Bitmap bitmap = BitmapFactory.decodeFile(finalLocalFile.getAbsolutePath());
-                holder.user_photo.setImageBitmap(bitmap);
-            }
-        });
+        String userImageUrl = postsList.get(position).getUserImageUrl();
+        Picasso.get().load(userImageUrl).rotate(90).fit().centerInside().into(holder.user_photo);
     }
 
     @Override

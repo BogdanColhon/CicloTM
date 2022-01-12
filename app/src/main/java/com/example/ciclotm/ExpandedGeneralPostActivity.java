@@ -21,6 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
@@ -83,12 +84,8 @@ public class ExpandedGeneralPostActivity extends AppCompatActivity {
         titlePostTextView.setText(post.getTitle());
         contentPostTextView.setText(post.getContent());
 
-        try {
-            getUserProfilePhoto(post);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        String userImageUrl = post.getUserImageUrl();
+        Picasso.get().load(userImageUrl).rotate(90).fit().centerInside().into(userProfileImageView);
 
     }
 
