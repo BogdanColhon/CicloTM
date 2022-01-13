@@ -8,7 +8,9 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -19,7 +21,9 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -131,7 +135,7 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
             public void onClick(View v) {
                 try {
                     checkCameraPermission();
-                    dispatchTakePictureIntent(100);
+                    chooseOption(100);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -144,7 +148,9 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
             public void onClick(View v) {
                 try {
                     checkCameraPermission();
-                    dispatchTakePictureIntent(101);
+                    Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(pickPhoto, 2);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -215,7 +221,7 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
                         if (task.isSuccessful()) {
                             uploadPhotos();
                             Toast.makeText(ReportStolenBikeActivity.this, "Raport adaugat", Toast.LENGTH_SHORT).show();
-                             //might need to be commented
+                            //might need to be commented
                              /*StolenBikeLocationActivity.terminator.finish();
                              MenuActivity.terminator.finish();
                              Intent myIntent = new Intent(ReportStolenBikeActivity.this, MenuActivity.class);
@@ -226,13 +232,43 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
                 });
                 FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users").child(user_id).child("Furturi").child(String.valueOf(postDate))
                         .setValue(report);
-                MapMarker marker = new MapMarker(theftMarkerLat, theftMarkerLng, date_of_theft,bikeImageLink,locationImageLink);
+                MapMarker marker = new MapMarker(theftMarkerLat, theftMarkerLng, date_of_theft, bikeImageLink, locationImageLink);
                 FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("StolenBikesMarkers").child("Coordonate").child(String.valueOf(postDate))
                         .setValue(marker);
 
             }
         });
 
+    }
+
+    private void chooseOption(int code) {
+        final Dialog dialog = new Dialog(ReportStolenBikeActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.camera_gallery_dialog);
+
+
+        ImageView cameraImageView = dialog.findViewById(R.id.cameraImageView);
+        ImageView galleryImageView = dialog.findViewById(R.id.galleryImageView);
+
+        cameraImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dispatchTakePictureIntent(code);
+                dialog.dismiss();
+            }
+        });
+        galleryImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(pickPhoto,1);
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
     private void checkCameraPermission() {
@@ -325,6 +361,16 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            contentUri = data.getData();
+             f = new File(contentUri.getPath());
+            locationReportImageView.setImageURI(contentUri);
+        }
+        if (requestCode == 2) {
+            contentUri2 = data.getData();
+            f2 = new File(contentUri2.getPath());
+            stolenBikeReportImageView.setImageURI(contentUri2);
+        }
         if (requestCode == 100) {
             f = new File(currentPhotoPath);
             Log.d("tag", "Absolute path URL" + Uri.fromFile(f));
