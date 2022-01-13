@@ -166,10 +166,11 @@ public class AdminGeneralFragment extends Fragment  implements adminGeneralRecyc
     }
 
     public void removeItem(int position){
-        postsList.remove(position);
-        adapter.notifyItemRemoved(position);
-        PostReference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference()
+        System.out.println("Removed position: "+position);
+       PostReference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference()
                 .child("GeneralPosts").child(String.valueOf(postsList.get(position).getDate()));
         PostReference.removeValue();
+        postsList.remove(position);
+       adapter.notifyItemRemoved(position);
     }
 }

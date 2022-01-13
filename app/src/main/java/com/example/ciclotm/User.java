@@ -1,8 +1,9 @@
 package com.example.ciclotm;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class User {
+public class User implements Serializable {
 
     private String LastName;
     private String FirstName;

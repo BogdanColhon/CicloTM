@@ -115,7 +115,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     if (password.matches("admin23.*")) {
                                         user = new User(lastname, firstname, date, phonenumber, idphone, email, "Bio", "Sex", "", "1");
                                     } else {
-                                        user = new User(lastname, firstname, date, phonenumber, idphone, email, "Bio", "Sex", "", "0");
+                                        user = new User(lastname, firstname, date, phonenumber, idphone, email, "Bio", "Sex", "https://firebasestorage.googleapis.com/v0/b/ciclotm.appspot.com/o/Admin%2FScreenshot%202022-01-13%20185334.jpg?alt=media&token=f5c61f90-a0a1-4b5e-a1bf-048c5edcfb27", "0");
                                     }
                                         FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users")
                                                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())

@@ -129,14 +129,17 @@ public class AdminMapsFragment extends Fragment {
         addPointsOfInterestFloatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment myDialogFragment = new DialogFragment();
-                myDialogFragment.show(getActivity().getSupportFragmentManager(), "MyFragment");
-                Bundle args = new Bundle();
-                args.putDouble("markerLat", newPointOfInterestMarker.latitude);
-                args.putDouble("markerLng", newPointOfInterestMarker.longitude);
-                args.putString("address", fulladdress);
-                myDialogFragment.putArguments(args);
+                if (newPointOfInterestMarker != null) {
+                    DialogFragment myDialogFragment = new DialogFragment();
+                    myDialogFragment.show(getActivity().getSupportFragmentManager(), "MyFragment");
+                    Bundle args = new Bundle();
+                    args.putDouble("markerLat", newPointOfInterestMarker.latitude);
+                    args.putDouble("markerLng", newPointOfInterestMarker.longitude);
+                    args.putString("address", fulladdress);
+                    myDialogFragment.putArguments(args);
+                }
             }
+
         });
 
         searchPointOfInterestTextView = (TextView) view.findViewById(R.id.searchPointOfInterestTextView);

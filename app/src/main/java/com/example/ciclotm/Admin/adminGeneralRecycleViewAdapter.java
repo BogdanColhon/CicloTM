@@ -103,6 +103,7 @@ public class adminGeneralRecycleViewAdapter  extends RecyclerView.Adapter<adminG
     @Override
     public int getItemCount() {
         generalPostsCount = String.valueOf(postsList.size());
+        System.out.println(generalPostsCount);
 
         return postsList.size();
     }

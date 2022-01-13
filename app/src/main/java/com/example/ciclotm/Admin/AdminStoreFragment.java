@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.ciclotm.AdminMenuActivity2;
 import com.example.ciclotm.R;
 
 /**
@@ -62,5 +63,12 @@ public class AdminStoreFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_admin_store, container, false);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AdminMenuActivity2) getActivity())
+                .setActionBarTitle("Magazin");
     }
 }
