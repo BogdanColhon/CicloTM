@@ -7,9 +7,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.ciclotm.Admin.AdminProfileActivity;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
@@ -36,8 +39,9 @@ public class ExpandedGeneralPostActivity extends AppCompatActivity {
     TextView contentPostTextView;
     TextView userNamePostTextView;
     ImageView userProfileImageView;
-
+    User userExtra;
     private DatabaseReference reference;
+    private DatabaseReference reference2;
     private StorageReference storageReference;
 
     @Override
@@ -59,10 +63,11 @@ public class ExpandedGeneralPostActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User userProfile = snapshot.getValue(User.class);
+                userExtra = userProfile;
 
                 if (userProfile != null) {
-                    String firstname = userProfile.FirstName;
-                    String lastname = userProfile.LastName;
+                    String firstname = userProfile.getFirstName();
+                    String lastname = userProfile.getLastName();
 
                     userNamePostTextView.setText(firstname + " " + lastname);
                 }
@@ -83,13 +88,38 @@ public class ExpandedGeneralPostActivity extends AppCompatActivity {
         titlePostTextView.setText(post.getTitle());
         contentPostTextView.setText(post.getContent());
 
-        try {
-            getUserProfilePhoto(post);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String userImageUrl = post.getUserImageUrl();
+        Picasso.get().load(userImageUrl).rotate(90).fit().centerInside().into(userProfileImageView);
 
+        userProfileImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                reference2 = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users");
+                reference2.child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        User userProfile = snapshot.getValue(User.class);
+                        if (userProfile.getIsAdmin().equals("0")) {
+                            Intent intent = new Intent(ExpandedGeneralPostActivity.this, ProfileActivity.class);
+                            intent.putExtra("clicked_user", userExtra);
+                            startActivity(intent);
+                        }
+                        if (userProfile.getIsAdmin().equals("1")) {
+                            Intent intent = new Intent(ExpandedGeneralPostActivity.this, AdminProfileActivity.class);
+                            intent.putExtra("clicked_user", userExtra);
+                            startActivity(intent);
+                        }
+                    }
 
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+            }
+        });
     }
 
     @Override

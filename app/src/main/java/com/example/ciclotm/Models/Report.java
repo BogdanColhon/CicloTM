@@ -14,12 +14,14 @@ public class Report {
     private String thief_description;
     private Double theftMarkerLat;
     private Double theftMarkerLng;
+    private String bikeImageUrl;
+    private String locationImageUrl;
 
     public Report() {
 
     }
 
-    public Report(Date publishDate, Date stolenDate, String address, String user_id, String bike_brand, String bike_model, String bike_color, String bike_description,String thief_description,Double theftMarkerLat,Double theftMarkerLng) {
+    public Report(Date publishDate, Date stolenDate, String address, String user_id, String bike_brand, String bike_model, String bike_color, String bike_description,String thief_description,Double theftMarkerLat,Double theftMarkerLng,String bikeImageUrl,String locationImageUrl) {
         this.publishDate = publishDate;
         this.stolenDate = stolenDate;
         this.address = address;
@@ -31,6 +33,8 @@ public class Report {
         this.thief_description = thief_description;
         this.theftMarkerLat = theftMarkerLat;
         this.theftMarkerLng = theftMarkerLng;
+        this.bikeImageUrl = bikeImageUrl;
+        this.locationImageUrl=locationImageUrl;
     }
 
     public Date getPublishDate() {
@@ -120,4 +124,21 @@ public class Report {
     public void setTheftMarkerLng(Double theftMarkerLng) {
         this.theftMarkerLng = theftMarkerLng;
     }
+
+    public String getBikeImageUrl() {
+        return bikeImageUrl;
+    }
+
+    public void setBikeImageUrl(String bikeImageUrl) {
+        this.bikeImageUrl = bikeImageUrl;
+    }
+
+    public String getLocationImageUrl() {
+        return locationImageUrl;
+    }
+
+    public void setLocationImageUrl(String locationImageUrl) {
+        this.locationImageUrl = locationImageUrl;
+    }
+
 }

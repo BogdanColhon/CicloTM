@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ciclotm.Models.MapMarker;
+import com.example.ciclotm.Models.Photo;
 import com.example.ciclotm.Models.Report;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -55,6 +56,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 
 public class ReportStolenBikeActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -82,9 +84,11 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
     Date currentTime;
     String user_Id;
     String bikeModel;
+    String bikeImageLink = "";
+    String locationImageLink = "";
     Calendar calendar = Calendar.getInstance();
     String currentPhotoPath;
-    private DatabaseReference reference;
+    private DatabaseReference reference, DatabaseRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +116,7 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
 
         currentTime = Calendar.getInstance().getTime();
 
+        DatabaseRef = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("ReportImagesUploads");
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users");
         user_Id = user.getUid();
@@ -202,25 +207,26 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
                 if (bikeModel == "model") {
                     bike_model = "-";
                 }
-                uploadPhotos();
-                Report report = new Report(postDate, date_of_theft, address, user_id, bike_brand, bike_model, bike_color, bike_description, thief_description, theftMarkerLat, theftMarkerLng);
+                Report report = new Report(postDate, date_of_theft, address, user_id, bike_brand, bike_model, bike_color, bike_description, thief_description, theftMarkerLat, theftMarkerLng, bikeImageLink, locationImageLink);
                 FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("furturiPosts").child(String.valueOf(postDate))
                         .setValue(report).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
+                            uploadPhotos();
                             Toast.makeText(ReportStolenBikeActivity.this, "Raport adaugat", Toast.LENGTH_SHORT).show();
-                            StolenBikeLocationActivity.terminator.finish();
-                            MenuActivity.terminator.finish();
-                            Intent myIntent = new Intent(ReportStolenBikeActivity.this, MenuActivity.class);
-                            ReportStolenBikeActivity.this.startActivity(myIntent);
-                            finish();
+                             //might need to be commented
+                             /*StolenBikeLocationActivity.terminator.finish();
+                             MenuActivity.terminator.finish();
+                             Intent myIntent = new Intent(ReportStolenBikeActivity.this, MenuActivity.class);
+                             ReportStolenBikeActivity.this.startActivity(myIntent);
+                            finish();*/
                         }
                     }
                 });
                 FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users").child(user_id).child("Furturi").child(String.valueOf(postDate))
                         .setValue(report);
-                MapMarker marker = new MapMarker(theftMarkerLat, theftMarkerLng, date_of_theft);
+                MapMarker marker = new MapMarker(theftMarkerLat, theftMarkerLng, date_of_theft,bikeImageLink,locationImageLink);
                 FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("StolenBikesMarkers").child("Coordonate").child(String.valueOf(postDate))
                         .setValue(marker);
 
@@ -242,33 +248,67 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
 
     public void uploadPhotos() {
         Folder = FirebaseStorage.getInstance().getReference().child(user_Id).child("ReportImages").child(currentTime.toString());
-        StorageReference locationImageName = Folder.child(f.getName());
-        if (contentUri != null) {
-            locationImageName.putFile(contentUri)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
+        if (f != null) {
+            StorageReference locationImageName = Folder.child(f.getName());
+            if (contentUri != null) {
+                locationImageName.putFile(contentUri)
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                locationImageName.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        HashMap hashMap = new HashMap();
+                                        hashMap.put("locationImageUrl", uri.toString());
+                                        FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("furturiPosts").child(String.valueOf(currentTime)).updateChildren(hashMap)
+                                                .addOnSuccessListener(new OnSuccessListener() {
+                                                    @Override
+                                                    public void onSuccess(Object o) {
 
-                }
-            });
+                                                    }
+                                                });
+
+                                    }
+                                });
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+            }
         }
-        StorageReference bikeImageName = Folder.child(f2.getName());
-        if (contentUri2 != null) {
-            bikeImageName.putFile(contentUri2)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
+        if (f2 != null) {
+            StorageReference bikeImageName = Folder.child(f2.getName());
+            if (contentUri2 != null) {
+                bikeImageName.putFile(contentUri2)
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                bikeImageName.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        HashMap hashMap = new HashMap();
+                                        hashMap.put("bikeImageUrl", uri.toString());
+                                        FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("furturiPosts").child(String.valueOf(currentTime)).updateChildren(hashMap)
+                                                .addOnSuccessListener(new OnSuccessListener() {
+                                                    @Override
+                                                    public void onSuccess(Object o) {
 
-                }
-            });
+                                                    }
+                                                });
+
+                                    }
+                                });
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+            }
         }
     }
 

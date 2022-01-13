@@ -43,6 +43,7 @@ import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -51,17 +52,17 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
-public class EditProfileActivity extends AppCompatActivity{
+public class EditProfileActivity extends AppCompatActivity {
 
     ImageView profileImage;
     String currentPhotoPath;
     String user_id;
     String genderString;
-    File f;
+    private File f;
     private StorageReference Folder;
     private DatabaseReference reference;
     private StorageReference storageReference;
-    Uri contentUri;
+    private Uri contentUri;
     private final int PERMISSION_REQUEST_CODE = 100;
 
     EditText firstNameEW;
@@ -79,7 +80,7 @@ public class EditProfileActivity extends AppCompatActivity{
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
-        user_id= intent.getStringExtra("uId");
+        user_id = intent.getStringExtra("uId");
         fetchInfo();
 
         firstNameEW = (EditText) findViewById(R.id.firstNameEditText);
@@ -95,6 +96,7 @@ public class EditProfileActivity extends AppCompatActivity{
             public void onClick(View v) {
                 try {
                     checkCameraPermission();
+                    Toast.makeText(EditProfileActivity.this, "WTF", Toast.LENGTH_SHORT).show();
                     dispatchTakePictureIntent(100);
 
                 } catch (Exception e) {
@@ -105,7 +107,8 @@ public class EditProfileActivity extends AppCompatActivity{
 
 
     }
-    private void fetchInfo(){
+
+    private void fetchInfo() {
         reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users");
         reference.child(user_id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -113,22 +116,21 @@ public class EditProfileActivity extends AppCompatActivity{
                 User userProfile = snapshot.getValue(User.class);
 
                 if (userProfile != null) {
-                    String firstname = userProfile.FirstName;
-                    String lastname = userProfile.LastName;
-                    String bio = userProfile.Bio;
-                    String gender = userProfile.Gender;
-                    String phone = userProfile.PhoneNumber;
-
+                    String firstname = userProfile.getFirstName();
+                    String lastname = userProfile.getLastName();
+                    String bio = userProfile.getBio();
+                    String gender = userProfile.getGender();
+                    String phone = userProfile.getPhoneNumber();
+                    String profileImageUrl = userProfile.getProfileImageUrl();
 
                     firstNameEW.setText(firstname);
                     lastNameEW.setText(lastname);
                     bioEW.setText(bio);
                     phoneET.setText(phone);
                     genderET.setText(gender);
-                    try {
-                        getUserProfilePhoto();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+
+                    if(!profileImageUrl.equals("")) {
+                        Picasso.get().load(profileImageUrl).fit().centerInside().rotate(90).into(profileImage);
                     }
                 }
             }
@@ -141,18 +143,6 @@ public class EditProfileActivity extends AppCompatActivity{
 
     }
 
-    public void getUserProfilePhoto() throws IOException {
-        String userProfilePhoto = "UsersProfilePicture/" + user_id + ".jpg";
-        storageReference = FirebaseStorage.getInstance().getReference().child(userProfilePhoto);
-        File localFile = File.createTempFile("tempFile", "jpg");
-        storageReference.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-                profileImage.setImageBitmap(bitmap);
-            }
-        });
-    }
 
     private void checkCameraPermission() {
         if (ContextCompat.checkSelfPermission(EditProfileActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
@@ -188,8 +178,14 @@ public class EditProfileActivity extends AppCompatActivity{
     }
 
     private File createImageFile() throws IOException {
-        String imageFileName =user_id;
-        File image = new File(imageFileName+".jpg");
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,
+                ".jpg",
+                storageDir
+        );
 
         currentPhotoPath = image.getAbsolutePath();
         return image;
@@ -211,21 +207,36 @@ public class EditProfileActivity extends AppCompatActivity{
         finish();
         return super.onSupportNavigateUp();
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        getMenuInflater().inflate(R.menu.action_bar_edit_profile,menu);
+        getMenuInflater().inflate(R.menu.action_bar_edit_profile, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     public void uploadPhotos() {
         Folder = FirebaseStorage.getInstance().getReference().child("UsersProfilePicture");
-        StorageReference locationImageName = Folder.child(f.getName());
+        StorageReference profileImageName = Folder.child(f.getName());
         if (contentUri != null) {
-            locationImageName.putFile(contentUri)
+            profileImageName.putFile(contentUri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            profileImageName.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    HashMap hashMap = new HashMap();
+                                    hashMap.put("profileImageUrl", uri.toString());
+                                    FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users").child(user_id).updateChildren(hashMap)
+                                            .addOnSuccessListener(new OnSuccessListener() {
+                                                @Override
+                                                public void onSuccess(Object o) {
+
+                                                }
+                                            });
+                                }
+                            });
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -240,33 +251,32 @@ public class EditProfileActivity extends AppCompatActivity{
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add:
-            String firstname = firstNameEW.getText().toString().trim();
-            String lastname = lastNameEW.getText().toString().trim();
-            String bio = bioEW.getText().toString().trim();
-            String gender =genderET.getText().toString().trim();
-            String phone = phoneET.getText().toString().trim();
-            HashMap hashMap = new HashMap();
-            hashMap.put("FirstName",firstname);
-            hashMap.put("LastName",lastname);
-            hashMap.put("Bio",bio);
-            hashMap.put("Gender",gender);
-            hashMap.put("PhoneNumber",phone);
+                String firstname = firstNameEW.getText().toString().trim();
+                String lastname = lastNameEW.getText().toString().trim();
+                String bio = bioEW.getText().toString().trim();
+                String gender = genderET.getText().toString().trim();
+                String phone = phoneET.getText().toString().trim();
+                HashMap hashMap = new HashMap();
+                hashMap.put("FirstName", firstname);
+                hashMap.put("LastName", lastname);
+                hashMap.put("Bio", bio);
+                hashMap.put("Gender", gender);
+                hashMap.put("PhoneNumber", phone);
 
 
+                FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users").child(user_id).updateChildren(hashMap)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(EditProfileActivity.this, "Modificări efectuate", Toast.LENGTH_SHORT).show();
 
-            FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users").child(user_id).updateChildren(hashMap)
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(EditProfileActivity.this, "Modificări efectuate", Toast.LENGTH_SHORT).show();
-
-                    }
-                }
-            });
-            if(contentUri!=null)
-            uploadPhotos();
-            break;
+                                }
+                            }
+                        });
+                if (contentUri != null)
+                    uploadPhotos();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

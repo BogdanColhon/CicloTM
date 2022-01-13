@@ -24,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -76,8 +77,8 @@ public class ExpandedTurePostActivity extends AppCompatActivity {
                 User userProfile = snapshot.getValue(User.class);
 
                 if (userProfile != null) {
-                    String firstname = userProfile.FirstName;
-                    String lastname = userProfile.LastName;
+                    String firstname = userProfile.getFirstName();
+                    String lastname = userProfile.getLastName();
 
                     usernameTextView.setText(firstname + " " + lastname);
                 }
@@ -103,11 +104,9 @@ public class ExpandedTurePostActivity extends AppCompatActivity {
         ridersTextView.setText(String.valueOf(post.getNo_participants()));
         contentTextView.setText(post.getDescription());
 
-        try {
-            getUserProfilePhoto(post);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        String userImageUrl = post.getUserImageUrl();
+        Picasso.get().load(userImageUrl).rotate(90).fit().centerInside().into(userPhotoImageView);
 
         joinButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,19 +123,6 @@ public class ExpandedTurePostActivity extends AppCompatActivity {
                                 }
                             }
                         });
-            }
-        });
-    }
-
-    public void getUserProfilePhoto(turePost post) throws IOException {
-        String userProfilePhoto = "UsersProfilePicture/" + post.getUid() + ".png";
-        storageReference = FirebaseStorage.getInstance().getReference().child(userProfilePhoto);
-        File localFile = File.createTempFile("tempFile", "png");
-        storageReference.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-               userPhotoImageView.setImageBitmap(bitmap);
             }
         });
     }

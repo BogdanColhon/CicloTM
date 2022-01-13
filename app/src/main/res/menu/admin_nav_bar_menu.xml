@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/adminMapsFragment"
+        android:icon="@drawable/maps_button"
+        android:title="Hărți" />
+    <item
+        android:id="@+id/adminCommunityFragment"
+        android:icon="@drawable/community_button"
+        android:title="Comunitate" />
+    <item
+        android:id="@+id/adminStoreFragment"
+        android:icon="@drawable/store_button"
+        android:title="Magazin" />
+    <item
+        android:id="@+id/adminRulesFragment"
+        android:icon="@drawable/rules_button"
+        android:title="Legislație" />
+    <item
+        android:id="@+id/adminProfileFragment"
+        android:icon="@drawable/profile_button"
+        android:title="Profil" />
+</menu>

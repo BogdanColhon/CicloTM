@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,9 +46,9 @@ public class bicycleRecycleViewAdapter extends RecyclerView.Adapter<bicycleRecyc
             super(view);
             nick_nameText = (TextView) view.findViewById(R.id.nicknameTextView);
             brandText = (TextView) view.findViewById(R.id.bikeBrandTextView);
-            yearText = (TextView) view.findViewById(R.id.bikePurchasingYearTextView);
-            weightText = (TextView) view.findViewById(R.id.bikeWeightTextView);
-            descriptionText = (TextView) view.findViewById(R.id.detailsTextView);
+            yearText = (TextView) view.findViewById(R.id.yearTextView);
+            weightText = (TextView) view.findViewById(R.id.weightTextView);
+            descriptionText = (TextView) view.findViewById(R.id.descriptionTextView);
             bikeImageView = (ImageView) view.findViewById(R.id.bike_photo);
         }
     }
@@ -62,38 +63,24 @@ public class bicycleRecycleViewAdapter extends RecyclerView.Adapter<bicycleRecyc
 
     @Override
     public void onBindViewHolder(@NonNull bicycleRecycleViewAdapter.MyViewHolder holder, int position) {
-        String nickname= bikeList.get(position).getNick_name();
+        String nickname = bikeList.get(position).getNick_name();
         holder.nick_nameText.setText(nickname);
 
+        String model = bikeList.get(position).getModel();
+        String year = bikeList.get(position).getYear();
         String brand = bikeList.get(position).getBrand();
-        holder.brandText.setText(brand);
+        holder.brandText.setText(brand + " " + model + " " + year);
 
-        String weight= bikeList.get(position).getWeight();
-        holder.weightText.setText(weight);
 
-        String year= bikeList.get(position).getYear();
-        holder.yearText.setText(year);
+        String weight = bikeList.get(position).getWeight();
+        holder.weightText.setText(weight + " kg");
 
-        String description= bikeList.get(position).getDetails();
+        String description = bikeList.get(position).getDetails();
         holder.descriptionText.setText(description);
 
-        String userProfilePicture = "UsersProfilePicture/" + bikeList.get(position).getOwner() + ".png";
-        String a="26mTrrDNEAgRHz2OoSZ8Q3Ig3N22/ReportImages/Thu Jan 06 18:38:03 GMT+02:00 2022/89c0becee797f6a54cd65c66191db2cf.jpg";
-        storageReference = FirebaseStorage.getInstance().getReference().child(a);
-        File localFile = null;
-        try {
-            localFile = File.createTempFile("tempFile", "png");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        File finalLocalFile = localFile;
-        storageReference.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                Bitmap bitmap = BitmapFactory.decodeFile(finalLocalFile.getAbsolutePath());
-                holder.bikeImageView.setImageBitmap(bitmap);
-            }
-        });
+        String link = bikeList.get(position).getBikePhotoUrl();
+        if (!link.equals(""))
+            Picasso.get().load(link).resize(500, 500).centerInside().into(holder.bikeImageView);
     }
 
     @Override

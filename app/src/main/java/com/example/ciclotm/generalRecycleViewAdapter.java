@@ -1,13 +1,6 @@
 package com.example.ciclotm;
 
-import android.content.ClipData;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,16 +10,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -89,22 +77,8 @@ public class generalRecycleViewAdapter extends RecyclerView.Adapter<generalRecyc
         SimpleDateFormat df = new SimpleDateFormat("HH:mm  dd/MM/yyyy", Locale.getDefault());
         String output = df.format(date);
         holder.data.setText(output);
-        String userProfilePicture = "UsersProfilePicture/" + postsList.get(position).getUid() + ".png";
-        storageReference = FirebaseStorage.getInstance().getReference().child(userProfilePicture);
-        File localFile = null;
-        try {
-            localFile = File.createTempFile("tempFile", "png");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        File finalLocalFile = localFile;
-        storageReference.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                Bitmap bitmap = BitmapFactory.decodeFile(finalLocalFile.getAbsolutePath());
-                holder.user_photo.setImageBitmap(bitmap);
-            }
-        });
+        String userImageUrl = postsList.get(position).getUserImageUrl();
+        Picasso.get().load(userImageUrl).rotate(90).fit().centerInside().into(holder.user_photo);
 
     }
 

@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -71,26 +72,9 @@ public class furturiRecycleViewAdapter extends RecyclerView.Adapter<furturiRecyc
         holder.location.setText(location);
         String description = postsList.get(position).getBike_model();
         holder.description.setText(description);
-
-
-        String theftPicture =postsList.get(position).getUser_id()+"/ReportImages/"+postsList.get(position).getPublishDate().toString()+"/bicicleta.jpg";
-        String a= "26mTrrDNEAgRHz2OoSZ8Q3Ig3N22/ReportImages/Thu Jan 06 18:38:03 GMT+02:00 2022/89c0becee797f6a54cd65c66191db2cf.jpg";
-        System.out.println(theftPicture);
-        storageReference = FirebaseStorage.getInstance().getReference().child(a);
-        File localFile = null;
-        try {
-            localFile = File.createTempFile("tempFile", "jpg");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        File finalLocalFile = localFile;
-        storageReference.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                Bitmap bitmap = BitmapFactory.decodeFile(finalLocalFile.getAbsolutePath());
-                holder.bike_photo.setImageBitmap(bitmap);
-            }
-        });
+        String link = postsList.get(position).getBikeImageUrl();
+        if(!link.equals(""))
+        Picasso.get().load(link).resize(500,500).centerInside().into(holder.bike_photo);
     }
 
 
