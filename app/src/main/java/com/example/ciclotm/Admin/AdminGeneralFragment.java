@@ -1,13 +1,7 @@
-package com.example.ciclotm;
+package com.example.ciclotm.Admin;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +10,18 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.TextView;
+
+import com.example.ciclotm.ExpandedGeneralPostActivity;
+import com.example.ciclotm.GeneralPostActivity;
+import com.example.ciclotm.R;
+import com.example.ciclotm.generalPost;
+import com.example.ciclotm.generalRecycleViewAdapter;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,18 +32,18 @@ import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link TureFragment#newInstance} factory method to
+ * Use the {@link AdminGeneralFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GeneralFragment extends Fragment implements generalRecycleViewAdapter.OnPostListener {
-
+public class AdminGeneralFragment extends Fragment  implements adminGeneralRecycleViewAdapter.OnPostListener  {
     private ArrayList<generalPost> postsList = new ArrayList<>();
     TextView generalPostsNumberTextView;
     private RecyclerView recyclerView;
-    generalRecycleViewAdapter adapter;
+    adminGeneralRecycleViewAdapter adapter;
     RecyclerView.LayoutManager layoutManager;
     private DatabaseReference reference;
-    private int counter = 0;
+    private DatabaseReference PostReference;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -47,7 +53,7 @@ public class GeneralFragment extends Fragment implements generalRecycleViewAdapt
     private String mParam1;
     private String mParam2;
 
-    public GeneralFragment() {
+    public AdminGeneralFragment() {
         // Required empty public constructor
     }
 
@@ -57,18 +63,17 @@ public class GeneralFragment extends Fragment implements generalRecycleViewAdapt
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment TureFragment.
+     * @return A new instance of fragment AdminGeneralFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static GeneralFragment newInstance(String param1, String param2) {
-        GeneralFragment fragment = new GeneralFragment();
+    public static AdminGeneralFragment newInstance(String param1, String param2) {
+        AdminGeneralFragment fragment = new AdminGeneralFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,13 +87,12 @@ public class GeneralFragment extends Fragment implements generalRecycleViewAdapt
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_general, container, false);
+        View view = inflater.inflate(R.layout.fragment_admin_general, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.generalRView);
         generalPostsNumberTextView = (TextView) view.findViewById(R.id.generalPostsNumberTextView);
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new generalRecycleViewAdapter(getContext(), postsList, this);
+        adapter = new adminGeneralRecycleViewAdapter(getContext(), postsList, this);
         recyclerView.setAdapter(adapter);
         fetchPostsInfo();
         System.out.println(postsList.size());
@@ -111,14 +115,6 @@ public class GeneralFragment extends Fragment implements generalRecycleViewAdapt
         return view;
     }
 
-
-    private void setAdapter() {
-        generalRecycleViewAdapter adapter = new generalRecycleViewAdapter(getActivity().getApplicationContext(), postsList, this);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getContext());
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
-    }
 
     private void fetchPostsInfo() {
         reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("GeneralPosts");
@@ -154,7 +150,7 @@ public class GeneralFragment extends Fragment implements generalRecycleViewAdapt
 
 
     private void fetchPostsNumber() {
-        generalPostsNumberTextView.setText(String.valueOf(generalRecycleViewAdapter.generalPostsCount));
+        generalPostsNumberTextView.setText(String.valueOf(adminGeneralRecycleViewAdapter.generalPostsCount));
     }
 
     @Override
@@ -162,5 +158,18 @@ public class GeneralFragment extends Fragment implements generalRecycleViewAdapt
         Intent intent = new Intent(getContext(), ExpandedGeneralPostActivity.class);
         intent.putExtra("clicked_post", postsList.get(position));
         startActivity(intent);
+    }
+
+    @Override
+    public void OnDeleteClick(int position) {
+        removeItem(position);
+    }
+
+    public void removeItem(int position){
+        postsList.remove(position);
+        adapter.notifyItemRemoved(position);
+        PostReference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference()
+                .child("GeneralPosts").child(String.valueOf(postsList.get(position).getDate()));
+        PostReference.removeValue();
     }
 }

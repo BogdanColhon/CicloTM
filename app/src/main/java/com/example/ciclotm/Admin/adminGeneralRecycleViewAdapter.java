@@ -1,4 +1,4 @@
-package com.example.ciclotm;
+package com.example.ciclotm.Admin;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +10,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ciclotm.R;
+import com.example.ciclotm.generalPost;
+import com.example.ciclotm.generalRecycleViewAdapter;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
@@ -18,16 +21,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-public class generalRecycleViewAdapter extends RecyclerView.Adapter<generalRecycleViewAdapter.MyViewHolder> {
+public class adminGeneralRecycleViewAdapter  extends RecyclerView.Adapter<adminGeneralRecycleViewAdapter.MyViewHolder> {
     Context context;
     public static String generalPostsCount;
     private StorageReference storageReference;
     private int ItemCount = 0;
     private ArrayList<generalPost> postsList;
-    private OnPostListener mOnPostListener;
+    private adminGeneralRecycleViewAdapter.OnPostListener mOnPostListener;
 
 
-    public generalRecycleViewAdapter(Context context, ArrayList<generalPost> postsList, OnPostListener onPostListener) {
+    public adminGeneralRecycleViewAdapter(Context context, ArrayList<generalPost> postsList, adminGeneralRecycleViewAdapter.OnPostListener onPostListener) {
         this.context = context;
         this.postsList = postsList;
         this.mOnPostListener = onPostListener;
@@ -35,9 +38,9 @@ public class generalRecycleViewAdapter extends RecyclerView.Adapter<generalRecyc
 
     @NonNull
     @Override
-    public generalRecycleViewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.community_general_card_layout, parent, false);
-        return new MyViewHolder(itemView, mOnPostListener);
+    public adminGeneralRecycleViewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.community_admin_general_card_layout, parent, false);
+        return new adminGeneralRecycleViewAdapter.MyViewHolder(itemView, mOnPostListener);
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -45,14 +48,29 @@ public class generalRecycleViewAdapter extends RecyclerView.Adapter<generalRecyc
         TextView content;
         TextView data;
         ImageView user_photo;
-        OnPostListener onPostListener;
+        ImageView deleteButton;
+        adminGeneralRecycleViewAdapter.OnPostListener onPostListener;
 
-        public MyViewHolder(final View view, OnPostListener OnPostListener) {
+        public MyViewHolder(final View view, adminGeneralRecycleViewAdapter.OnPostListener OnPostListener) {
             super(view);
             title = (TextView) view.findViewById(R.id.upperTextView);
             content = (TextView) view.findViewById(R.id.lowerTextView);
             data = (TextView) view.findViewById(R.id.middleGeneralTextView);
             user_photo = (ImageView) view.findViewById(R.id.user_photo);
+            deleteButton = (ImageView) view.findViewById(R.id.deleteImageView);
+
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(OnPostListener !=null){
+                        int position = getAbsoluteAdapterPosition();
+                        if(position!=RecyclerView.NO_POSITION){
+                            OnPostListener.OnDeleteClick(position);
+                        }
+                    }
+                }
+            });
+
             this.onPostListener = OnPostListener;
 
             view.setOnClickListener(this);
@@ -68,7 +86,7 @@ public class generalRecycleViewAdapter extends RecyclerView.Adapter<generalRecyc
 
 
     @Override
-    public void onBindViewHolder(@NonNull generalRecycleViewAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull adminGeneralRecycleViewAdapter.MyViewHolder holder, int position) {
         String title = postsList.get(position).getTitle();
         holder.title.setText(title);
         String content = postsList.get(position).getContent();
@@ -91,6 +109,6 @@ public class generalRecycleViewAdapter extends RecyclerView.Adapter<generalRecyc
 
     public interface OnPostListener {
         void onPostClick(int position);
+        void OnDeleteClick(int position);
     }
-
 }

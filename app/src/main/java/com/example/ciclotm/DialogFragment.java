@@ -1,7 +1,5 @@
 package com.example.ciclotm;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,34 +8,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.example.ciclotm.Models.PointOfInterestMarker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.Calendar;
-import java.util.Date;
 
 public class DialogFragment extends androidx.fragment.app.DialogFragment {
 
-    private DatabaseReference reference;
     private RadioGroup radioGroup;
     private RadioButton radioButton;
-    private RadioButton radioButton2;
     private Button addButton;
-    private TextView addressTextView;
     private EditText placeNameEditText;
     private String address;
     private Double markerLat;
@@ -51,7 +35,6 @@ public class DialogFragment extends androidx.fragment.app.DialogFragment {
         View view = inflater.inflate(R.layout.custom_point_of_interest_dialog, null);
         radioGroup = view.findViewById(R.id.radioGroup);
         addButton = view.findViewById(R.id.addButton);
-        addressTextView = view.findViewById(R.id.addressTextView);
         placeNameEditText = view.findViewById(R.id.placeName);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
