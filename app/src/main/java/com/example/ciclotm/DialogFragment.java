@@ -46,6 +46,12 @@ public class DialogFragment extends androidx.fragment.app.DialogFragment {
                 val3 = markerLat;
                 val4 = markerLng;
 
+                if (val1.isEmpty()) {
+                    placeNameEditText.setError("Câmp obligatoriu!");
+                    placeNameEditText.requestFocus();
+                    return;
+                }
+
                 PointOfInterestMarker marker = new PointOfInterestMarker(val1, val2, val3, val4);
 
                 FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("PointsOfInterestMarkers").child(val1)
@@ -56,6 +62,7 @@ public class DialogFragment extends androidx.fragment.app.DialogFragment {
                         }
                     }
                 });
+                dismiss();
             }
         });
         view.findViewById(R.id.serviceRadioButton).setOnClickListener(new View.OnClickListener() {

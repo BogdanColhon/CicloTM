@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.Image;
@@ -20,6 +21,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -94,7 +96,7 @@ public class BicyclePostActivity extends AppCompatActivity implements AdapterVie
             public void onClick(View v) {
                 try {
                     checkCameraPermission();
-                    dispatchTakePictureIntent(100);
+                    chooseOption(100);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -109,6 +111,36 @@ public class BicyclePostActivity extends AppCompatActivity implements AdapterVie
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         typeSpinner.setAdapter(adapter);
         typeSpinner.setOnItemSelectedListener(this);
+    }
+
+    private void chooseOption(int code) {
+        final Dialog dialog = new Dialog(BicyclePostActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.camera_gallery_dialog);
+
+
+        ImageView cameraImageView = dialog.findViewById(R.id.cameraImageView);
+        ImageView galleryImageView = dialog.findViewById(R.id.galleryImageView);
+
+        cameraImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dispatchTakePictureIntent(code);
+                dialog.dismiss();
+            }
+        });
+        galleryImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(pickPhoto,1);
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
     private void checkCameraPermission() {
@@ -152,10 +184,10 @@ public class BicyclePostActivity extends AppCompatActivity implements AdapterVie
                         if (task.isSuccessful()) {
                             uploadPhotos();
                             Toast.makeText(BicyclePostActivity.this, "Bicicletă adaugată", Toast.LENGTH_SHORT).show();
-                            /*BicyclesActivity.terminator.finish();
+                            BicyclesActivity.terminator.finish();
                             Intent myIntent = new Intent(BicyclePostActivity.this, BicyclesActivity.class);
                             startActivity(myIntent);
-                            finish();*/
+                            finish();
                         }
                     }
                 });
@@ -244,6 +276,11 @@ public class BicyclePostActivity extends AppCompatActivity implements AdapterVie
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            contentUri = data.getData();
+            f = new File(contentUri.getPath());
+            bikeImageView.setImageURI(contentUri);
+        }
         if (requestCode == 100) {
             f = new File(currentPhotoPath);
             Log.d("tag", "Absolute path URL" + Uri.fromFile(f));

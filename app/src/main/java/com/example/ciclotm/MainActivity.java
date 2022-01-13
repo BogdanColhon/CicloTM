@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void userLogin() {
-        email = editTextEmail.getText().toString();
+        email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString();
 
         if (email.isEmpty()) {
