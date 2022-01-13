@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,6 +22,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ciclotm.Models.Photo;
 import com.google.android.gms.common.util.SharedPreferencesUtils;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,6 +39,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -57,7 +60,11 @@ public class ProfileFragment extends Fragment {
     private DatabaseReference reference;
     private String userID;
     private Calendar today, birthday;
+    private int i=0;
     ImageView userProfileImageView;
+    ImageView imageView1,imageView2,imageView3;
+    ArrayList<String> gallery_links = new ArrayList<>();
+    ArrayList<ImageView> gallery = new ArrayList<>();
     private StorageReference storageReference;
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -112,6 +119,14 @@ public class ProfileFragment extends Fragment {
         final TextView ageTextView = (TextView) view.findViewById(R.id.profileAgeTextView);
         userProfileImageView = (ImageView) view.findViewById(R.id.userProfileImageView);
 
+        imageView1 = (ImageView) view.findViewById(R.id.imageView1);
+        imageView2 = (ImageView) view.findViewById(R.id.imageView2);
+        imageView3 = (ImageView) view.findViewById(R.id.imageView3);
+
+        gallery.add(imageView1);
+        gallery.add(imageView2);
+        gallery.add(imageView3);
+
 
         Button editProfileButton = (Button) view.findViewById(R.id.editProfileButton);
         editProfileButton.setOnClickListener(new View.OnClickListener() {
@@ -155,6 +170,24 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+     /*   reference.child(userID).child("Gallery").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Photo photo = snapshot.getValue(Photo.class);
+                gallery_links.add(0,photo.getPhotoUrl());
+                System.out.println("aocosoocscs");
+                System.out.println(photo.getPhotoUrl());
+                Picasso.get().load(photo.getPhotoUrl()).resize(300,300).into(gallery.get(i));
+                i++;
+
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+            });*/
+
         ListView profileListView = (ListView) view.findViewById(R.id.profileListView);
         for (int i = 0; i < button_names.length; i++) {
             profileListViewButton button = new profileListViewButton(button_names[i], ">");
@@ -197,7 +230,8 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
-    public void getUserProfilePhoto(String profileImageUrl) throws IOException {
+
+            public void getUserProfilePhoto(String profileImageUrl) throws IOException {
         if(!profileImageUrl.equals("")) {
             Picasso.get().load(profileImageUrl).fit().centerInside().rotate(90).into(userProfileImageView);
         }
