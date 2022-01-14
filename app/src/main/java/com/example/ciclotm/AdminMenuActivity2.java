@@ -22,7 +22,7 @@ public class AdminMenuActivity2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_menu2);
         //terminator=this;
-        TempDialog = new ProgressDialog(AdminMenuActivity2.this);
+        TempDialog = new ProgressDialog(AdminMenuActivity2.this,R.style.MyAlertDialogStyle);
         TempDialog.setMessage("Wait");
         TempDialog.setCancelable(false);
         TempDialog.setProgress(i);
