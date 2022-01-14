@@ -78,7 +78,7 @@ public class generalRecycleViewAdapter extends RecyclerView.Adapter<generalRecyc
         String output = df.format(date);
         holder.data.setText(output);
         String userImageUrl = postsList.get(position).getUserImageUrl();
-        Picasso.get().load(userImageUrl).rotate(90).fit().centerInside().into(holder.user_photo);
+        Picasso.get().load(userImageUrl).fit().centerInside().into(holder.user_photo);
 
     }
 

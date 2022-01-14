@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -20,6 +21,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -96,8 +98,7 @@ public class EditProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     checkCameraPermission();
-                    Toast.makeText(EditProfileActivity.this, "WTF", Toast.LENGTH_SHORT).show();
-                    dispatchTakePictureIntent(100);
+                    chooseOption(100);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -129,8 +130,8 @@ public class EditProfileActivity extends AppCompatActivity {
                     phoneET.setText(phone);
                     genderET.setText(gender);
 
-                    if(!profileImageUrl.equals("")) {
-                        Picasso.get().load(profileImageUrl).fit().centerInside().rotate(90).into(profileImage);
+                    if (!profileImageUrl.equals("")) {
+                        Picasso.get().load(profileImageUrl).fit().centerInside().into(profileImage);
                     }
                 }
             }
@@ -141,6 +142,36 @@ public class EditProfileActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void chooseOption(int code) {
+        final Dialog dialog = new Dialog(EditProfileActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.camera_gallery_dialog);
+
+
+        ImageView cameraImageView = dialog.findViewById(R.id.cameraImageView);
+        ImageView galleryImageView = dialog.findViewById(R.id.galleryImageView);
+
+        cameraImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dispatchTakePictureIntent(code);
+                dialog.dismiss();
+            }
+        });
+        galleryImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(pickPhoto, 1);
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
 
@@ -194,10 +225,18 @@ public class EditProfileActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (data != null) {
+            if (requestCode == 1) {
+                contentUri = data.getData();
+                f = new File(contentUri.getPath());
+                profileImage.setImageURI(contentUri);
+            }
+        }
         if (requestCode == 100) {
             f = new File(currentPhotoPath);
             Log.d("tag", "Absolute path URL" + Uri.fromFile(f));
-            profileImage.setImageURI(Uri.fromFile(f));
+            if (contentUri != null)
+                profileImage.setImageURI(Uri.fromFile(f));
             contentUri = Uri.fromFile(f);
         }
     }

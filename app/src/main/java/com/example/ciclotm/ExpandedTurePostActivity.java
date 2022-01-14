@@ -106,7 +106,7 @@ public class ExpandedTurePostActivity extends AppCompatActivity {
 
 
         String userImageUrl = post.getUserImageUrl();
-        Picasso.get().load(userImageUrl).rotate(90).fit().centerInside().into(userPhotoImageView);
+        Picasso.get().load(userImageUrl).fit().centerInside().into(userPhotoImageView);
 
         joinButton.setOnClickListener(new View.OnClickListener() {
             @Override

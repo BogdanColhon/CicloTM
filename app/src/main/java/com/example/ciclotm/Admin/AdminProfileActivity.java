@@ -121,7 +121,7 @@ public class AdminProfileActivity extends AppCompatActivity {
 
     public void getUserProfilePhoto(String profileImageUrl) throws IOException {
         if (!profileImageUrl.equals("")) {
-            Picasso.get().load(profileImageUrl).fit().centerInside().rotate(90).into(userProfileImageView);
+            Picasso.get().load(profileImageUrl).fit().centerInside().into(userProfileImageView);
         }
     }
 }

@@ -27,6 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -131,7 +132,21 @@ public class TureFragment extends Fragment  implements tureRecycleViewAdapter.On
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                try {
+                    turePost newPost = snapshot.getValue(turePost.class);
+                    String data = snapshot.getKey();
+                    for(turePost p:postsList){
+                        String date = String.valueOf(newPost.getDate());
+                        if(data.equals(date))
+                        {
+                            postsList.set(postsList.indexOf(p),newPost);
+                        }
+                    }
+                    adapter.notifyDataSetChanged();
 
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override

@@ -139,6 +139,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_maps, container, false);
+        reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("furturiPosts");
         mapView = view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         fetchMarkers();
@@ -233,7 +234,6 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
     }
 
     private void fetchMarkers() {
-        reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("furturiPosts");
         reference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -248,7 +248,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
                         .title("Furată pe " + calendar.get(Calendar.DAY_OF_MONTH)
                                 + "." + month
                                 + "." + calendar.get(Calendar.YEAR))
-                        .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ic_baseline_dot)));
+                        .icon(bitmapDescriptorFromVector(getContext(), R.drawable.ic_baseline_dot)));
                 hash_markers.put(marker.getId(),newMarker.getBikeImageUrl());
                 map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
                     @Nullable
@@ -347,6 +347,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
     }
 
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
+
         Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
         vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
         Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);

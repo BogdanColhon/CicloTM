@@ -11,12 +11,14 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -80,6 +82,7 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
     Spinner modelReportSpinner;
     FloatingActionButton sendReportButton;
     LatLng theftMarker;
+
 
     private FirebaseUser user;
     private FirebaseStorage storage;
@@ -222,11 +225,11 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
                             uploadPhotos();
                             Toast.makeText(ReportStolenBikeActivity.this, "Raport adaugat", Toast.LENGTH_SHORT).show();
                             //might need to be commented
-                             /*StolenBikeLocationActivity.terminator.finish();
+                             StolenBikeLocationActivity.terminator.finish();
                              MenuActivity.terminator.finish();
                              Intent myIntent = new Intent(ReportStolenBikeActivity.this, MenuActivity.class);
                              ReportStolenBikeActivity.this.startActivity(myIntent);
-                            finish();*/
+                            finish();
                         }
                     }
                 });

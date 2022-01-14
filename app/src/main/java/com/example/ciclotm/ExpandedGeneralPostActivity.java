@@ -89,7 +89,7 @@ public class ExpandedGeneralPostActivity extends AppCompatActivity {
         contentPostTextView.setText(post.getContent());
 
         String userImageUrl = post.getUserImageUrl();
-        Picasso.get().load(userImageUrl).rotate(90).fit().centerInside().into(userProfileImageView);
+        Picasso.get().load(userImageUrl).fit().centerInside().into(userProfileImageView);
 
         userProfileImageView.setOnClickListener(new View.OnClickListener() {
             @Override

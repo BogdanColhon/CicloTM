@@ -86,7 +86,7 @@ public class tureRecycleViewAdapter extends RecyclerView.Adapter<tureRecycleView
         String userProfilePicture = "UsersProfilePicture/" + postsList.get(position).getUid() + ".png";
         storageReference = FirebaseStorage.getInstance().getReference().child(userProfilePicture);
         String userImageUrl = postsList.get(position).getUserImageUrl();
-        Picasso.get().load(userImageUrl).rotate(90).fit().centerInside().into(holder.user_photo);
+        Picasso.get().load(userImageUrl).fit().centerInside().into(holder.user_photo);
     }
 
     @Override
