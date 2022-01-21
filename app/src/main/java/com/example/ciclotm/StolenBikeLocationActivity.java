@@ -204,7 +204,7 @@ public class StolenBikeLocationActivity extends AppCompatActivity {
             Geocoder geo = new Geocoder(StolenBikeLocationActivity.this.getApplicationContext(), Locale.getDefault());
             List<Address> addresses = geo.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
             if (!addresses.isEmpty()) {
-                String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                String address = addresses.get(0).getAddressLine(0);
                 String city = addresses.get(0).getLocality();
                 String state = addresses.get(0).getAdminArea();
                 String country = addresses.get(0).getCountryName();
@@ -220,7 +220,6 @@ public class StolenBikeLocationActivity extends AppCompatActivity {
 
     // Check for permission to access Location
     private boolean checkPermission() {
-        // Ask for permission if it wasn't granted yet
         return (ContextCompat.checkSelfPermission(StolenBikeLocationActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED);
     }
