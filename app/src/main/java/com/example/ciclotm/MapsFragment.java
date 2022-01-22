@@ -5,14 +5,10 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -28,13 +24,9 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.ciclotm.Models.ClusterMarker;
-import com.example.ciclotm.Models.MapMarker;
 import com.example.ciclotm.Models.PointOfInterestMarker;
 import com.example.ciclotm.Models.Report;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -54,15 +46,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.heatmaps.Gradient;
 import com.google.maps.android.heatmaps.HeatmapTileProvider;
 import com.google.maps.android.heatmaps.WeightedLatLng;
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -73,10 +61,12 @@ import java.util.HashMap;
  * create an instance of this fragment.
  */
 public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClickListener {
+    public static String newReportMarkerUrl;
     private final int REQ_PERMISSION = 5;
     private MapView mapView;
     private GoogleMap map;
     private DatabaseReference reference;
+    private ArrayList<Report> reportList = new ArrayList<>();
     private ArrayList<WeightedLatLng> arr = new ArrayList<>();
     ArrayList<String> markers = new ArrayList<>();
     TextView t_markerWindow;
@@ -239,7 +229,8 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Report newMarker = snapshot.getValue(Report.class);
                 LatLng latLng = new LatLng(newMarker.getTheftMarkerLat(), newMarker.getTheftMarkerLng());
-                System.out.println("\n\n"+newMarker.getTheftMarkerLat()+"\n\n");
+                System.out.println("\n\n" + newMarker.getTheftMarkerLat() + "\n\n");
+                reportList.add(newMarker);
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(newMarker.getStolenDate());
                 int month = calendar.get(Calendar.MONTH) + 1;
@@ -249,16 +240,21 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
                                 + "." + month
                                 + "." + calendar.get(Calendar.YEAR))
                         .icon(bitmapDescriptorFromVector(getContext(), R.drawable.ic_baseline_dot)));
-                hash_markers.put(marker.getId(),newMarker.getBikeImageUrl());
+                hash_markers.put(marker.getId(), newMarker.getBikeImageUrl());
                 map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
                     @Nullable
                     @Override
                     public View getInfoContents(@NonNull Marker marker) {
-                        View v = getLayoutInflater().inflate(R.layout.marker_info_window,null);
+                        View v = getLayoutInflater().inflate(R.layout.marker_info_window, null);
                         String url = (String) hash_markers.get(marker.getId());
-                        TextView t1= (TextView) v.findViewById(R.id.textView);
+                        TextView t1 = (TextView) v.findViewById(R.id.textView);
                         ImageView i1 = (ImageView) v.findViewById(R.id.markerInfoWindowImageView);
-                        Picasso.get().load(url).resize(500,500).centerInside().into(i1);
+
+                        if (!url.equals(""))
+                            Picasso.get().load(url).resize(500, 500).centerInside().into(i1);
+                        if (url.equals(""))
+                            Picasso.get().load(newReportMarkerUrl).resize(500, 500).centerInside().into(i1);
+
                         t1.setText(marker.getTitle());
                         return v;
                     }
@@ -269,12 +265,20 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
                         return null;
                     }
                 });
-                WeightedLatLng weightedLatLng = new WeightedLatLng(latLng,10);
+                WeightedLatLng weightedLatLng = new WeightedLatLng(latLng, 10);
                 arr.add(weightedLatLng);
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Report updateMarker = snapshot.getValue(Report.class);
+                LatLng latLng = new LatLng(updateMarker.getTheftMarkerLat(), updateMarker.getTheftMarkerLng());
+                for (Report rep : reportList) {
+                    if (rep.getPublishDate().equals(updateMarker.getPublishDate())) {
+                        reportList.set(reportList.indexOf(rep), updateMarker);
+                        break;
+                    }
+                }
 
             }
 
@@ -295,6 +299,17 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
         });
     }
 
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
+
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
+
+
     private void fetchPointOfInterestMarkers() {
         reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("PointsOfInterestMarkers");
         reference.addChildEventListener(new ChildEventListener() {
@@ -302,7 +317,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 PointOfInterestMarker newMarker = snapshot.getValue(PointOfInterestMarker.class);
                 LatLng latLng = new LatLng(newMarker.getLat(), newMarker.getLng());
-                System.out.println("\n\n"+newMarker.getType());
+                System.out.println("\n\n" + newMarker.getType());
                 if (String.valueOf(newMarker.getType()).equals("Service")) {
                     Marker marker = map.addMarker(new MarkerOptions()
                             .position(latLng)
@@ -344,16 +359,6 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
 
             }
         });
-    }
-
-    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
-
-        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
-        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
-        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        vectorDrawable.draw(canvas);
-        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
     @Override

@@ -8,7 +8,6 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -16,19 +15,17 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.util.Patterns;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -37,26 +34,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ciclotm.Models.MapMarker;
-import com.example.ciclotm.Models.Photo;
 import com.example.ciclotm.Models.Report;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.core.Repo;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -65,6 +57,10 @@ import java.util.Date;
 import java.util.HashMap;
 
 public class ReportStolenBikeActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+
+    ProgressDialog TempDialog;
+    CountDownTimer mCountDownTimer;
+    int i =0;
 
     File f, f2;
     Uri contentUri, contentUri2;
@@ -120,6 +116,13 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
         addressReportTextView = (TextView) findViewById(R.id.addressReportTextView);
         bikeDescriptionEditText = (EditText) findViewById(R.id.bikeDescriptionReportEditText);
         thiefDescriptionEditText = (EditText) findViewById(R.id.thiefDescriptionReportEditText);
+
+        TempDialog = new ProgressDialog(ReportStolenBikeActivity.this,R.style.MyAlertDialogStyle);
+        TempDialog.setMessage("Wait");
+        TempDialog.setCancelable(false);
+        TempDialog.setProgress(i);
+        TempDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        TempDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.GRAY));
 
         currentTime = Calendar.getInstance().getTime();
 
@@ -223,21 +226,28 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             uploadPhotos();
-                            Toast.makeText(ReportStolenBikeActivity.this, "Raport adaugat", Toast.LENGTH_SHORT).show();
-                            //might need to be commented
-                             StolenBikeLocationActivity.terminator.finish();
-                             MenuActivity.terminator.finish();
-                             Intent myIntent = new Intent(ReportStolenBikeActivity.this, MenuActivity.class);
-                             ReportStolenBikeActivity.this.startActivity(myIntent);
-                            finish();
+                            TempDialog.show();
+                            mCountDownTimer = new CountDownTimer(2000,1000) {
+                                @Override
+                                public void onTick(long millisUntilFinished) {
+                                    TempDialog.setMessage("wait");
+                                }
+
+                                @Override
+                                public void onFinish() {
+                                    TempDialog.dismiss();
+                                    Toast.makeText(ReportStolenBikeActivity.this, "Raport adăugat", Toast.LENGTH_SHORT).show();
+                                    StolenBikeLocationActivity.terminator.finish();
+                                    finish();
+                                }
+                            }.start();
+
                         }
                     }
                 });
                 FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users").child(user_id).child("Furturi").child(String.valueOf(postDate))
                         .setValue(report);
-                MapMarker marker = new MapMarker(theftMarkerLat, theftMarkerLng, date_of_theft, bikeImageLink, locationImageLink);
-                FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("StolenBikesMarkers").child("Coordonate").child(String.valueOf(postDate))
-                        .setValue(marker);
+
 
             }
         });
@@ -334,6 +344,10 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
                                                 .addOnSuccessListener(new OnSuccessListener() {
                                                     @Override
                                                     public void onSuccess(Object o) {
+                                                        MapMarker marker = new MapMarker(theftMarker.latitude, theftMarker.longitude, calendar.getTime(), uri.toString(), locationImageLink);
+                                                        FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("StolenBikesMarkers").child("Coordonate").child(String.valueOf(currentTime))
+                                                               .setValue(marker);
+                                                        MapsFragment.newReportMarkerUrl =uri.toString();
 
                                                     }
                                                 });
