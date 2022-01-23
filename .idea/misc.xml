@@ -6,6 +6,7 @@
         <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/drawable-v24/login_button_shape.xml" value="0.3828125" />
         <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/drawable/custom_border.xml" value="0.3828125" />
         <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/drawable/custom_linear_layout.xml" value="0.3828125" />
+        <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/drawable/custom_linear_layout_expanded_theft.xml" value="0.3828125" />
         <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/drawable/custom_report.xml" value="0.24114583333333334" />
         <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/drawable/custom_search_location_edittext.xml" value="0.3828125" />
         <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/drawable/custom_search_view.xml" value="0.3828125" />
@@ -29,6 +30,7 @@
         <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/layout/activity_bicycles.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/layout/activity_community_posts.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/layout/activity_edit_profile.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/layout/activity_expanded_furturi_post.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/layout/activity_expanded_general_post.xml" value="0.33" />
         <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/layout/activity_expanded_ture_post.xml" value="0.33" />
         <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/layout/activity_forgot_password.xml" value="0.20572916666666666" />

@@ -1,8 +1,9 @@
 package com.example.ciclotm.Models;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Report {
+public class Report implements Serializable {
     private Date publishDate;
     private Date stolenDate;
     private String address;

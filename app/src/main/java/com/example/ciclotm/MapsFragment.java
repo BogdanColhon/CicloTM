@@ -17,6 +17,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ciclotm.Models.PointOfInterestMarker;
 import com.example.ciclotm.Models.Report;
@@ -46,6 +48,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.core.Repo;
 import com.google.maps.android.heatmaps.Gradient;
 import com.google.maps.android.heatmaps.HeatmapTileProvider;
 import com.google.maps.android.heatmaps.WeightedLatLng;
@@ -53,6 +56,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -83,6 +87,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
     Gradient gradient = new Gradient(colors, startPoints);
 
     HashMap hash_markers = new HashMap();
+    HashMap hash_markers2 = new HashMap();
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -241,6 +246,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
                                 + "." + calendar.get(Calendar.YEAR))
                         .icon(bitmapDescriptorFromVector(getContext(), R.drawable.ic_baseline_dot)));
                 hash_markers.put(marker.getId(), newMarker.getBikeImageUrl());
+                hash_markers2.put(marker.getId(), newMarker);
                 map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
                     @Nullable
                     @Override
@@ -249,6 +255,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
                         String url = (String) hash_markers.get(marker.getId());
                         TextView t1 = (TextView) v.findViewById(R.id.textView);
                         ImageView i1 = (ImageView) v.findViewById(R.id.markerInfoWindowImageView);
+
 
                         if (!url.equals(""))
                             Picasso.get().load(url).resize(500, 500).centerInside().into(i1);
@@ -265,6 +272,18 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
                         return null;
                     }
                 });
+                map.setOnInfoWindowLongClickListener(new GoogleMap.OnInfoWindowLongClickListener(){
+                    @Override
+                    public void onInfoWindowLongClick(@NonNull Marker marker) {
+                        Report clicked_report = (Report) hash_markers2.get(marker.getId());
+                        Intent intent = new Intent(getContext(),ExpandedFurturiPostActivity.class);
+                        intent.putExtra("clicked_report",clicked_report);
+                        getActivity().startActivity(intent);
+                    }
+
+                });
+
+
                 WeightedLatLng weightedLatLng = new WeightedLatLng(latLng, 10);
                 arr.add(weightedLatLng);
             }
@@ -447,6 +466,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
 
     @Override
     public void onInfoWindowClick(@NonNull Marker marker) {
+        Toast.makeText(getContext(), "Raport adăugat", Toast.LENGTH_SHORT).show();
 
     }
 }
