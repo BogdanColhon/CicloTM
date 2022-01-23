@@ -129,7 +129,6 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_maps, container, false);
-        reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("furturiPosts");
         mapView = view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         fetchMarkers();
@@ -224,12 +223,13 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
     }
 
     private void fetchMarkers() {
+        reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("furturiPosts");
         reference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Report newMarker = snapshot.getValue(Report.class);
+                System.out.println(newMarker.getAddress());
                 LatLng latLng = new LatLng(newMarker.getTheftMarkerLat(), newMarker.getTheftMarkerLng());
-                System.out.println("\n\n" + newMarker.getTheftMarkerLat() + "\n\n");
                 reportList.add(newMarker);
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(newMarker.getStolenDate());
@@ -318,6 +318,22 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
                 PointOfInterestMarker newMarker = snapshot.getValue(PointOfInterestMarker.class);
                 LatLng latLng = new LatLng(newMarker.getLat(), newMarker.getLng());
                 System.out.println("\n\n" + newMarker.getType());
+                map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                    @Nullable
+                    @Override
+                    public View getInfoContents(@NonNull Marker marker) {
+                        View v = getLayoutInflater().inflate(R.layout.point_of_interest_marker_info, null);
+                        TextView t1 = (TextView) v.findViewById(R.id.textView);
+                        t1.setText(marker.getTitle());
+                        return v;
+                    }
+
+                    @Nullable
+                    @Override
+                    public View getInfoWindow(@NonNull Marker marker) {
+                        return null;
+                    }
+                });
                 if (String.valueOf(newMarker.getType()).equals("Service")) {
                     Marker marker = map.addMarker(new MarkerOptions()
                             .position(latLng)
@@ -336,7 +352,9 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
                             .title(newMarker.getTitle())
                             .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ic_baseline_coffee_24)));
                 }
+
             }
+
 
 
             @Override

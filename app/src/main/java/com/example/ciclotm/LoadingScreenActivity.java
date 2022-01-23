@@ -16,7 +16,7 @@ public class LoadingScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading_screen);
         videoView = findViewById(R.id.videoView);
-        Uri video = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ciclotm_loading_screen_video_trim);
+        Uri video = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ciclotm_loading_screen_video);
         videoView.setVideoURI(video);
         videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override

@@ -10,11 +10,12 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_margin="5dp"
+        android:layout_margin="20dp"
         android:gravity="center"
         android:textStyle="bold"
         android:textSize="20sp"
         android:textColor="@color/white"
+        android:textAllCaps="true"
         android:text="Tip hartă:" />
 
 
@@ -22,44 +23,51 @@
         android:id="@+id/furturiLayer"
         android:layout_width="200dp"
         android:background="@drawable/login_button_shape"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:layout_weight="1"
         android:focusable="true"
-        android:layout_margin="5dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp"
         android:gravity="center"
         app:backgroundTint="@null"
         android:textStyle="bold"
+        android:textSize="15sp"
+       android:drawableRight="@drawable/th3"
         android:text="Furturi" />
 
-
-
-    <Space
-        android:layout_width="100dp"
-        android:layout_height="10dp"></Space>
 
     <Button
         android:id="@+id/utileLayer"
         android:layout_width="200dp"
-        android:layout_margin="5dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="15dp"
+
         android:gravity="center"
         android:focusable="true"
         app:backgroundTint="@null"
         android:background="@drawable/login_button_shape"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:layout_weight="1"
         android:textStyle="bold"
+        android:drawableRight="@drawable/point8"
         android:text="Puncte de interes" />
 
     <Button
         android:id="@+id/heatMapLayer"
         android:layout_width="200dp"
-        android:layout_margin="5dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="30dp"
+        android:layout_height="80dp"
         android:gravity="center"
         android:focusable="true"
         app:backgroundTint="@null"
         android:background="@drawable/login_button_shape"
-        android:layout_height="wrap_content"
         android:layout_weight="1"
+       android:drawableRight="@drawable/heatmap4"
         android:textStyle="bold"
+        android:textSize="15sp"
         android:text="HEAT MAP" />
 </LinearLayout>
