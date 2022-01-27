@@ -24,8 +24,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class TurePostActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -96,6 +99,7 @@ public class TurePostActivity extends AppCompatActivity implements AdapterView.O
                 user = FirebaseAuth.getInstance().getCurrentUser();
                 reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users");
                 String uid = user.getUid();
+                List<String> participants = new ArrayList<>(Arrays.asList(uid));
                 Date currentTime = Calendar.getInstance().getTime();
 
                 reference.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -104,7 +108,7 @@ public class TurePostActivity extends AppCompatActivity implements AdapterView.O
                         User userProfile = snapshot.getValue(User.class);
                         if (userProfile != null) {
                             userImageUrl = String.valueOf(userProfile.getProfileImageUrl());
-                            turePost post = new turePost(title, distance, duration + " " + timeUnit, startTime, startPoint, 1, description, uid, currentTime, userImageUrl);
+                            turePost post = new turePost(title, distance, duration + " " + timeUnit, startTime, startPoint, 1, description, uid, currentTime, userImageUrl,participants);
 
                             FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("TurePosts").child(String.valueOf(currentTime))
                                     .setValue(post).addOnCompleteListener(new OnCompleteListener<Void>() {

@@ -53,8 +53,8 @@ public class RegisterActivity extends AppCompatActivity {
         editTextEmail = findViewById(R.id.editTextEmail);
         editTextPassword = findViewById(R.id.editTextPassword);
         textViewDate = findViewById(R.id.textViewBirthDate);
-        textViewPhoneId = findViewById(R.id.textViewPhoneId);
-        InfoDialog = findViewById(R.id.imageButtonInfo);
+        //textViewPhoneId = findViewById(R.id.textViewPhoneId);
+        //InfoDialog = findViewById(R.id.imageButtonInfo);
         Register = findViewById(R.id.finishRegisterButton);
 
         Calendar calendar = Calendar.getInstance();
@@ -62,8 +62,8 @@ public class RegisterActivity extends AppCompatActivity {
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        String phoneId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-        textViewPhoneId.setText(phoneId);
+        // String phoneId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        //textViewPhoneId.setText(phoneId);
 
         textViewDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,7 +91,7 @@ public class RegisterActivity extends AppCompatActivity {
                 String firstname = editTextFirstName.getText().toString();
                 Date date = birthdate.getTime();
                 String phonenumber = editTextPhoneNumber.getText().toString();
-                String idphone = textViewPhoneId.getText().toString();
+                //String idphone = textViewPhoneId.getText().toString();
                 String email = editTextEmail.getText().toString();
                 String password = editTextPassword.getText().toString();
 
@@ -113,27 +113,27 @@ public class RegisterActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     if (password.matches("admin23.*")) {
-                                        user = new User(lastname, firstname, date, phonenumber, idphone, email, "Bio", "Sex", "", "1");
+                                        user = new User(lastname, firstname, date, phonenumber, "", email, "Bio", "Sex", "", "1");
                                     } else {
-                                        user = new User(lastname, firstname, date, phonenumber, idphone, email, "Bio", "Sex", "https://firebasestorage.googleapis.com/v0/b/ciclotm.appspot.com/o/Admin%2FScreenshot%202022-01-13%20185334.jpg?alt=media&token=f5c61f90-a0a1-4b5e-a1bf-048c5edcfb27", "0");
+                                        user = new User(lastname, firstname, date, phonenumber, "", email, "Bio", "Sex", "https://firebasestorage.googleapis.com/v0/b/ciclotm.appspot.com/o/Admin%2FScreenshot%202022-01-13%20185334.jpg?alt=media&token=f5c61f90-a0a1-4b5e-a1bf-048c5edcfb27", "0");
                                     }
-                                        FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users")
-                                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                                .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if (task.isSuccessful()) {
-                                                    Toast.makeText(RegisterActivity.this, "User adaugat", Toast.LENGTH_SHORT).show();
-                                                }
+                                    FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users")
+                                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                            .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Toast.makeText(RegisterActivity.this, "Cont creat", Toast.LENGTH_SHORT).show();
                                             }
-                                        });
-                                    }
+                                        }
+                                    });
+                                }
                             }
                         });
             }
         });
 
-        InfoDialog.setOnClickListener(new View.OnClickListener() {
+  /*      InfoDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showCustomDialog();
@@ -155,5 +155,6 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
         dialog.show();
+    }*/
     }
 }
