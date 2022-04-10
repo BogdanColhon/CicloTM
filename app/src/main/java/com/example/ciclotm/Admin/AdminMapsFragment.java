@@ -1,7 +1,6 @@
 package com.example.ciclotm.Admin;
 
 import android.Manifest;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,6 +8,10 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,22 +19,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.Button;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.ciclotm.AdminMenuActivity2;
 import com.example.ciclotm.DialogFragment;
-import com.example.ciclotm.MenuActivity;
 import com.example.ciclotm.Models.PointOfInterestMarker;
 import com.example.ciclotm.R;
-import com.example.ciclotm.StolenBikeLocationActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -54,6 +45,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -72,9 +64,8 @@ public class AdminMapsFragment extends Fragment {
     private FloatingActionButton addPointsOfInterestFloatingButton;
     private LatLng newPointOfInterestMarker;
     private String fulladdress = "-";
-    private RadioGroup radioGroup;
-    private RadioButton radioButton;
-    private Button addButton;
+    private ArrayList<PointOfInterestMarker> markerList = new ArrayList<>();
+
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -191,29 +182,38 @@ public class AdminMapsFragment extends Fragment {
                 PointOfInterestMarker newMarker = snapshot.getValue(PointOfInterestMarker.class);
                 LatLng latLng = new LatLng(newMarker.getLat(), newMarker.getLng());
                 System.out.println("\n\n" + newMarker.getType());
+                markerList.add(newMarker);
+
                 if (String.valueOf(newMarker.getType()).equals("Service")) {
                     Marker marker = map.addMarker(new MarkerOptions()
                             .position(latLng)
                             .title(newMarker.getTitle())
-                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ic_baseline_service)));
+                            .icon(bitmapDescriptorFromVector(getContext(), R.drawable.ic_baseline_service)));
                 }
                 if (String.valueOf(newMarker.getType()).equals("Magazin")) {
                     Marker marker = map.addMarker(new MarkerOptions()
                             .position(latLng)
                             .title(newMarker.getTitle())
-                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ic_baseline_store_24)));
+                            .icon(bitmapDescriptorFromVector(getContext(), R.drawable.ic_baseline_store_24)));
                 }
                 if (String.valueOf(newMarker.getType()).equals("Cafenea")) {
                     Marker marker = map.addMarker(new MarkerOptions()
                             .position(latLng)
                             .title(newMarker.getTitle())
-                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ic_baseline_coffee_24)));
+                            .icon(bitmapDescriptorFromVector(getContext(), R.drawable.ic_baseline_coffee_24)));
                 }
             }
 
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                PointOfInterestMarker updateMarker = snapshot.getValue(PointOfInterestMarker.class);
+                for (PointOfInterestMarker m : markerList) {
+                    if (m.getTitle().equals(updateMarker.getTitle())) {
+                        markerList.set(markerList.indexOf(m), updateMarker);
+                        break;
+                    }
+                }
 
             }
 

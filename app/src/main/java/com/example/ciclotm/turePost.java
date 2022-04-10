@@ -3,7 +3,9 @@ package com.example.ciclotm;
 import android.graphics.drawable.Drawable;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class turePost implements Serializable {
 
@@ -20,11 +22,14 @@ public class turePost implements Serializable {
     private Date date;
     private String userImageUrl;
 
+
+    private List<String> participants;
+
     public turePost() {
 
     }
 
-    public turePost(String title, String distance, String duration, String start_time, String start_point, int no_participants, String description, String uid, Date date,String userImageUrl) {
+    public turePost(String title, String distance, String duration, String start_time, String start_point, int no_participants, String description, String uid, Date date,String userImageUrl,List<String> participants) {
         this.title = title;
         this.distance = distance;
         this.duration = duration;
@@ -35,6 +40,7 @@ public class turePost implements Serializable {
         this.uid = uid;
         this.date = date;
         this.userImageUrl = userImageUrl;
+        this.participants= participants;
 
     }
 
@@ -117,5 +123,14 @@ public class turePost implements Serializable {
     public void setUserImageUrl(String userImageUrl) {
         this.userImageUrl = userImageUrl;
     }
+
+    public List<String> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(List<String> participants) {
+        this.participants = participants;
+    }
+
 
 }

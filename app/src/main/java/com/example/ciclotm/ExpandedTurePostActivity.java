@@ -16,6 +16,8 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,8 +30,11 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 
 public class ExpandedTurePostActivity extends AppCompatActivity {
 
@@ -44,8 +49,10 @@ public class ExpandedTurePostActivity extends AppCompatActivity {
     TextView contentTextView;
     Button joinButton;
     ImageView userPhotoImageView;
+    private FirebaseUser user;
 
     private DatabaseReference reference;
+    private DatabaseReference reference1;
     private StorageReference storageReference;
 
 
@@ -69,6 +76,10 @@ public class ExpandedTurePostActivity extends AppCompatActivity {
         contentTextView = (TextView) findViewById(R.id.contentTextView);
         joinButton = (Button) findViewById(R.id.joinButton);
         userPhotoImageView = (ImageView) findViewById(R.id.user_photo);
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        reference1 = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users");
+        String uid = user.getUid();
 
         reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users");
         reference.child(post.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -99,11 +110,11 @@ public class ExpandedTurePostActivity extends AppCompatActivity {
         titleTextView.setText(post.getTitle());
         startPointTextView.setText(post.getStart_point());
         startTimeTextView.setText(post.getStart_time());
-        kmTextView.setText("~"+post.getDistance()+" km");
-        durationTextView.setText("~"+post.getDuration());
+        kmTextView.setText("~" + post.getDistance() + " km");
+        durationTextView.setText("~" + post.getDuration());
         ridersTextView.setText(String.valueOf(post.getNo_participants()));
         contentTextView.setText(post.getDescription());
-
+        List<String> participants = post.getParticipants();
 
         String userImageUrl = post.getUserImageUrl();
         Picasso.get().load(userImageUrl).fit().centerInside().into(userPhotoImageView);
@@ -112,17 +123,23 @@ public class ExpandedTurePostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                HashMap hashMap = new HashMap();
-                hashMap.put("no_participants",post.getNo_participants()+1);
-                FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("TurePosts").child(post.getDate().toString()).updateChildren(hashMap)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    ridersTextView.setText(String.valueOf(post.getNo_participants()+1));
+                if (!participants.contains(uid)) {
+                    participants.add(uid);
+                    HashMap hashMap = new HashMap();
+                    hashMap.put("no_participants", post.getNo_participants() + 1);
+                    hashMap.put("participants",participants);
+                    FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("TurePosts").child(post.getDate().toString()).updateChildren(hashMap)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        ridersTextView.setText(String.valueOf(post.getNo_participants() + 1));
+                                    }
                                 }
-                            }
-                        });
+                            });
+                }
+                else
+                    Toast.makeText(ExpandedTurePostActivity.this,"Deja participați",Toast.LENGTH_SHORT).show();
             }
         });
     }
