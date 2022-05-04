@@ -36,4 +36,79 @@
         <item>Magazin</item>
         <item>Cafenea</item>
     </string-array>
+
+    <string name="rules_obligatii">- Prezența permanentă a unui act de identitate valabil în momentul în care folosești drumul public \n
+- Dacă te întâlnești cu alți bicicliști în trafic sunteți obligați să mergeți pe un singur rând. Circulația în paralel este permisă doar în cazul în care sunt organizate concursuri sau manifestații. \n
+- Bicicleta ce o folosești trebuie să dispună de tot echipamentul prevăzut de Codul Rutier \n
+- Îmbrăcăminte ce o folosești pe timp de noapte trebuie să conțină neapărat elemente fluorescent-reflectorizante \n </string>
+    <string name="rules_interdictii">- Să folosești drumurile publice spre a lua lecții de ciclism \n
+- Să folosești trotuarele în lipsa unor piste pentru bicicliști \n
+- Să folosești doar o mână pentru a controla ghidonul sau doar un picior pentru a controla pedalele \n
+- Să mergi în paralel cu alt sau alți bicicliști \n
+- Să transporți o altă perrsoană cu ajutorul bicicletei. Interdicția nu se aplică bicicletelor special create pentru a fi folosite de mai multe persoane și bicicletelor dotate cu scaune speciale pentru copii de până la șapte ani și care sunt conduse de o persoană majoră. \n
+- Să folosești bicicleta atunci când sistemele de frânare sau cele de semnalizare sonore nu funcționează \n
+- Să fii remorcat, tras sau împins de alt vehicul sau să te ții de un alt vehicul ce se află în mers \n
+- Să traversezi strada pe trecerea de pietoni în timp ce ești pe bicicletă \n
+- Să folosești bicicleta pe străzile ce sunt acoperite cu gheață, polei sau zăpadă \n
+- Să mergi cu bicicleta fără să menții contactul ambelor roți cu asfaltul \n
+- Să folosești autostrada \n
+- Să staționezi cu bicicleta pe drumurile publice pe timp de noapte \n
+- Să folosești alte benzi decât cea de lângă bordură sau acostament în afară de cazurile în care trebuie să te încadrezi regulamentar ca să virezi la stânga în intersecții \n
+- Să circuli cu bicicleta sub influența alcoolului, drogurilor sau a altor substanțe stupefiante cu efecte similare acestora \n
+- Să transporți orice obiect ce poate incomoda sau pune în pericol conducerea bicicletei sau ceilalți participanți la trafic \n</string>
+    <string name="rules_dotari">\t Pentru a respecta în totalitate legile impuse de Regulamentul de aplicare al Codului Rutier, fiecare biciclist este obligat să-și doteze bicicleta cu echipamentul corespunzător. \n\n
+
+        <b>Dotările unei biciclete includ:</b> \n\n
+
+        <b>1. Un dispozitiv fluorescent-reflectorizant roșu (catadioptri)*</b> – în partea din spate a bicicletei trebuie să montezi cel puțin un astfel de dispozitiv, care devine vizibil atunci când este iluminat de farul unei mașini sau de o altă bicicletă. Acest dispozitiv este considerat un element pasiv de siguranță. \n
+        <b>2. Ghidon</b> – sistemul de direcție al bicicletei trebuie să fie funcțional, astfel încât să poți schimba direcția și să eviți obstacolele cu ușurință. \n
+        <b>3. Sistem de frânare</b> – acesta trebuie să asigure o oprire cât mai rapidă și mai sigură a bicicletei care se află în mișcare. \n
+        <b>4. Far alb sau galben*</b> – acest far, indiferent că are lumină albă sau galbenă, trebuie poziționat în partea din față a bicicletei. Poate fi un far clasic sau cu LED și trebuie să iți ofere vizibilitate pe timp de noapte, dar și să te faca vizibil vehiculelor care circulă din direcția opusă. \n
+        <b>5. Claxon</b> – poți să-ți montezi un claxon ce are o tonalitate și intensitate similară cu cele ale autovehiculelor. \n
+        <b>6. Far roșu*</b> – acesta trebuie montat în partea din spate a bicicletei, astfel încât să poți fi observat în trafic de vehiculele care vin din spate. \n
+        <b>7. Ochi de pisică</b> – dispozitiv ce trebuie montat pe spițele roților, astfel încât atunci când ele sunt în mișcare, să formeze un cerc continuu. De regulă acestea au o culoare portocalie, dar poți opta și pentru alte nuanțe de verde, galben sau gri. \n\n
+    \t*Este obligatoriu sa ai montat un set de iluminare pentru bicicleta (faruri si catadioptri) doar atunci cand vizibilitatea este redusa sau circuli pe timp de noapte, atat in interiorul localitatilor, cat si in exteriorul acestora. \n</string>
+
+    <string-array name="denumire_semne_circulatie">
+        <item>Cedează trecerea</item>
+        <item>Oprire</item>
+        <item>Drum cu prioritate</item>
+        <item>Sfârșitul drumului cu prioritate</item>
+        <item>Accesul interzis</item>
+        <item>Circulația interzisă în ambele sensuri</item>
+        <item>Accesul interzis bicicletelor</item>
+        <item>Interzis a vira la stânga</item>
+        <item>Interzis a vira la dreapta</item>
+        <item>Întoarcere interzisă</item>
+        <item>Urcare cu înclinare mare</item>
+        <item>Coborăre periculoasă</item>
+        <item>Ocolire</item>
+        <item>Intersecție cu sens giratoriu</item>
+        <item>Pistă pentru biciclete</item>
+        <item>Pistă comună pentru pietoni și biciclete</item>
+        <item>Trecere de pietoni</item>
+        <item>Sens unic</item>
+    </string-array>
+
+    <string-array name="defintie_semne_circulatie">
+        <item>La întâlnirea acestui indicator, participantul la trafic este obligat să reducă viteza și să se asigure că pe drumul prioritar nu circulă vehicule, și abia apoi poate să pătrundă în intersecție. Dacă pe drumul prioritar circula alte vehicule, conducătorul este obligat să oprească pentru a le acorda prioritate.</item>
+        <item>Participantul la trafic care întâlnește acest indicator este obligat să oprească în locul cu vizibilitate maximă, fără a depăși colțul intersecției, și să acorde prioritate tuturor vehiculelor care circulă pe drumul prioritar.</item>
+        <item>Are rolul de a anunța conducătorul auto că are prioritate în intersecțiile în care va pătrunde.</item>
+        <item>Are rolul de a informa conducătorul auto că în următoarea intersecție în care va pătrunde, toate drumurile vor fi de aceeași categorie și se va aplica regula priorității de dreapta.</item>
+        <item>În general, se amplasează pe drumurile cu sens unic, pe sensul pe care nu este permisă circulația.</item>
+        <item>Se amplasează la intrarea pe drumurile publice pe care accesul vehiculelor este interzis.</item>
+        <item>Se întâlnește la intrarea pe drumurile publice pe care accesul bicicletelor este interzis.</item>
+        <item>Se află instalat înaintea intersecției în care se interzice virajul la stânga, deoarece pe drumul respectiv circulația se desfășoară într-un singur sens sau întrucât executarea virajului ar pune în pericol ceilalți participanți la trafic.</item>
+        <item>Se află instalat înaintea intersecției în care se interzice virajul la dreapta, deoarece pe drumul respectiv circulația se desfășoară într-un singur sens sau întrucat executarea virajului ar pune în pericol ceilalți participanți la trafic.</item>
+        <item>Are rolul de a interzice întoarcerea în zona respectivă, deoarece daca s-ar executa această manevră ceilalți participanți la trafic ar putea fi puși în pericol.</item>
+        <item>La întâlnirea acestui indicator, dacă drumul nu este suficient de lat pentru a permite trecerea a două vehicule unul pe lânga celălalt, are prioritate cel care urcă față de cel care coboară.</item>
+        <item>La întâlnirea acestui indicator, dacă drumul nu este suficient de lat pentru a permite trecerea a două vehicule unul pe lânga celălalt, are prioritate cel care urcă față de cel care coboară.</item>
+        <item>Indicatorul din imaginea alăturată se amplasează înaintea unui obstacol aflat pe partea carosabilă, pe care participantul la trafic trebuie să îl ocolească în sensul indicat de săgeată.</item>
+        <item>Se amplasează înaintea unei intersecții cu sens giratoriu. La intalnirea acestui indicator, participantul la trafic este obligat să acorde prioritate vehiculelor care circulă în interiorul intersecției.</item>
+        <item>Are rolul de a preciza începutul unei piste de biciclete pe care este permisă numai circulația bicicletelor.</item>
+        <item>Are rolul de a preciza începutul sectorului de drum pe care este permisă și obligatorie numai circulația pietonilor și a bicicletelor.</item>
+        <item>Acest indicator se instalează în apropierea unei treceri pentru pietoni.</item>
+        <item>Indicatorul alăturat se montează la intrarea pe drumurile cu sens unic. Pe drumul cu sens unic este interzisă manevra de întoarcere.</item>
+    </string-array>
+
 </resources>

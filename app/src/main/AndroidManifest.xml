@@ -20,6 +20,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CicloTM">
         <activity
+            android:name=".SemneCirculatieActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DotariObligatoriiActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ImbunatatireaCirculatieiActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ReguliCirculatie.ReguliCirculatieActivity"
+            android:exported="false" />
+        <activity
             android:name=".ExpandedFurturiPostActivity"
             android:exported="false" />
         <activity
