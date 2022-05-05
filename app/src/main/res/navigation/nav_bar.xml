@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_community" />
     <fragment
         android:id="@+id/storeFragment"
-        android:name="com.example.ciclotm.StoreFragment"
+        android:name="com.example.ciclotm.RecordFragment"
         android:label="fragment_store"
         tools:layout="@layout/fragment_store" />
     <fragment

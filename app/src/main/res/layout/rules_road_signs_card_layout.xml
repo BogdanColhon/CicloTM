@@ -38,7 +38,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="16"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingEnd="10dp">
 
                 <TextView
                     android:id="@+id/signNameTextView"

@@ -145,7 +145,7 @@
                 android:layout_weight="0.5" />
 
             <ImageButton
-                android:id="@+id/imageButton"
+                android:id="@+id/galleryImageButton"
                 android:layout_width="0dp"
                 android:layout_height="53dp"
                 android:layout_weight="3"

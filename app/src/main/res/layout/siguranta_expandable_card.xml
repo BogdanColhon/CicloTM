@@ -29,6 +29,7 @@
 
             <ImageView
                 android:id="@+id/rulesSigurantaImageView"
+                android:adjustViewBounds="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 ></ImageView>
@@ -37,6 +38,8 @@
                 android:id="@+id/rulesListTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/rulesSigurantaImageView"
+                android:justificationMode="inter_word"
                 android:padding="16dp"
                 android:textColor="@color/black"
                 android:textSize="18sp" />

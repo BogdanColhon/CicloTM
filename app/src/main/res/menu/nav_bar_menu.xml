@@ -11,8 +11,8 @@
         android:title="Comunitate" />
     <item
         android:id="@+id/storeFragment"
-        android:icon="@drawable/store_button"
-        android:title="Magazin" />
+        android:icon="@drawable/record_button"
+        android:title="Înregistrare" />
     <item
         android:id="@+id/rulesFragment"
         android:icon="@drawable/rules_button"

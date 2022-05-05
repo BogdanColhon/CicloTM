@@ -9,6 +9,7 @@ import android.media.Image;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -27,6 +29,7 @@ import com.google.android.gms.common.util.SharedPreferencesUtils;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -63,6 +66,7 @@ public class ProfileFragment extends Fragment {
     private int i=0;
     ImageView userProfileImageView;
     ImageView imageView1,imageView2,imageView3;
+    ImageButton openGalleryButton;
     ArrayList<String> gallery_links = new ArrayList<>();
     ArrayList<ImageView> gallery = new ArrayList<>();
     private StorageReference storageReference;
@@ -123,6 +127,8 @@ public class ProfileFragment extends Fragment {
         imageView2 = (ImageView) view.findViewById(R.id.imageView2);
         imageView3 = (ImageView) view.findViewById(R.id.imageView3);
 
+        openGalleryButton = (ImageButton) view.findViewById(R.id.galleryImageButton);
+
         gallery.add(imageView1);
         gallery.add(imageView2);
         gallery.add(imageView3);
@@ -133,6 +139,15 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent (getContext(),EditProfileActivity.class);
+                intent.putExtra("uId",userID);
+                startActivity(intent);
+            }
+        });
+
+        openGalleryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent (getContext(),GalleryActivity.class);
                 intent.putExtra("uId",userID);
                 startActivity(intent);
             }
@@ -170,23 +185,38 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-     /*   reference.child(userID).child("Gallery").addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.child(userID).child("Gallery").addChildEventListener(new ChildEventListener() {
+
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Photo photo = snapshot.getValue(Photo.class);
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Photo photo = dataSnapshot.getValue(Photo.class);
                 gallery_links.add(0,photo.getPhotoUrl());
-                System.out.println("aocosoocscs");
-                System.out.println(photo.getPhotoUrl());
-                Picasso.get().load(photo.getPhotoUrl()).resize(300,300).into(gallery.get(i));
+                if(i<3)
+                Picasso.get().load(photo.getPhotoUrl()).resize(300,300).centerCrop().into(gallery.get(i));
                 i++;
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
             }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
 
-            });*/
+            });
 
         ListView profileListView = (ListView) view.findViewById(R.id.profileListView);
         for (int i = 0; i < button_names.length; i++) {
