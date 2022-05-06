@@ -14,7 +14,7 @@
         android:id="@+id/storeFragment"
         android:name="com.example.ciclotm.RecordFragment"
         android:label="fragment_store"
-        tools:layout="@layout/fragment_store" />
+        tools:layout="@layout/fragment_record" />
     <fragment
         android:id="@+id/mapsFragment"
         android:name="com.example.ciclotm.MapsFragment"
