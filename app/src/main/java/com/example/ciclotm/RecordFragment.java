@@ -1,7 +1,9 @@
 package com.example.ciclotm;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -10,20 +12,17 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-
-import android.os.Handler;
-import android.os.SystemClock;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Chronometer;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -34,13 +33,11 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -52,25 +49,32 @@ import java.util.Locale;
  */
 public class RecordFragment extends Fragment {
 
-    int LOCATION_REFRESH_TIME = 15000; // 15 seconds to update
-    int LOCATION_REFRESH_DISTANCE = 500; // 500 meters to update
+    private int LOCATION_REFRESH_TIME = 5000; // 5 seconds to update
+    private int LOCATION_REFRESH_DISTANCE = 3; // 500 meters to update
+    private final int REQ_PERMISSION = 5;
+
     private TextView elapsedTime;
+    private TextView distanceText;
     private ImageButton startButton;
+    private ImageButton finishButton;
     private ImageButton resumeButton;
     private ImageButton stopButton;
     private LinearLayout startLinear;
     private LinearLayout finishLinear;
-    private LocationManager locationMangaer = null;
+
     private LocationListener locationListener = null;
+    private LocationManager locationManager;
     private FusedLocationProviderClient client;
+
     private MapView mapView;
     private GoogleMap map;
-    private final int REQ_PERMISSION = 5;
-    private ArrayList<LatLng> routePoints = new ArrayList<LatLng>();
+    private static ArrayList<Location> routePoints = new ArrayList<Location>();
+    private static ArrayList<Marker> routeMarker = new ArrayList<Marker>();
 
+
+    protected static double totalDistance = 0.0;
     private int seconds;
     private boolean running;
-    private boolean wasRunning;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -120,22 +124,34 @@ public class RecordFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_record, container, false);
 
         elapsedTime = view.findViewById(R.id.recordElapsedTimeTextView);
+        distanceText = view.findViewById(R.id.distanceTV);
         startButton = view.findViewById(R.id.recordStartImageButton);
+        finishButton = view.findViewById(R.id.recordFinishImageButton);
         resumeButton = view.findViewById(R.id.recordResumeImageButton);
         stopButton = view.findViewById(R.id.recordStopImageButton);
         startLinear = view.findViewById(R.id.startLinearLayout);
         finishLinear = view.findViewById(R.id.finishLinearLayout);
+        mapView = view.findViewById(R.id.recordMapView);
+        mapView.onCreate(savedInstanceState);
+
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
         runTimer();
 
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 running = true;
+
                 startLinear.setVisibility(View.INVISIBLE);
                 finishLinear.setVisibility(View.VISIBLE);
                 stopButton.setVisibility(View.VISIBLE);
                 resumeButton.setVisibility(View.VISIBLE);
+
+                locationListener = new MyLocationListener();
+                if (checkPermission())
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, locationListener);
             }
         });
 
@@ -143,6 +159,8 @@ public class RecordFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 running = true;
+                if (checkPermission())
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, locationListener);
             }
         });
 
@@ -150,19 +168,60 @@ public class RecordFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 running = false;
+                locationManager.removeUpdates(locationListener);
+                for (int i = 0; i < routePoints.size(); i++) {
+                    System.out.println(routePoints.get(i));
+                }
             }
         });
 
-        mapView = view.findViewById(R.id.recordMapView);
-        mapView.onCreate(savedInstanceState);
-
+        finishButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+                alertDialog.setMessage("Sigur vrei să închei înregistrarea?");
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Da",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Nu", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                alertDialog.show();
+            }
+        });
 
         client = LocationServices.getFusedLocationProviderClient(getContext());
-        getCurrentLocation();
-
+        getStartingLocation();
         return view;
 
     }
+
+    public class MyLocationListener implements LocationListener {
+        @Override
+        public void onLocationChanged(Location loc) {
+            setMarker(loc);
+            if (routeMarker.get(routeMarker.size() - 2) != null) {
+                System.out.println(routeMarker.get(1));
+                routeMarker.get(routeMarker.size() - 2).remove();
+            }
+
+            if (routePoints.get(routePoints.size() - 2) != null) {
+                double pointsDistance = (routePoints.get(routePoints.size() - 2).distanceTo(routePoints.get(routePoints.size() - 1))) / (double) 1000;
+                totalDistance = totalDistance + pointsDistance;
+                distanceText.setText(String.format("%.2f", totalDistance));
+            }
+
+
+        }
+    }
+
 
     private void runTimer() {
         Handler handler = new Handler();
@@ -174,19 +233,19 @@ public class RecordFragment extends Fragment {
                 int minutes = (seconds % 3600) / 60;
                 int secs = seconds % 60;
 
-                String time = String.format(Locale.getDefault(),"%d:%02d:%02d",hours,minutes,secs);
+                String time = String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, secs);
                 elapsedTime.setText(time);
 
-                if(running){
+                if (running) {
                     seconds++;
                 }
-                handler.postDelayed(this,1000);
+                handler.postDelayed(this, 1000);
             }
         });
     }
 
 
-    private void getCurrentLocation() {
+    private void getStartingLocation() {
         if (checkPermission()) {
             Task<Location> task = client.getLastLocation();
             task.addOnSuccessListener(new OnSuccessListener<Location>() {
@@ -205,10 +264,15 @@ public class RecordFragment extends Fragment {
                                 map = mMap;
                                 map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                                routePoints.add(latLng);
+                                Location point = new Location("point");
+                                point.setLatitude(latLng.latitude);
+                                point.setLongitude(latLng.longitude);
+                                routePoints.add(point);
                                 MarkerOptions options = new MarkerOptions().position(latLng).icon(bitmapDescriptorFromVector(getContext(), R.drawable.black_dot_icon_resized));
                                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
-                                mMap.addMarker(options);
+                                Marker marker = mMap.addMarker(options);
+                                routeMarker.add(marker);
+
                             }
                         });
                     }
@@ -219,6 +283,23 @@ public class RecordFragment extends Fragment {
             askPermission();
         }
     }
+
+    public void setMarker(Location location) {
+
+
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        Location point = new Location("point");
+        point.setLatitude(latLng.latitude);
+        point.setLongitude(latLng.longitude);
+        routePoints.add(point);
+        MarkerOptions options = new MarkerOptions().position(latLng).icon(bitmapDescriptorFromVector(getContext(), R.drawable.black_dot_icon_resized));
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
+        Marker marker = map.addMarker(options);
+        routeMarker.add(marker);
+
+
+    }
+
 
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
 
@@ -289,4 +370,6 @@ public class RecordFragment extends Fragment {
                 REQ_PERMISSION
         );
     }
+
+
 }
