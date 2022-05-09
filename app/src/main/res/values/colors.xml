@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="navBar_color">#020202</color>
     <color name="reportColor">#EEEEEE</color>
+    <color name="green">#0cce2c</color>
 </resources>

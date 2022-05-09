@@ -136,7 +136,6 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
         View view = inflater.inflate(R.layout.fragment_maps, container, false);
         mapView = view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
-        fetchMarkers();
         FloatingActionButton reportButton = view.findViewById(R.id.reportFloatingButton);
         FloatingActionButton mapLayerButton = view.findViewById(R.id.layersFloatingButton);
 
@@ -163,6 +162,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap mMap) {
+                fetchMarkers();
                 MapsInitializer.initialize(getContext());
                 map = mMap;
                 map.setMapType(GoogleMap.MAP_TYPE_NORMAL);

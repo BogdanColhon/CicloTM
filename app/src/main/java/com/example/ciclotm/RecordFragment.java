@@ -4,7 +4,9 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
@@ -24,6 +26,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.ciclotm.ReguliCirculatie.ReguliCirculatieActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -36,6 +39,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
@@ -50,11 +55,13 @@ import java.util.Locale;
 public class RecordFragment extends Fragment {
 
     private int LOCATION_REFRESH_TIME = 5000; // 5 seconds to update
-    private int LOCATION_REFRESH_DISTANCE = 3; // 500 meters to update
+    private int LOCATION_REFRESH_DISTANCE = 1; // 1 meters to update
+    static final Double EARTH_RADIUS = 6371.00;
     private final int REQ_PERMISSION = 5;
 
     private TextView elapsedTime;
     private TextView distanceText;
+    private TextView speedText;
     private ImageButton startButton;
     private ImageButton finishButton;
     private ImageButton resumeButton;
@@ -68,13 +75,15 @@ public class RecordFragment extends Fragment {
 
     private MapView mapView;
     private GoogleMap map;
-    private static ArrayList<Location> routePoints = new ArrayList<Location>();
+    protected static ArrayList<Location> routePoints = new ArrayList<Location>();
     private static ArrayList<Marker> routeMarker = new ArrayList<Marker>();
 
 
     protected static double totalDistance = 0.0;
     private int seconds;
     private boolean running;
+    private String time;
+    private double speed;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -125,6 +134,7 @@ public class RecordFragment extends Fragment {
 
         elapsedTime = view.findViewById(R.id.recordElapsedTimeTextView);
         distanceText = view.findViewById(R.id.distanceTV);
+        speedText = view.findViewById(R.id.speedTV);
         startButton = view.findViewById(R.id.recordStartImageButton);
         finishButton = view.findViewById(R.id.recordFinishImageButton);
         resumeButton = view.findViewById(R.id.recordResumeImageButton);
@@ -184,6 +194,11 @@ public class RecordFragment extends Fragment {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(getContext(), RecordedRouteActivity.class);
+                                intent.putExtra("distanceRecorded", totalDistance);
+                                intent.putExtra("timeRecorded", time);
+                                intent.putExtra("avgSpeedRecorded",speed);
+                                startActivity(intent);
                                 dialog.dismiss();
                             }
                         });
@@ -203,23 +218,79 @@ public class RecordFragment extends Fragment {
 
     }
 
+//    public class MyLocationListener implements LocationListener {
+//        @Override
+//        public void onLocationChanged(Location loc) {
+//            setMarker(loc);
+//
+//            if (routeMarker.get(routeMarker.size() - 2) != null) {
+//                System.out.println(routeMarker.get(1));
+//                routeMarker.get(routeMarker.size() - 2).remove();
+//            }
+//
+//            if (routePoints.get(routePoints.size() - 2) != null) {
+//                double pointsDistance = (routePoints.get(routePoints.size() - 2).distanceTo(routePoints.get(routePoints.size() - 1))) / (double) 1000;
+//                totalDistance = totalDistance + pointsDistance;
+//                distanceText.setText(String.format("%.2f", totalDistance));
+//
+//                LatLng firstPoint = new LatLng(routePoints.get(routePoints.size() - 2).getLatitude(),routePoints.get(routePoints.size()-2).getLongitude());
+//                LatLng secondPoint = new LatLng(routePoints.get(routePoints.size() - 1).getLatitude(),routePoints.get(routePoints.size()-1).getLongitude());
+//                PolylineOptions polylineOptions = new PolylineOptions()
+//                        .add(firstPoint)
+//                        .add(secondPoint)
+//                        .width(13)
+//                        .color(getResources().getColor(R.color.green, getResources().newTheme()));
+//
+//                Polyline polyline = map.addPolyline(polylineOptions);
+//            }
+//
+//
+//        }
+//    }
+
     public class MyLocationListener implements LocationListener {
         @Override
         public void onLocationChanged(Location loc) {
             setMarker(loc);
+
             if (routeMarker.get(routeMarker.size() - 2) != null) {
                 System.out.println(routeMarker.get(1));
                 routeMarker.get(routeMarker.size() - 2).remove();
             }
 
             if (routePoints.get(routePoints.size() - 2) != null) {
-                double pointsDistance = (routePoints.get(routePoints.size() - 2).distanceTo(routePoints.get(routePoints.size() - 1))) / (double) 1000;
+                LatLng firstPoint = new LatLng(routePoints.get(routePoints.size() - 2).getLatitude(),routePoints.get(routePoints.size()-2).getLongitude());
+                LatLng secondPoint = new LatLng(routePoints.get(routePoints.size() - 1).getLatitude(),routePoints.get(routePoints.size()-1).getLongitude());
+
+                double pointsDistance = DistanceCalculation(firstPoint.latitude,firstPoint.longitude,secondPoint.latitude,secondPoint.longitude);
                 totalDistance = totalDistance + pointsDistance;
+                System.out.println(totalDistance + "---------------------");
+               speed = pointsDistance/(double)(5.0/3600.0);
+                System.out.println(speed + "---------------------");
                 distanceText.setText(String.format("%.2f", totalDistance));
+                speedText.setText(String.format("%.2f",speed));
+
+
+                PolylineOptions polylineOptions = new PolylineOptions()
+                        .add(firstPoint)
+                        .add(secondPoint)
+                        .width(13)
+                        .color(getResources().getColor(R.color.green, getResources().newTheme()));
+
+                Polyline polyline = map.addPolyline(polylineOptions);
             }
 
 
         }
+    }
+
+    public double DistanceCalculation(double lat1, double lon1, double lat2, double lon2){
+        double Radius = EARTH_RADIUS;
+        double dLat = Math.toRadians(lat2-lat1);
+        double dLon = Math.toRadians(lon2-lon1);
+        double a = Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(Math.toRadians(lat1))*Math.cos(Math.toRadians(lat2))*Math.sin(dLon/2)*Math.sin(dLon/2);
+        double c = 2*Math.asin(Math.sqrt(a));
+        return Radius * c;
     }
 
 
@@ -233,7 +304,7 @@ public class RecordFragment extends Fragment {
                 int minutes = (seconds % 3600) / 60;
                 int secs = seconds % 60;
 
-                String time = String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, secs);
+                time = String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, secs);
                 elapsedTime.setText(time);
 
                 if (running) {
