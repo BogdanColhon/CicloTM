@@ -55,7 +55,7 @@ import java.util.Locale;
 public class RecordFragment extends Fragment {
 
     private int LOCATION_REFRESH_TIME = 5000; // 5 seconds to update
-    private int LOCATION_REFRESH_DISTANCE = 1; // 1 meters to update
+    private int LOCATION_REFRESH_DISTANCE = 3; // 3 meters to update
     static final Double EARTH_RADIUS = 6371.00;
     private final int REQ_PERMISSION = 5;
 
@@ -84,6 +84,10 @@ public class RecordFragment extends Fragment {
     private boolean running;
     private String time;
     private double speed;
+    private double maxSpeed = 0;
+    private double avgSpeed;
+    private double speedSum = 0;
+    private int samples = 1;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -197,7 +201,8 @@ public class RecordFragment extends Fragment {
                                 Intent intent = new Intent(getContext(), RecordedRouteActivity.class);
                                 intent.putExtra("distanceRecorded", totalDistance);
                                 intent.putExtra("timeRecorded", time);
-                                intent.putExtra("avgSpeedRecorded",speed);
+                                intent.putExtra("avgSpeedRecorded",speedSum/(double) samples);
+                                intent.putExtra("maxSpeedRecorded",maxSpeed);
                                 startActivity(intent);
                                 dialog.dismiss();
                             }
@@ -218,40 +223,12 @@ public class RecordFragment extends Fragment {
 
     }
 
-//    public class MyLocationListener implements LocationListener {
-//        @Override
-//        public void onLocationChanged(Location loc) {
-//            setMarker(loc);
-//
-//            if (routeMarker.get(routeMarker.size() - 2) != null) {
-//                System.out.println(routeMarker.get(1));
-//                routeMarker.get(routeMarker.size() - 2).remove();
-//            }
-//
-//            if (routePoints.get(routePoints.size() - 2) != null) {
-//                double pointsDistance = (routePoints.get(routePoints.size() - 2).distanceTo(routePoints.get(routePoints.size() - 1))) / (double) 1000;
-//                totalDistance = totalDistance + pointsDistance;
-//                distanceText.setText(String.format("%.2f", totalDistance));
-//
-//                LatLng firstPoint = new LatLng(routePoints.get(routePoints.size() - 2).getLatitude(),routePoints.get(routePoints.size()-2).getLongitude());
-//                LatLng secondPoint = new LatLng(routePoints.get(routePoints.size() - 1).getLatitude(),routePoints.get(routePoints.size()-1).getLongitude());
-//                PolylineOptions polylineOptions = new PolylineOptions()
-//                        .add(firstPoint)
-//                        .add(secondPoint)
-//                        .width(13)
-//                        .color(getResources().getColor(R.color.green, getResources().newTheme()));
-//
-//                Polyline polyline = map.addPolyline(polylineOptions);
-//            }
-//
-//
-//        }
-//    }
-
     public class MyLocationListener implements LocationListener {
         @Override
         public void onLocationChanged(Location loc) {
             setMarker(loc);
+
+                samples++;
 
             if (routeMarker.get(routeMarker.size() - 2) != null) {
                 System.out.println(routeMarker.get(1));
@@ -264,9 +241,13 @@ public class RecordFragment extends Fragment {
 
                 double pointsDistance = DistanceCalculation(firstPoint.latitude,firstPoint.longitude,secondPoint.latitude,secondPoint.longitude);
                 totalDistance = totalDistance + pointsDistance;
-                System.out.println(totalDistance + "---------------------");
-               speed = pointsDistance/(double)(5.0/3600.0);
-                System.out.println(speed + "---------------------");
+                speed = pointsDistance/(double)(5.0/3600.0);
+                if(speed > maxSpeed)
+                {
+                    maxSpeed = speed;
+                }
+                speedSum = speedSum + speed;
+
                 distanceText.setText(String.format("%.2f", totalDistance));
                 speedText.setText(String.format("%.2f",speed));
 

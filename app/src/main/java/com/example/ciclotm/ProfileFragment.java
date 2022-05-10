@@ -3,30 +3,22 @@ package com.example.ciclotm;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.example.ciclotm.Models.Photo;
-import com.google.android.gms.common.util.SharedPreferencesUtils;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -35,16 +27,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -57,15 +43,15 @@ import java.util.Date;
 public class ProfileFragment extends Fragment {
 
 
-    String[] button_names = {"Biciclete", "Statistici", "Postări comunitate", "Deconectare"};
+    String[] button_names = {"Biciclete", "Statistici", "Ture", "Postări comunitate", "Deconectare"};
     ArrayList<profileListViewButton> profile_buttons = new ArrayList<>();
     private FirebaseUser user;
     private DatabaseReference reference;
     private String userID;
     private Calendar today, birthday;
-    private int i=0;
+    private int i = 0;
     ImageView userProfileImageView;
-    ImageView imageView1,imageView2,imageView3;
+    ImageView imageView1, imageView2, imageView3;
     ImageButton openGalleryButton;
     ArrayList<String> gallery_links = new ArrayList<>();
     ArrayList<ImageView> gallery = new ArrayList<>();
@@ -138,8 +124,8 @@ public class ProfileFragment extends Fragment {
         editProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent (getContext(),EditProfileActivity.class);
-                intent.putExtra("uId",userID);
+                Intent intent = new Intent(getContext(), EditProfileActivity.class);
+                intent.putExtra("uId", userID);
                 startActivity(intent);
             }
         });
@@ -147,8 +133,8 @@ public class ProfileFragment extends Fragment {
         openGalleryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent (getContext(),GalleryActivity.class);
-                intent.putExtra("uId",userID);
+                Intent intent = new Intent(getContext(), GalleryActivity.class);
+                intent.putExtra("uId", userID);
                 startActivity(intent);
             }
         });
@@ -171,7 +157,7 @@ public class ProfileFragment extends Fragment {
                     }
 
                     nameTextView.setText(firstname + " " + lastname);
-                    ageTextView.setText(String.valueOf(age)+" ani");
+                    ageTextView.setText(String.valueOf(age) + " ani");
                     try {
                         getUserProfilePhoto(userProfile.getProfileImageUrl());
                     } catch (IOException e) {
@@ -190,9 +176,9 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Photo photo = dataSnapshot.getValue(Photo.class);
-                gallery_links.add(0,photo.getPhotoUrl());
-                if(i<3)
-                Picasso.get().load(photo.getPhotoUrl()).resize(300,300).centerCrop().into(gallery.get(i));
+                gallery_links.add(0, photo.getPhotoUrl());
+                if (i < 3)
+                    Picasso.get().load(photo.getPhotoUrl()).resize(300, 300).centerCrop().into(gallery.get(i));
                 i++;
             }
 
@@ -216,7 +202,7 @@ public class ProfileFragment extends Fragment {
 
             }
 
-            });
+        });
 
         ListView profileListView = (ListView) view.findViewById(R.id.profileListView);
         for (int i = 0; i < button_names.length; i++) {
@@ -239,10 +225,14 @@ public class ProfileFragment extends Fragment {
                         startActivity(i);
                         break;
                     case 2:
-                        i = new Intent(getActivity(), CommunityPostsActivity.class);
+                        i = new Intent(getActivity(), RoutePostsActivity.class);
                         startActivity(i);
                         break;
                     case 3:
+                        i = new Intent(getActivity(), CommunityPostsActivity.class);
+                        startActivity(i);
+                        break;
+                    case 4:
                         FirebaseAuth.getInstance().signOut();
                         SharedPreferences preferences = getActivity().getSharedPreferences("credentials", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = preferences.edit();
@@ -261,8 +251,8 @@ public class ProfileFragment extends Fragment {
     }
 
 
-            public void getUserProfilePhoto(String profileImageUrl) throws IOException {
-        if(!profileImageUrl.equals("")) {
+    public void getUserProfilePhoto(String profileImageUrl) throws IOException {
+        if (!profileImageUrl.equals("")) {
             Picasso.get().load(profileImageUrl).fit().centerInside().into(userProfileImageView);
         }
     }

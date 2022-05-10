@@ -20,6 +20,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CicloTM">
         <activity
+            android:name=".RoutePostsActivity"
+            android:exported="false" />
+        <activity
             android:name=".RecordedRouteActivity"
             android:exported="false" />
         <activity
