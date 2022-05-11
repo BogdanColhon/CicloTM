@@ -14,8 +14,10 @@ import com.example.ciclotm.Models.Route;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 public class routePostsRecycleViewAdapter extends RecyclerView.Adapter<routePostsRecycleViewAdapter.MyViewHolder> {
 
@@ -53,10 +55,12 @@ public class routePostsRecycleViewAdapter extends RecyclerView.Adapter<routePost
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int i) {
         Date time = routeList.get(i).getPublishDate();
-        holder.dateText.setText(time.toString());
+        SimpleDateFormat df = new SimpleDateFormat("HH:mm  dd/MM/yyyy", Locale.getDefault());
+        String output = df.format(time);
+        holder.dateText.setText(output);
 
         double distance = routeList.get(i).getDistance();
-        holder.distanceText.setText(String.valueOf(distance));
+        holder.distanceText.setText(String.format("%.2f", distance) + " km");
 
 
         String duration = routeList.get(i).getElapsedTime();
