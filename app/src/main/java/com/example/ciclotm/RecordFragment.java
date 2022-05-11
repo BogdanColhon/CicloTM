@@ -1,12 +1,51 @@
 package com.example.ciclotm;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
+import com.example.ciclotm.ReguliCirculatie.ReguliCirculatieActivity;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+
+import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,6 +53,42 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class RecordFragment extends Fragment {
+
+    private int LOCATION_REFRESH_TIME = 5000; // 5 seconds to update
+    private int LOCATION_REFRESH_DISTANCE = 3; // 3 meters to update
+    static final Double EARTH_RADIUS = 6371.00;
+    private final int REQ_PERMISSION = 5;
+
+    private TextView elapsedTime;
+    private TextView distanceText;
+    private TextView speedText;
+    private ImageButton startButton;
+    private ImageButton finishButton;
+    private ImageButton resumeButton;
+    private ImageButton stopButton;
+    private LinearLayout startLinear;
+    private LinearLayout finishLinear;
+
+    private LocationListener locationListener = null;
+    private LocationManager locationManager;
+    private FusedLocationProviderClient client;
+
+    private MapView mapView;
+    private GoogleMap map;
+    protected static ArrayList<Location> routePoints = new ArrayList<Location>();
+    private static ArrayList<Marker> routeMarker = new ArrayList<Marker>();
+
+
+    protected static double totalDistance = 0.0;
+    private int seconds;
+    private boolean running;
+    private String time;
+    private double speed;
+    private double maxSpeed = 0;
+    private double avgSpeed;
+    private double speedSum = 0;
+    private int samples = 1;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -58,15 +133,295 @@ public class RecordFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_store, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_record, container, false);
+
+        elapsedTime = view.findViewById(R.id.recordElapsedTimeTextView);
+        distanceText = view.findViewById(R.id.distanceTV);
+        speedText = view.findViewById(R.id.speedTV);
+        startButton = view.findViewById(R.id.recordStartImageButton);
+        finishButton = view.findViewById(R.id.recordFinishImageButton);
+        resumeButton = view.findViewById(R.id.recordResumeImageButton);
+        stopButton = view.findViewById(R.id.recordStopImageButton);
+        startLinear = view.findViewById(R.id.startLinearLayout);
+        finishLinear = view.findViewById(R.id.finishLinearLayout);
+        mapView = view.findViewById(R.id.recordMapView);
+        mapView.onCreate(savedInstanceState);
+
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+
+        runTimer();
+
+        startButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                running = true;
+
+                startLinear.setVisibility(View.INVISIBLE);
+                finishLinear.setVisibility(View.VISIBLE);
+                stopButton.setVisibility(View.VISIBLE);
+                resumeButton.setVisibility(View.VISIBLE);
+
+                locationListener = new MyLocationListener();
+                if (checkPermission())
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, locationListener);
+            }
+        });
+
+        resumeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                running = true;
+                if (checkPermission())
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, locationListener);
+            }
+        });
+
+        stopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                running = false;
+                locationManager.removeUpdates(locationListener);
+                for (int i = 0; i < routePoints.size(); i++) {
+                    System.out.println(routePoints.get(i));
+                }
+            }
+        });
+
+        finishButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+                alertDialog.setMessage("Sigur vrei să închei înregistrarea?");
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Da",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(getContext(), RecordedRouteActivity.class);
+                                intent.putExtra("distanceRecorded", totalDistance);
+                                intent.putExtra("timeRecorded", time);
+                                intent.putExtra("avgSpeedRecorded",speedSum/(double) samples);
+                                intent.putExtra("maxSpeedRecorded",maxSpeed);
+                                startActivity(intent);
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Nu", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                alertDialog.show();
+            }
+        });
+
+        client = LocationServices.getFusedLocationProviderClient(getContext());
+        getStartingLocation();
+        return view;
+
     }
-    public void onResume(){
+
+    public class MyLocationListener implements LocationListener {
+        @Override
+        public void onLocationChanged(Location loc) {
+            setMarker(loc);
+
+                samples++;
+
+            if (routeMarker.get(routeMarker.size() - 2) != null) {
+                System.out.println(routeMarker.get(1));
+                routeMarker.get(routeMarker.size() - 2).remove();
+            }
+
+            if (routePoints.get(routePoints.size() - 2) != null) {
+                LatLng firstPoint = new LatLng(routePoints.get(routePoints.size() - 2).getLatitude(),routePoints.get(routePoints.size()-2).getLongitude());
+                LatLng secondPoint = new LatLng(routePoints.get(routePoints.size() - 1).getLatitude(),routePoints.get(routePoints.size()-1).getLongitude());
+
+                double pointsDistance = DistanceCalculation(firstPoint.latitude,firstPoint.longitude,secondPoint.latitude,secondPoint.longitude);
+                totalDistance = totalDistance + pointsDistance;
+                speed = pointsDistance/(double)(5.0/3600.0);
+                if(speed > maxSpeed)
+                {
+                    maxSpeed = speed;
+                }
+                speedSum = speedSum + speed;
+
+                distanceText.setText(String.format("%.2f", totalDistance));
+                speedText.setText(String.format("%.2f",speed));
+
+
+                PolylineOptions polylineOptions = new PolylineOptions()
+                        .add(firstPoint)
+                        .add(secondPoint)
+                        .width(13)
+                        .color(getResources().getColor(R.color.green, getResources().newTheme()));
+
+                Polyline polyline = map.addPolyline(polylineOptions);
+            }
+
+
+        }
+    }
+
+    public double DistanceCalculation(double lat1, double lon1, double lat2, double lon2){
+        double Radius = EARTH_RADIUS;
+        double dLat = Math.toRadians(lat2-lat1);
+        double dLon = Math.toRadians(lon2-lon1);
+        double a = Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(Math.toRadians(lat1))*Math.cos(Math.toRadians(lat2))*Math.sin(dLon/2)*Math.sin(dLon/2);
+        double c = 2*Math.asin(Math.sqrt(a));
+        return Radius * c;
+    }
+
+
+    private void runTimer() {
+        Handler handler = new Handler();
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                int hours = seconds / 3600;
+                int minutes = (seconds % 3600) / 60;
+                int secs = seconds % 60;
+
+                time = String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, secs);
+                elapsedTime.setText(time);
+
+                if (running) {
+                    seconds++;
+                }
+                handler.postDelayed(this, 1000);
+            }
+        });
+    }
+
+
+    private void getStartingLocation() {
+        if (checkPermission()) {
+            Task<Location> task = client.getLastLocation();
+            task.addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    if (location != null) {
+                        try {
+                            MapsInitializer.initialize(getActivity().getApplicationContext());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        mapView.getMapAsync(new OnMapReadyCallback() {
+                            @Override
+                            public void onMapReady(GoogleMap mMap) {
+                                MapsInitializer.initialize(getContext());
+                                map = mMap;
+                                map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                                Location point = new Location("point");
+                                point.setLatitude(latLng.latitude);
+                                point.setLongitude(latLng.longitude);
+                                routePoints.add(point);
+                                MarkerOptions options = new MarkerOptions().position(latLng).icon(bitmapDescriptorFromVector(getContext(), R.drawable.black_dot_icon_resized));
+                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
+                                Marker marker = mMap.addMarker(options);
+                                routeMarker.add(marker);
+
+                            }
+                        });
+                    }
+                    ;
+                }
+            });
+        } else {
+            askPermission();
+        }
+    }
+
+    public void setMarker(Location location) {
+
+
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        Location point = new Location("point");
+        point.setLatitude(latLng.latitude);
+        point.setLongitude(latLng.longitude);
+        routePoints.add(point);
+        MarkerOptions options = new MarkerOptions().position(latLng).icon(bitmapDescriptorFromVector(getContext(), R.drawable.black_dot_icon_resized));
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
+        Marker marker = map.addMarker(options);
+        routeMarker.add(marker);
+
+
+    }
+
+
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
+
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mapView.onStart();
+    }
+
+    @Override
+    public void onResume() {
         super.onResume();
-
-        // Set title bar
         ((MenuActivity) getActivity())
-                .setActionBarTitle("Magazin");
-
+                .setActionBarTitle("Înregistrează");
+        mapView.onResume();
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mapView.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mapView.onStop();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mapView.onDestroy();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mapView.onSaveInstanceState(outState);
+    }
+
+    // Check for permission to access Location
+    private boolean checkPermission() {
+        // Ask for permission if it wasn't granted yet
+        return (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED);
+    }
+
+    // Asks for permission
+    private void askPermission() {
+        ActivityCompat.requestPermissions(
+                getActivity(),
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                REQ_PERMISSION
+        );
+    }
+
+
 }
