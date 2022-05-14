@@ -9,15 +9,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,8 +20,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
 import com.example.ciclotm.Models.PointOfInterestMarker;
+import com.example.ciclotm.Models.LiveEventsMarker;
 import com.example.ciclotm.Models.Report;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -42,13 +44,14 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.core.Repo;
 import com.google.maps.android.heatmaps.Gradient;
 import com.google.maps.android.heatmaps.HeatmapTileProvider;
 import com.google.maps.android.heatmaps.WeightedLatLng;
@@ -56,7 +59,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -73,6 +75,16 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
     private ArrayList<Report> reportList = new ArrayList<>();
     private ArrayList<WeightedLatLng> arr = new ArrayList<>();
     ArrayList<String> markers = new ArrayList<>();
+    FloatingActionButton reportButton;
+    FloatingActionButton liveEventButton;
+    FloatingActionButton mapLayerButton;
+    FusedLocationProviderClient client;
+    private LatLng newMarkerPosition = null;
+
+
+    private int i = 0;
+
+
     TextView t_markerWindow;
     ImageView i_markerWindow;
     int[] colors = {
@@ -136,14 +148,39 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
         View view = inflater.inflate(R.layout.fragment_maps, container, false);
         mapView = view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
-        FloatingActionButton reportButton = view.findViewById(R.id.reportFloatingButton);
-        FloatingActionButton mapLayerButton = view.findViewById(R.id.layersFloatingButton);
+        reportButton = view.findViewById(R.id.reportFloatingButton);
+        liveEventButton = view.findViewById(R.id.liveEventFloatingButton);
+        mapLayerButton = view.findViewById(R.id.layersFloatingButton);
+
+        //Initialize fused location
+        client = LocationServices.getFusedLocationProviderClient(getActivity());
+        Location loc = null;
+        getCurrentLocation(loc);
+
+        fetchMarkers();
 
         reportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(getActivity(), StolenBikeLocationActivity.class);
                 getActivity().startActivity(myIntent);
+            }
+        });
+
+        liveEventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (newMarkerPosition != null) {
+                    DialogFragmentLive myDialogFragment = new DialogFragmentLive();
+                    myDialogFragment.show(getActivity().getSupportFragmentManager(), "MyFragment");
+
+                    Bundle args = new Bundle();
+                    args.putDouble("markerLat", newMarkerPosition.latitude);
+                    args.putDouble("markerLng", newMarkerPosition.longitude);
+                    myDialogFragment.putArguments(args);
+                } else {
+                    Toast.makeText(getContext(), "Trebuie sa confirmatia locatia curenta", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -154,30 +191,77 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
             }
         });
 
+
+        return view;
+    }
+
+    public void getCurrentLocation(Location new_location) {
         try {
-            MapsInitializer.initialize(getActivity().getApplicationContext());
+            MapsInitializer.initialize(getContext());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        mapView.getMapAsync(new OnMapReadyCallback() {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        Task<Location> task = client.getLastLocation();
+        task.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
-            public void onMapReady(GoogleMap mMap) {
-                fetchMarkers();
-                MapsInitializer.initialize(getContext());
-                map = mMap;
-                map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-                if (checkPermission()) {
-                    mMap.setMyLocationEnabled(true);
-                } else
-                    askPermission();
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    if (location != new_location) {
+                        mapView.getMapAsync(new OnMapReadyCallback() {
+                            @Override
+                            public void onMapReady(GoogleMap mMap) {
+                                MapsInitializer.initialize(getContext());
+                                map = mMap;
+                                map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-                LatLng city_center = new LatLng(45.75804742621145, 21.228941951330423);
-                CameraPosition city = CameraPosition.builder().target(city_center).zoom(16).build();
-                map.moveCamera(CameraUpdateFactory.newCameraPosition(city));
+                                if (checkPermission()) {
+                                    mMap.setMyLocationEnabled(true);
+                                } else
+                                    askPermission();
 
+                                LatLng city_center = new LatLng(45.75804742621145, 21.228941951330423);
+                                CameraPosition city = CameraPosition.builder().target(city_center).zoom(16).build();
+                                map.moveCamera(CameraUpdateFactory.newCameraPosition(city));
+
+                                if (i >= 1) {
+                                    LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
+                                    CameraPosition current_camera_position = CameraPosition.builder().target(current).zoom(16).build();
+                                    map.moveCamera(CameraUpdateFactory.newCameraPosition(current_camera_position));
+                                }
+
+                                map.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+                                    @Override
+                                    public boolean onMyLocationButtonClick() {
+                                        if (i >= 1) {
+                                            getCurrentLocation(location);
+                                        }
+                                        LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
+                                        newMarkerPosition = current;
+                                        System.out.println(newMarkerPosition.longitude + "\n" + newMarkerPosition.latitude);
+                                        i++;
+
+                                        return false;
+
+                                    }
+
+                                });
+
+                            }
+                        });
+                    }
+                }
             }
         });
-        return view;
     }
 
     private void showCustomDialog() {
@@ -187,6 +271,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
         dialog.setContentView(R.layout.custom_dialog_map_layers);
 
         final Button furturiLayer = dialog.findViewById(R.id.furturiLayer);
+        final Button liveLayer = dialog.findViewById(R.id.liveLayer);
         final Button utileLayer = dialog.findViewById(R.id.utileLayer);
         final Button heatMapLayer = dialog.findViewById(R.id.heatMapLayer);
 
@@ -194,23 +279,42 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
             @Override
             public void onClick(View v) {
                 map.clear();
+                reportButton.setVisibility(View.VISIBLE);
+                liveEventButton.setVisibility(View.INVISIBLE);
                 fetchMarkers();
                 dialog.dismiss();
             }
         });
+
+        liveLayer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                map.clear();
+                reportButton.setVisibility(View.INVISIBLE);
+                liveEventButton.setVisibility(View.VISIBLE);
+                fetchLiveEventsMarkers();
+                dialog.dismiss();
+            }
+        });
+
         utileLayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 map.clear();
+                reportButton.setVisibility(View.VISIBLE);
+                liveEventButton.setVisibility(View.INVISIBLE);
                 fetchPointOfInterestMarkers();
                 dialog.dismiss();
             }
         });
+
         heatMapLayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 map.clear();
-                System.out.println(arr.toString());
+                reportButton.setVisibility(View.VISIBLE);
+                liveEventButton.setVisibility(View.INVISIBLE);
+
                 HeatmapTileProvider heatmapTileProvider = new HeatmapTileProvider.Builder()
                         .weightedData(arr)
                         .radius(10)
@@ -272,12 +376,12 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
                         return null;
                     }
                 });
-                map.setOnInfoWindowLongClickListener(new GoogleMap.OnInfoWindowLongClickListener(){
+                map.setOnInfoWindowLongClickListener(new GoogleMap.OnInfoWindowLongClickListener() {
                     @Override
                     public void onInfoWindowLongClick(@NonNull Marker marker) {
                         Report clicked_report = (Report) hash_markers2.get(marker.getId());
-                        Intent intent = new Intent(getContext(),ExpandedFurturiPostActivity.class);
-                        intent.putExtra("clicked_report",clicked_report);
+                        Intent intent = new Intent(getContext(), ExpandedFurturiPostActivity.class);
+                        intent.putExtra("clicked_report", clicked_report);
                         getActivity().startActivity(intent);
                     }
 
@@ -374,6 +478,90 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
 
             }
 
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void fetchLiveEventsMarkers() {
+        reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("LiveEventsMarkers");
+        reference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                LiveEventsMarker newMarker = snapshot.getValue(LiveEventsMarker.class);
+                LatLng latLng = new LatLng(newMarker.getLat(), newMarker.getLng());
+
+                if (String.valueOf(newMarker.getType()).equals("Groapă")) {
+                    Marker marker = map.addMarker(new MarkerOptions()
+                            .position(latLng)
+                            .title(newMarker.getTitle())
+                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.broken_glass_5)));
+                }
+                if (String.valueOf(newMarker.getType()).equals("Gheață")) {
+                    Marker marker = map.addMarker(new MarkerOptions()
+                            .position(latLng)
+                            .title(newMarker.getTitle())
+                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.snowflake_2)));
+                }
+                if (String.valueOf(newMarker.getType()).equals("Cioburi")) {
+                    Marker marker = map.addMarker(new MarkerOptions()
+                            .position(latLng)
+                            .title(newMarker.getTitle())
+                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.broken_glass_5)));
+                }
+                if (String.valueOf(newMarker.getType()).equals("Lucrări")) {
+                    Marker marker = map.addMarker(new MarkerOptions()
+                            .position(latLng)
+                            .title(newMarker.getTitle())
+                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ic_baseline_coffee_24)));
+                }
+                if (String.valueOf(newMarker.getType()).equals("Accident")) {
+                    Marker marker = map.addMarker(new MarkerOptions()
+                            .position(latLng)
+                            .title(newMarker.getTitle())
+                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ic_baseline_coffee_24)));
+                }
+
+                map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                    @Nullable
+                    @Override
+                    public View getInfoContents(@NonNull Marker marker) {
+                        View v = getLayoutInflater().inflate(R.layout.live_events_marker_info, null);
+                        TextView t1 = (TextView) v.findViewById(R.id.liveEventsMarkerInfoTitleTextView);
+                        TextView t2 = (TextView) v.findViewById(R.id.liveEventsMarkerInfoTimeTextView);
+                        TextView t3 = (TextView) v.findViewById(R.id.liveEventsMarkerContentTextView);
+                        t1.setText(newMarker.getTitle());
+                        t2.setText(newMarker.getPublishDate().toString());
+                        t3.setText(newMarker.getDescription());
+                        return v;
+                    }
+
+                    @Nullable
+                    @Override
+                    public View getInfoWindow(@NonNull Marker marker) {
+                        return null;
+                    }
+                });
+
+            }
 
 
             @Override

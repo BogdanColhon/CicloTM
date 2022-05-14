@@ -36,6 +36,23 @@
        android:drawableRight="@drawable/th3"
         android:text="Furturi" />
 
+    <Button
+        android:id="@+id/liveLayer"
+        android:layout_width="200dp"
+        android:background="@drawable/login_button_shape"
+        android:layout_height="80dp"
+        android:layout_weight="1"
+        android:focusable="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        app:backgroundTint="@null"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:drawableRight="@drawable/live_button_2"
+        android:text="Live" />
+
 
     <Button
         android:id="@+id/utileLayer"
