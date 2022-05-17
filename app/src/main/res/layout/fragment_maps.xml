@@ -18,6 +18,21 @@
         android:clickable="true"
         app:maxImageSize="35dp"
         android:src="@drawable/report_theft" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/liveEventFloatingButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="100dip"
+        android:layout_marginEnd="15dip"
+        android:clickable="true"
+        android:scaleType="center"
+        android:src="@drawable/ic_baseline_add_24"
+        android:visibility="invisible"
+        app:backgroundTint="@color/black"
+        app:maxImageSize="35dp" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/layersFloatingButton"
         android:layout_width="wrap_content"

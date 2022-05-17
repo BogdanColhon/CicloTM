@@ -2,25 +2,25 @@ package com.example.ciclotm;
 
 public class profileListViewButton {
     private String button_name;
-    private String arrow;
-    public profileListViewButton(String button_name,String arrow){
+    private int button_icon;
+    public profileListViewButton(String button_name,int button_icon){
         this.button_name=button_name;
-        this.arrow=arrow;
+        this.button_icon=button_icon;
     }
 
     public String getButton_name() {
         return button_name;
     }
 
-    public String getArrow() {
-        return arrow;
+    public int getButton_icon() {
+        return button_icon;
     }
 
     public void setButton_name(String button_name) {
         this.button_name = button_name;
     }
 
-    public void setArrow(String arrow) {
-        this.arrow = arrow;
+    public void setButton_icon(int button_icon) {
+        this.button_icon = button_icon;
     }
 }

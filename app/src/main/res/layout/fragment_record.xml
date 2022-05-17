@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".RecordFragment">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/liveEventAddFloatingButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginTop="100dip"
+        android:layout_marginEnd="15dip"
+        android:clickable="true"
+        android:scaleType="center"
+        android:src="@drawable/pin_24"
+        android:visibility="invisible"
+        app:backgroundTint="@color/black"
+        app:maxImageSize="35dp" />
 
     <LinearLayout
         android:layout_width="match_parent"

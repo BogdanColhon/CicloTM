@@ -1,7 +1,5 @@
 package com.example.ciclotm.Models;
 
-import java.util.Date;
-
 public class PointOfInterestMarker {
 
     private String Title;
