@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -13,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -44,6 +48,7 @@ public class ProfileFragment extends Fragment {
 
 
     String[] button_names = {"Biciclete", "Statistici", "Ture", "Postări comunitate", "Deconectare"};
+    int[] button_icons = {R.drawable.bike_collection_button, R.drawable.stats_bars_button, R.drawable.routes_button, R.drawable.my_community_posts_button, R.drawable.log_out_button};
     ArrayList<profileListViewButton> profile_buttons = new ArrayList<>();
     private FirebaseUser user;
     private DatabaseReference reference;
@@ -89,6 +94,7 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -97,10 +103,28 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.action_bar_profile, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.edit) {
+            Intent intent = new Intent(getContext(), EditProfileActivity.class);
+            intent.putExtra("uId", userID);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users");
         userID = user.getUid();
@@ -120,15 +144,15 @@ public class ProfileFragment extends Fragment {
         gallery.add(imageView3);
 
 
-        Button editProfileButton = (Button) view.findViewById(R.id.editProfileButton);
-        editProfileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), EditProfileActivity.class);
-                intent.putExtra("uId", userID);
-                startActivity(intent);
-            }
-        });
+        //  Button editProfileButton = (Button) view.findViewById(R.id.editProfileButton);
+//        editProfileButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getContext(), EditProfileActivity.class);
+//                intent.putExtra("uId", userID);
+//                startActivity(intent);
+//            }
+//        });
 
         openGalleryButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -206,7 +230,7 @@ public class ProfileFragment extends Fragment {
 
         ListView profileListView = (ListView) view.findViewById(R.id.profileListView);
         for (int i = 0; i < button_names.length; i++) {
-            profileListViewButton button = new profileListViewButton(button_names[i], ">");
+            profileListViewButton button = new profileListViewButton(button_names[i], button_icons[i]);
             profile_buttons.add(button);
         }
         profileListViewAdapter adapter = new profileListViewAdapter(getContext(), profile_buttons);
@@ -248,6 +272,8 @@ public class ProfileFragment extends Fragment {
 
 
         return view;
+
+
     }
 
 

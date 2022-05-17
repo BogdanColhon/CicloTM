@@ -157,7 +157,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
         Location loc = null;
         getCurrentLocation(loc);
 
-        fetchMarkers();
+       // fetchMarkers();
 
         reportButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -255,7 +255,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
                                     }
 
                                 });
-
+                                fetchMarkers();
                             }
                         });
                     }
@@ -513,7 +513,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
                     Marker marker = map.addMarker(new MarkerOptions()
                             .position(latLng)
                             .title(newMarker.getTitle())
-                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.broken_glass_5)));
+                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.hole_marker_4)));
                 }
                 if (String.valueOf(newMarker.getType()).equals("Gheață")) {
                     Marker marker = map.addMarker(new MarkerOptions()
@@ -525,19 +525,19 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
                     Marker marker = map.addMarker(new MarkerOptions()
                             .position(latLng)
                             .title(newMarker.getTitle())
-                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.broken_glass_5)));
+                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.glass_shards)));
                 }
                 if (String.valueOf(newMarker.getType()).equals("Lucrări")) {
                     Marker marker = map.addMarker(new MarkerOptions()
                             .position(latLng)
                             .title(newMarker.getTitle())
-                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ic_baseline_coffee_24)));
+                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.road_work_marker_2)));
                 }
                 if (String.valueOf(newMarker.getType()).equals("Accident")) {
                     Marker marker = map.addMarker(new MarkerOptions()
                             .position(latLng)
                             .title(newMarker.getTitle())
-                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ic_baseline_coffee_24)));
+                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.accident_marker)));
                 }
 
                 map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
@@ -611,6 +611,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
     @Override
     public void onStart() {
         super.onStart();
+        System.out.println("---------------start");
         mapView.onStart();
     }
 
@@ -619,18 +620,21 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
         super.onResume();
         ((MenuActivity) getActivity())
                 .setActionBarTitle("Hărți");
+        System.out.println("--------------resume");
         mapView.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        System.out.println("-----------------------pause");
         mapView.onPause();
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        System.out.println("-----------------------stop");
         mapView.onStop();
     }
 
@@ -643,6 +647,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
     @Override
     public void onDestroy() {
         super.onDestroy();
+        System.out.println("--------------------destroy");
         mapView.onDestroy();
     }
 

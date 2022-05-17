@@ -61,8 +61,8 @@ public class AdminProfileActivity extends AppCompatActivity {
 
         ListView profileListView = (ListView) findViewById(R.id.profileListView);
         for (int i = 0; i < button_names.length; i++) {
-            profileListViewButton button = new profileListViewButton(button_names[i], ">");
-            profile_buttons.add(button);
+            //profileListViewButton button = new profileListViewButton(button_names[i], );
+          //  profile_buttons.add(button);
         }
         profileListViewAdapter adapter = new profileListViewAdapter(AdminProfileActivity.this, profile_buttons);
         profileListView.setAdapter(adapter);
