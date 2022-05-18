@@ -2,6 +2,7 @@ package com.example.ciclotm;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,7 +18,10 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +47,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -51,8 +56,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -90,6 +100,7 @@ public class RecordFragment extends Fragment {
     protected static ArrayList<Location> routePoints = new ArrayList<Location>();
     private static ArrayList<Marker> routeMarker = new ArrayList<Marker>();
     private ArrayList<LiveEventsMarker> liveEventsMarker = new ArrayList<LiveEventsMarker>();
+    LatLng newMarkerPosition;
 
 
     protected static double totalDistance = 0.0;
@@ -102,6 +113,7 @@ public class RecordFragment extends Fragment {
     private double speedSum = 0;
     private int samples = 1;
 
+    private Dialog dialog;
     private AlertDialog alertDialog;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -241,15 +253,55 @@ public class RecordFragment extends Fragment {
         addLiveEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LatLng newMarkerPosition = new LatLng(routePoints.get(routePoints.size() - 1).getLatitude(), routePoints.get(routePoints.size() - 1).getLongitude());
+                running = false;
+                locationManager.removeUpdates(locationListener);
+                newMarkerPosition = new LatLng(routePoints.get(routePoints.size() - 1).getLatitude(), routePoints.get(routePoints.size() - 1).getLongitude());
                 if (newMarkerPosition != null) {
-                    DialogFragmentLive myDialogFragment = new DialogFragmentLive();
-                    myDialogFragment.show(getActivity().getSupportFragmentManager(), "MyFragment");
 
-                    Bundle args = new Bundle();
-                    args.putDouble("markerLat", newMarkerPosition.latitude);
-                    args.putDouble("markerLng", newMarkerPosition.longitude);
-                    myDialogFragment.putArguments(args);
+                    View view = getLayoutInflater().inflate(R.layout.custom_live_event_dialog_big,null);
+                    dialog = new Dialog(getContext(), android.R.style.Theme_DeviceDefault_Light_NoActionBar_Fullscreen);
+                    dialog.setContentView(view);
+                    dialog.setCancelable(true);
+
+                    final ImageView holeButton = dialog.findViewById(R.id.liveDialogHoleImageView);
+                    final ImageView glassButton = dialog.findViewById(R.id.liveDialogGlassImageView);
+                    final ImageView iceButton = dialog.findViewById(R.id.liveDialogIceImageView);
+                    final ImageView roadWorkButton = dialog.findViewById(R.id.liveDialogRoadWorkImageView);
+                    final ImageView accidentButton = dialog.findViewById(R.id.liveDialogAccidentImageView);
+
+                    holeButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            openDescriptionDialog(R.drawable.ground_hole_marker_3,"Groapă");
+                        }
+                    });
+
+                    glassButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            openDescriptionDialog(R.drawable.broken_bottle,"Cioburi");
+                        }
+                    });
+                    iceButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            openDescriptionDialog(R.drawable.snowflake,"Gheață");
+                        }
+                    });
+                    roadWorkButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            openDescriptionDialog(R.drawable.road_work_marker_5,"Lucrări");
+                        }
+                    });
+                    accidentButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            openDescriptionDialog(R.drawable.accident_marker_2,"Accident");
+                        }
+                    });
+
+                    dialog.show();
                 }
             }
         });
@@ -260,6 +312,45 @@ public class RecordFragment extends Fragment {
 
     }
 
+    public void openDescriptionDialog(int drawable,String type)
+    {
+        View view = getLayoutInflater().inflate(R.layout.custom_live_event_dialog_description,null);
+        Dialog dialog2 = new Dialog(getContext(), android.R.style.Theme_DeviceDefault_Light_NoActionBar_Fullscreen);
+        dialog2.setContentView(view);
+        dialog2.setCancelable(true);
+
+        final ImageView icon = dialog2.findViewById(R.id.liveEventDialogDescriptionIconImageView);
+        final TextView dialogType = dialog2.findViewById(R.id.liveEventDialogDescriptionTypeImageView);
+        final TextView dialogDate = dialog2.findViewById(R.id.liveEventDialogDescriptionDateImageView);
+        final EditText dialogDescriptionEditText = dialog2.findViewById(R.id.liveEventDialogDescriptionEditText);
+        final Button dialogPostButton = dialog2.findViewById(R.id.liveEventDialogDescriptionPostButton);
+        Picasso.get().load(drawable).into(icon);
+        dialogType.setText(type);
+        Date currentTime = Calendar.getInstance().getTime();
+        Date expiringTime = new Date();
+        expiringTime.setTime(System.currentTimeMillis() + (6*60*60*1000));
+        dialogDate.setText(String.valueOf(currentTime));
+        String dialogDescription = dialogDescriptionEditText.getText().toString().trim();
+        dialogPostButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LiveEventsMarker marker = new LiveEventsMarker(type,type,dialogDescription,currentTime,expiringTime,newMarkerPosition.latitude,newMarkerPosition.longitude);
+
+                FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("LiveEventsMarkers").child(String.valueOf(currentTime))
+                        .setValue(marker).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            dialog.dismiss();
+                            dialog2.dismiss();
+                            running = true;
+                        }
+                    }
+                });
+            }
+        });
+        dialog2.show();
+    }
     public class MyLocationListener implements LocationListener {
         @Override
         public void onLocationChanged(Location loc) {
@@ -460,7 +551,7 @@ public class RecordFragment extends Fragment {
                     Marker marker = map.addMarker(new MarkerOptions()
                             .position(latLng)
                             .title(newMarker.getTitle())
-                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.broken_glass_5)));
+                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ground_hole_marker_2)));
                 }
                 if (String.valueOf(newMarker.getType()).equals("Gheață")) {
                     Marker marker = map.addMarker(new MarkerOptions()
@@ -472,19 +563,19 @@ public class RecordFragment extends Fragment {
                     Marker marker = map.addMarker(new MarkerOptions()
                             .position(latLng)
                             .title(newMarker.getTitle())
-                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.broken_glass_5)));
+                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.broken_bottle_2)));
                 }
                 if (String.valueOf(newMarker.getType()).equals("Lucrări")) {
                     Marker marker = map.addMarker(new MarkerOptions()
                             .position(latLng)
                             .title(newMarker.getTitle())
-                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ic_baseline_coffee_24)));
+                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.road_work_marker_4)));
                 }
                 if (String.valueOf(newMarker.getType()).equals("Accident")) {
                     Marker marker = map.addMarker(new MarkerOptions()
                             .position(latLng)
                             .title(newMarker.getTitle())
-                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ic_baseline_coffee_24)));
+                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.accident_marker_3)));
                 }
 
                 map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
