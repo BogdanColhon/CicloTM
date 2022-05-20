@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,71 +10,128 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/user_photo"
-            android:layout_width="60dp"
-            android:layout_height="80dp"
-            android:layout_weight="0"
-            android:src="@drawable/user_photo" />
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="16"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/upperTextView"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="username"
-                android:singleLine="true"
-                android:textColor="#222222"
-                android:textSize="20dp" />
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/lowerTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="15dp"
-                android:text="00.00.2000" />
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/user_photo"
+                    android:layout_width="60dp"
+                    android:layout_height="80dp"
+                    android:layout_weight="0"
+                    android:src="@drawable/user_photo" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="16"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/upperTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="username"
+                        android:textColor="#222222"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:id="@+id/lowerTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="00.00.2000"
+                        android:textColor="@color/black"
+                        android:textSize="15dp" />
 
 
-        </LinearLayout>
+                </LinearLayout>
 
-    </LinearLayout>
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/titleTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
                 android:layout_marginBottom="5dp"
+                android:text="titlu"
                 android:textSize="23sp"
-                android:text="titlu" />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/contentTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:text="content" />
-        </LinearLayout>
-    </ScrollView>
+                android:text="content"
+                android:textSize="18sp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#c0c0c0" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Comentarii:"
+                android:textSize="18sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/expandedGeneralPostRView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </ScrollView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/expandedGeneralPostCommentUserImageView"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/no_image_available"
+            android:padding="5dp"
+            app:civ_border_width="1dp"
+            app:civ_border_color="@color/black"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/expandedGeneralPostCommentInputEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Adaugă comentariu..."
+                android:padding="10dp"
+                android:inputType="textMultiLine|text"
+                android:textColor="@color/black"
+                android:layout_toStartOf="@+id/expandedGeneralPostSendImageView"/>
+
+            <ImageView
+                android:id="@+id/expandedGeneralPostSendImageView"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="3dp"
+                android:src="@drawable/ic_baseline_send_24" />
+        </RelativeLayout>
+
+    </LinearLayout>
+</RelativeLayout>
