@@ -640,13 +640,6 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        System.out.println("--------------------destroy");
-        mapView.onDestroy();
-    }
-
-    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mapView.onSaveInstanceState(outState);
