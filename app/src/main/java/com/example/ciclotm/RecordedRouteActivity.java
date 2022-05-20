@@ -1,6 +1,7 @@
 package com.example.ciclotm;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
@@ -8,12 +9,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ReportFragment;
 
 import com.example.ciclotm.Models.Route;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -37,6 +40,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.core.Repo;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
@@ -321,9 +325,9 @@ public class RecordedRouteActivity extends AppCompatActivity {
                         .setValue(route).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-
-
                         Toast.makeText(RecordedRouteActivity.this, "Tură adăugată", Toast.LENGTH_SHORT).show();
+                        RecordFragment.shouldRefreshOnResume = true;
+                        RecordFragment.isFirst = false;
                         finish();
 
                     }

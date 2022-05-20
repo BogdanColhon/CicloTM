@@ -2,6 +2,7 @@ package com.example.ciclotm;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,10 +18,12 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,6 +32,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.ciclotm.Models.LiveEventsMarker;
+import com.example.ciclotm.Services.TrackingService;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -43,19 +47,22 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -64,14 +71,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class RecordFragment extends Fragment {
 
-    private int LOCATION_REFRESH_TIME = 5000; // 5 seconds to update
-    private int LOCATION_REFRESH_DISTANCE = 3; // 3 meters to update
-    static final Double EARTH_RADIUS = 6371.00;
-    private final int REQ_PERMISSION = 5;
-
-    private TextView elapsedTime;
-    private TextView distanceText;
-    private TextView speedText;
+    public static TextView elapsedTime;
+    public static TextView distanceText;
+    private static TextView speedText;
     private ImageButton startButton;
     private ImageButton finishButton;
     private ImageButton resumeButton;
@@ -86,26 +88,33 @@ public class RecordFragment extends Fragment {
     private DatabaseReference reference;
 
     private MapView mapView;
-    private GoogleMap map;
-    protected static ArrayList<Location> routePoints = new ArrayList<Location>();
-    private static ArrayList<Marker> routeMarker = new ArrayList<Marker>();
-    private ArrayList<LiveEventsMarker> liveEventsMarker = new ArrayList<LiveEventsMarker>();
+    public static GoogleMap map;
+    public static ArrayList<Location> routePoints = new ArrayList<Location>();
+    public static ArrayList<Marker> routeMarker = new ArrayList<Marker>();
+    private static ArrayList<LiveEventsMarker> liveEventsMarker = new ArrayList<LiveEventsMarker>();
+    LatLng newMarkerPosition;
 
 
     protected static double totalDistance = 0.0;
-    private int seconds;
-    private boolean running;
-    private String time;
-    private double speed;
-    private double maxSpeed = 0;
-    private double avgSpeed;
-    private double speedSum = 0;
-    private int samples = 1;
+    public static String time;
+    private static double maxSpeed = 0;
+    private static double speedSum = 0;
+    private static int samples = 1;
+    public static Location point;
+    public static Marker startMarker;
 
-    private AlertDialog alertDialog;
+    public static Fragment terminator;
+
+    private Dialog dialog;
+    private static AlertDialog alertDialog;
+
+    public static BottomNavigationView rfNavBar;
+
+    public static boolean shouldRefreshOnResume = false;
+    public static boolean isFirst = true;
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
     // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -150,6 +159,7 @@ public class RecordFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_record, container, false);
 
+        terminator=this;
         elapsedTime = view.findViewById(R.id.recordElapsedTimeTextView);
         distanceText = view.findViewById(R.id.distanceTV);
         speedText = view.findViewById(R.id.speedTV);
@@ -163,49 +173,41 @@ public class RecordFragment extends Fragment {
         mapView = view.findViewById(R.id.recordMapView);
         mapView.onCreate(savedInstanceState);
 
+        rfNavBar = getActivity().findViewById(R.id.bottomNavigationView);
+
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         alertDialog = new AlertDialog.Builder(getContext()).create();
-
-        runTimer();
 
 
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                running = true;
+
+                sendCommandToService(Constants.ACTION_START_OR_RESUME_SERVICE);
 
                 startLinear.setVisibility(View.INVISIBLE);
                 finishLinear.setVisibility(View.VISIBLE);
                 stopButton.setVisibility(View.VISIBLE);
                 resumeButton.setVisibility(View.VISIBLE);
                 addLiveEventButton.setVisibility(View.VISIBLE);
-
+                rfNavBar.setVisibility(View.INVISIBLE);
                 fetchLiveEventsMarkers();
 
-                locationListener = new MyLocationListener();
-                if (checkPermission())
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, locationListener);
             }
         });
 
         resumeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                running = true;
-                if (checkPermission())
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, locationListener);
+                sendCommandToService(Constants.ACTION_START_OR_RESUME_SERVICE);
             }
         });
 
         stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                running = false;
-                locationManager.removeUpdates(locationListener);
-                for (int i = 0; i < routePoints.size(); i++) {
-                    System.out.println(routePoints.get(i));
-                }
+                sendCommandToService(Constants.ACTION_PAUSE_SERVICE);
             }
         });
 
@@ -219,6 +221,7 @@ public class RecordFragment extends Fragment {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                sendCommandToService(Constants.ACTION_STOP_SERVICE);
                                 Intent intent = new Intent(getContext(), RecordedRouteActivity.class);
                                 intent.putExtra("distanceRecorded", totalDistance);
                                 intent.putExtra("timeRecorded", time);
@@ -241,72 +244,135 @@ public class RecordFragment extends Fragment {
         addLiveEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LatLng newMarkerPosition = new LatLng(routePoints.get(routePoints.size() - 1).getLatitude(), routePoints.get(routePoints.size() - 1).getLongitude());
+                sendCommandToService(Constants.ACTION_PAUSE_SERVICE);
+                newMarkerPosition = new LatLng(routePoints.get(routePoints.size() - 1).getLatitude(), routePoints.get(routePoints.size() - 1).getLongitude());
                 if (newMarkerPosition != null) {
-                    DialogFragmentLive myDialogFragment = new DialogFragmentLive();
-                    myDialogFragment.show(getActivity().getSupportFragmentManager(), "MyFragment");
 
-                    Bundle args = new Bundle();
-                    args.putDouble("markerLat", newMarkerPosition.latitude);
-                    args.putDouble("markerLng", newMarkerPosition.longitude);
-                    myDialogFragment.putArguments(args);
+                    View view = getLayoutInflater().inflate(R.layout.custom_live_event_dialog_big, null);
+                    dialog = new Dialog(getContext(), android.R.style.Theme_DeviceDefault_Light_NoActionBar_Fullscreen);
+                    dialog.setContentView(view);
+                    dialog.setCancelable(true);
+
+                    final ImageView holeButton = dialog.findViewById(R.id.liveDialogHoleImageView);
+                    final ImageView glassButton = dialog.findViewById(R.id.liveDialogGlassImageView);
+                    final ImageView iceButton = dialog.findViewById(R.id.liveDialogIceImageView);
+                    final ImageView roadWorkButton = dialog.findViewById(R.id.liveDialogRoadWorkImageView);
+                    final ImageView accidentButton = dialog.findViewById(R.id.liveDialogAccidentImageView);
+
+                    holeButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            openDescriptionDialog(R.drawable.ground_hole_marker_3, "Groapă");
+                        }
+                    });
+
+                    glassButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            openDescriptionDialog(R.drawable.broken_bottle, "Cioburi");
+                        }
+                    });
+                    iceButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            openDescriptionDialog(R.drawable.snowflake, "Gheață");
+                        }
+                    });
+                    roadWorkButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            openDescriptionDialog(R.drawable.road_work_marker_5, "Lucrări");
+                        }
+                    });
+                    accidentButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            openDescriptionDialog(R.drawable.accident_marker_2, "Accident");
+                        }
+                    });
+
+                    dialog.show();
                 }
             }
         });
 
-        client = LocationServices.getFusedLocationProviderClient(getContext());
-        getStartingLocation();
+
+            client = LocationServices.getFusedLocationProviderClient(getContext());
+            getStartingLocation();
+
+
         return view;
 
     }
 
-    public class MyLocationListener implements LocationListener {
-        @Override
-        public void onLocationChanged(Location loc) {
-            setMarker(loc);
-
-            samples++;
-
-            if (routeMarker.get(routeMarker.size() - 2) != null) {
-                System.out.println(routeMarker.get(1));
-                routeMarker.get(routeMarker.size() - 2).remove();
-            }
-
-            if (routePoints.get(routePoints.size() - 2) != null) {
-                LatLng firstPoint = new LatLng(routePoints.get(routePoints.size() - 2).getLatitude(), routePoints.get(routePoints.size() - 2).getLongitude());
-                LatLng secondPoint = new LatLng(routePoints.get(routePoints.size() - 1).getLatitude(), routePoints.get(routePoints.size() - 1).getLongitude());
-
-                double pointsDistance = DistanceCalculation(firstPoint.latitude, firstPoint.longitude, secondPoint.latitude, secondPoint.longitude);
-                totalDistance = totalDistance + pointsDistance;
-                speed = pointsDistance / (double) (5.0 / 3600.0);
-                if (speed > maxSpeed) {
-                    maxSpeed = speed;
-                }
-                speedSum = speedSum + speed;
-
-                distanceText.setText(String.format("%.2f", totalDistance));
-                speedText.setText(String.format("%.2f", speed));
 
 
-                PolylineOptions polylineOptions = new PolylineOptions()
-                        .add(firstPoint)
-                        .add(secondPoint)
-                        .width(13)
-                        .color(getResources().getColor(R.color.green, getResources().newTheme()));
-
-                Polyline polyline = map.addPolyline(polylineOptions);
-
-                checkProximityLiveEvents(secondPoint);
-            }
-
-
+    public static void removeMarker() {
+        if (TrackingService.serRouteMarker.get(TrackingService.serRouteMarker.size() - 2) != null) {
+            System.out.println(TrackingService.serRouteMarker.get(1));
+            TrackingService.serRouteMarker.get(TrackingService.serRouteMarker.size() - 2).remove();
         }
     }
 
-    public void checkProximityLiveEvents(LatLng currentPoint) {
+    private void sendCommandToService(String action) {
+        Intent intent = new Intent(getActivity(), TrackingService.class);
+        intent.setAction(action);
+        intent.putExtra("startLat", routePoints.get(0).getLatitude());
+        intent.putExtra("startLng", routePoints.get(0).getLongitude());
+        getActivity().startService(intent);
+//        if(action==Constants.ACTION_STOP_SERVICE)
+//        {
+//            getActivity().stopService(intent);
+//        }
+//        else
+//        {
+//            getActivity().startService(intent);
+//        }
+    }
+
+    public void openDescriptionDialog(int drawable, String type) {
+        View view = getLayoutInflater().inflate(R.layout.custom_live_event_dialog_description, null);
+        Dialog dialog2 = new Dialog(getContext(), android.R.style.Theme_DeviceDefault_Light_NoActionBar_Fullscreen);
+        dialog2.setContentView(view);
+        dialog2.setCancelable(true);
+
+        final ImageView icon = dialog2.findViewById(R.id.liveEventDialogDescriptionIconImageView);
+        final TextView dialogType = dialog2.findViewById(R.id.liveEventDialogDescriptionTypeImageView);
+        final TextView dialogDate = dialog2.findViewById(R.id.liveEventDialogDescriptionDateImageView);
+        final EditText dialogDescriptionEditText = dialog2.findViewById(R.id.liveEventDialogDescriptionEditText);
+        final Button dialogPostButton = dialog2.findViewById(R.id.liveEventDialogDescriptionPostButton);
+        Picasso.get().load(drawable).into(icon);
+        dialogType.setText(type);
+        Date currentTime = Calendar.getInstance().getTime();
+        Date expiringTime = new Date();
+        expiringTime.setTime(System.currentTimeMillis() + (6 * 60 * 60 * 1000));
+        dialogDate.setText(String.valueOf(currentTime));
+        String dialogDescription = dialogDescriptionEditText.getText().toString().trim();
+        dialogPostButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LiveEventsMarker marker = new LiveEventsMarker(type, type, dialogDescription, currentTime, expiringTime, newMarkerPosition.latitude, newMarkerPosition.longitude);
+
+                FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("LiveEventsMarkers").child(String.valueOf(currentTime))
+                        .setValue(marker).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            dialog.dismiss();
+                            dialog2.dismiss();
+                            sendCommandToService(Constants.ACTION_START_OR_RESUME_SERVICE);
+                        }
+                    }
+                });
+            }
+        });
+        dialog2.show();
+    }
+
+    public static void checkProximityLiveEvents(LatLng currentPoint) {
         for (int i = 0; i < liveEventsMarker.size(); i++) {
 
-            if (DistanceCalculation(currentPoint.latitude, currentPoint.longitude, liveEventsMarker.get(i).getLat(), liveEventsMarker.get(i).getLng()) <= 0.01) {
+            if (TrackingService.DistanceCalculation(currentPoint.latitude, currentPoint.longitude, liveEventsMarker.get(i).getLat(), liveEventsMarker.get(i).getLng()) <= 0.01) {
                 if (!alertDialog.isShowing()) {
                     alertDialog.setMessage("Confirmi evenimentul?");
                     alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Da",
@@ -323,7 +389,6 @@ public class RecordFragment extends Fragment {
                         }
                     });
                     alertDialog.show();
-                    //Toast.makeText(getContext(),"Eveniment in apropiere",Toast.LENGTH_SHORT).show();
 
                     // Hide after some seconds
                     final Handler handler = new Handler();
@@ -349,35 +414,12 @@ public class RecordFragment extends Fragment {
         }
     }
 
-    public double DistanceCalculation(double lat1, double lon1, double lat2, double lon2) {
-        double Radius = EARTH_RADIUS;
-        double dLat = Math.toRadians(lat2 - lat1);
-        double dLon = Math.toRadians(lon2 - lon1);
-        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        double c = 2 * Math.asin(Math.sqrt(a));
-        return Radius * c;
-    }
+
+    public static void setTimer(int hours, int minutes, int secs) {
+        time = String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, secs);
+        elapsedTime.setText(time);
 
 
-    private void runTimer() {
-        Handler handler = new Handler();
-
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                int hours = seconds / 3600;
-                int minutes = (seconds % 3600) / 60;
-                int secs = seconds % 60;
-
-                time = String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, secs);
-                elapsedTime.setText(time);
-
-                if (running) {
-                    seconds++;
-                }
-                handler.postDelayed(this, 1000);
-            }
-        });
     }
 
 
@@ -400,19 +442,18 @@ public class RecordFragment extends Fragment {
                                 map = mMap;
                                 map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                                Location point = new Location("point");
+                                point = new Location("point");
                                 point.setLatitude(latLng.latitude);
                                 point.setLongitude(latLng.longitude);
                                 routePoints.add(point);
                                 MarkerOptions options = new MarkerOptions().position(latLng).icon(bitmapDescriptorFromVector(getContext(), R.drawable.black_dot_icon_resized));
                                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
-                                Marker marker = mMap.addMarker(options);
-                                routeMarker.add(marker);
+                                startMarker = mMap.addMarker(options);
+                                routeMarker.add(startMarker);
 
                             }
                         });
                     }
-                    ;
                 }
             });
         } else {
@@ -420,24 +461,28 @@ public class RecordFragment extends Fragment {
         }
     }
 
-    public void setMarker(Location location) {
+    public static void setData(double rfDistance, double rfSpeed, int rfSamples,Location rfPoint, Marker rfMarker, PolylineOptions rfPolylineOptions) {
+
+        distanceText.setText(String.format("%.2f", rfDistance));
+        speedText.setText(String.format("%.2f", rfSpeed));
+        totalDistance = rfDistance;
+        if (rfSpeed > maxSpeed) {
+            maxSpeed = rfSpeed;
+        }
+        speedSum = speedSum + rfSpeed;
+        samples = rfSamples;
+
+        routePoints.add(rfPoint);
+        routeMarker.add(rfMarker);
 
 
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        Location point = new Location("point");
-        point.setLatitude(latLng.latitude);
-        point.setLongitude(latLng.longitude);
-        routePoints.add(point);
-        MarkerOptions options = new MarkerOptions().position(latLng).icon(bitmapDescriptorFromVector(getContext(), R.drawable.black_dot_icon_resized));
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
-        Marker marker = map.addMarker(options);
-        routeMarker.add(marker);
 
+        Polyline polyline = map.addPolyline(rfPolylineOptions);
 
     }
 
 
-    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
+    public static BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
 
         Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
         vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
@@ -460,7 +505,7 @@ public class RecordFragment extends Fragment {
                     Marker marker = map.addMarker(new MarkerOptions()
                             .position(latLng)
                             .title(newMarker.getTitle())
-                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.broken_glass_5)));
+                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ground_hole_marker_2)));
                 }
                 if (String.valueOf(newMarker.getType()).equals("Gheață")) {
                     Marker marker = map.addMarker(new MarkerOptions()
@@ -472,19 +517,19 @@ public class RecordFragment extends Fragment {
                     Marker marker = map.addMarker(new MarkerOptions()
                             .position(latLng)
                             .title(newMarker.getTitle())
-                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.broken_glass_5)));
+                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.broken_bottle_2)));
                 }
                 if (String.valueOf(newMarker.getType()).equals("Lucrări")) {
                     Marker marker = map.addMarker(new MarkerOptions()
                             .position(latLng)
                             .title(newMarker.getTitle())
-                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ic_baseline_coffee_24)));
+                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.road_work_marker_4)));
                 }
                 if (String.valueOf(newMarker.getType()).equals("Accident")) {
                     Marker marker = map.addMarker(new MarkerOptions()
                             .position(latLng)
                             .title(newMarker.getTitle())
-                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ic_baseline_coffee_24)));
+                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.accident_marker_3)));
                 }
 
                 map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
@@ -545,6 +590,45 @@ public class RecordFragment extends Fragment {
         ((MenuActivity) getActivity())
                 .setActionBarTitle("Înregistrează");
         mapView.onResume();
+        if(shouldRefreshOnResume == true)
+        {
+            resetFragment();
+            if(isFirst == false)
+            {
+                System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~AICI~~~~~~~~~~~~~~~~~~~~~~~");
+                client = LocationServices.getFusedLocationProviderClient(getContext());
+                getStartingLocation();
+            }
+
+        }
+    }
+
+    private void resetFragment(){
+        map.clear();
+        rfNavBar.setVisibility(View.VISIBLE);
+        startLinear.setVisibility(View.VISIBLE);
+        finishLinear.setVisibility(View.INVISIBLE);
+        stopButton.setVisibility(View.INVISIBLE);
+        resumeButton.setVisibility(View.INVISIBLE);
+        addLiveEventButton.setVisibility(View.INVISIBLE);
+        routeMarker= new ArrayList<Marker>();
+        routePoints= new ArrayList<Location>();
+        totalDistance = 0.0;
+        distanceText.setText("0.0 km");
+        time = "0:00:00";
+        elapsedTime.setText("0:00:00");
+        speedText.setText("0.0 km/h");
+        speedSum=0;
+        samples=1;
+        TrackingService.isFirstRun = true;
+        TrackingService.serviceKilled = true;
+        shouldRefreshOnResume = false;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        distanceText.setText("125-125");
     }
 
     @Override
@@ -569,6 +653,7 @@ public class RecordFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
+        sendCommandToService(Constants.ACTION_STOP_SERVICE);
     }
 
     @Override
@@ -589,7 +674,7 @@ public class RecordFragment extends Fragment {
         ActivityCompat.requestPermissions(
                 getActivity(),
                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                REQ_PERMISSION
+                Constants.REQ_PERMISSION
         );
     }
 

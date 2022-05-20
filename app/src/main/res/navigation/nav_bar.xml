@@ -5,6 +5,13 @@
     android:id="@+id/nav_bar"
     app:startDestination="@id/mapsFragment">
 
+    <action android:id="@+id/action_global_trackingFragment"
+        app:destination="@+id/storeFragment"
+        app:launchSingleTop="true"/>
+    <action android:id="@+id/action_end_trackingFragment"
+        app:destination="@+id/mapsFragment"
+        />
+
     <fragment
         android:id="@+id/communityFragment"
         android:name="com.example.ciclotm.CommunityFragment"
