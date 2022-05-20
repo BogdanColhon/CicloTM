@@ -595,7 +595,6 @@ public class RecordFragment extends Fragment {
             resetFragment();
             if(isFirst == false)
             {
-                System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~AICI~~~~~~~~~~~~~~~~~~~~~~~");
                 client = LocationServices.getFusedLocationProviderClient(getContext());
                 getStartingLocation();
             }

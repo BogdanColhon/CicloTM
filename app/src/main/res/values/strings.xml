@@ -37,25 +37,24 @@
         <item>Cafenea</item>
     </string-array>
 
-    <string name="rules_obligatii">- Prezența permanentă a unui act de identitate valabil în momentul în care folosești drumul public \n
-- Dacă te întâlnești cu alți bicicliști în trafic sunteți obligați să mergeți pe un singur rând. Circulația în paralel este permisă doar în cazul în care sunt organizate concursuri sau manifestații. \n
-- Bicicleta ce o folosești trebuie să dispună de tot echipamentul prevăzut de Codul Rutier \n
-- Îmbrăcăminte ce o folosești pe timp de noapte trebuie să conțină neapărat elemente fluorescent-reflectorizante \n </string>
-    <string name="rules_interdictii">- Să folosești drumurile publice spre a lua lecții de ciclism \n
-- Să folosești trotuarele în lipsa unor piste pentru bicicliști \n
-- Să folosești doar o mână pentru a controla ghidonul sau doar un picior pentru a controla pedalele \n
-- Să mergi în paralel cu alt sau alți bicicliști \n
-- Să transporți o altă perrsoană cu ajutorul bicicletei. Interdicția nu se aplică bicicletelor special create pentru a fi folosite de mai multe persoane și bicicletelor dotate cu scaune speciale pentru copii de până la șapte ani și care sunt conduse de o persoană majoră. \n
-- Să folosești bicicleta atunci când sistemele de frânare sau cele de semnalizare sonore nu funcționează \n
-- Să fii remorcat, tras sau împins de alt vehicul sau să te ții de un alt vehicul ce se află în mers \n
-- Să traversezi strada pe trecerea de pietoni în timp ce ești pe bicicletă \n
-- Să folosești bicicleta pe străzile ce sunt acoperite cu gheață, polei sau zăpadă \n
-- Să mergi cu bicicleta fără să menții contactul ambelor roți cu asfaltul \n
-- Să folosești autostrada \n
-- Să staționezi cu bicicleta pe drumurile publice pe timp de noapte \n
-- Să folosești alte benzi decât cea de lângă bordură sau acostament în afară de cazurile în care trebuie să te încadrezi regulamentar ca să virezi la stânga în intersecții \n
-- Să circuli cu bicicleta sub influența alcoolului, drogurilor sau a altor substanțe stupefiante cu efecte similare acestora \n
-- Să transporți orice obiect ce poate incomoda sau pune în pericol conducerea bicicletei sau ceilalți participanți la trafic \n</string>
+    <string name="rules_obligatii">\u2022 Prezența permanentă a unui act de identitate valabil în momentul în care folosești drumul public. \n
+        \u2022 Dacă te întâlnești cu alți bicicliști în trafic sunteți obligați să mergeți pe un singur rând. Circulația în paralel este permisă doar în cazul în care sunt organizate concursuri sau manifestații. \n
+        \u2022 Bicicleta pe care o folosești trebuie să dispună de tot echipamentul prevăzut de Codul Rutier. \n\u2022 Îmbrăcămintea pe care o folosești pe timp de noapte trebuie să conțină obligatoriu elemente fluorescent-reflectorizante. \n </string>
+    <string name="rules_interdictii">\u2022 Să folosești drumurile publice spre a lua lecții de ciclism. \n
+        \u2022 Să folosești trotuarele în lipsa unor piste pentru bicicliști. \n
+        \u2022 Să folosești doar o mână pentru a controla ghidonul sau doar un picior pentru a controla pedalele. \n
+        \u2022 Să mergi în paralel cu alt sau alți bicicliști. \n
+        \u2022 Să transporți o altă perrsoană cu ajutorul bicicletei. Interdicția nu se aplică bicicletelor special create pentru a fi folosite de mai multe persoane și bicicletelor dotate cu scaune speciale pentru copii de până la șapte ani și care sunt conduse de o persoană majoră. \n
+        \u2022 Să folosești bicicleta atunci când sistemele de frânare sau cele de semnalizare sonore nu funcționează. \n
+        \u2022 Să fii remorcat, tras sau împins de alt vehicul sau să te ții de un alt vehicul ce se află în mers. \n
+        \u2022 Să traversezi strada pe trecerea de pietoni în timp ce ești pe bicicletă. \n
+        \u2022 Să folosești bicicleta pe străzile ce sunt acoperite cu gheață, polei sau zăpadă. \n
+        \u2022 Să mergi cu bicicleta fără să menții contactul ambelor roți cu asfaltul. \n
+        \u2022 Să folosești autostrada. \n
+        \u2022 Să staționezi cu bicicleta pe drumurile publice pe timp de noapte. \n
+        \u2022 Să folosești alte benzi decât cea de lângă bordură sau acostament în afară de cazurile în care trebuie să te încadrezi regulamentar ca să virezi la stânga în intersecții. \n
+        \u2022 Să circuli cu bicicleta sub influența alcoolului, drogurilor sau a altor substanțe stupefiante cu efecte similare acestora. \n
+        \u2022 Să transporți orice obiect ce poate incomoda sau pune în pericol conducerea bicicletei sau ceilalți participanți la trafic. \n</string>
     <string name="rules_dotari">\t Pentru a respecta în totalitate legile impuse de Regulamentul de aplicare al Codului Rutier, fiecare biciclist este obligat să-și doteze bicicleta cu echipamentul corespunzător. \n\n
 
         <b>Dotările unei biciclete includ:</b> \n\n
@@ -112,26 +111,41 @@
     </string-array>
 
     <string name="rules_bicicleta_noaptea">
-        \t Iata cateva sfaturi care te vor ajuta sa circuli cu bicicleta in siguranta pe timpul noptii: \n\n
-        \u2022 Nu pleca cu bicicleta daca nu este dotata cu toate dispozitivele prevazute de regulamentul din Codul Rutier. Aceste elemente includ far galben sau alb pe fata, lumina rosie si catadioptri pe spate, dar si dispozitive reflectorizante pe spite. \n
-        \u2022 Nu stationa pe carosabil pe timpul noptii. In cazul in care ai o problema cu bicicleta, incearca sa iesi din zona in care circula masinile. \n
-        \u2022 Desi nu este obligatoriu sa porti vesta reflectorizanta daca exista iluminat public in localitate, este indicat sa o faci, pentru mai multa siguranta in trafic. Daca iesi in afara localitatii, imbracamintea cu elemente reflectorizante este obligatorie. Totodata, poti purta diferite elemente reflectorizante pe picior, pe brat sau chiar pe rucsac si pe casca. \n
-        \u2022 Monteaza in partea din fata a bicicletei un far cu lumina puternica, mai ales pentru deplasarile lungi pe timp de noapte, eventual setat pe modul intermitent, ca sa fii mai vizibil pentru soferii care ies de pe stradute laterale. Tot pentru deplasarile lungi poti opta pentru un far cu generator, care mai este cunoscut sub denumirea de dinam. Modelele noi au de obicei un dinam integrat in butucul rotii, iar atat timp cat roata se invarte, acesta genereaza curent. \n
+        \t Iată câteva sfaturi care te vor ajuta să circuli cu bicicleta în siguranță pe timpul nopții: \n\n
+        \u2022 Nu pleca cu bicicleta dacă nu este dotată cu toate dispozitivele prevazute de regulamentul din Codul Rutier. Aceste elemente includ far galben sau alb pe față, lumină roșie și catadioptri pe spate, dar și dispozitive reflectorizante pe spițe. \n
+        \u2022 Nu staționa pe carosabil pe timpul nopții. În cazul în care ai o problemă cu bicicleta, încearcă să ieși din zona în care circulă mașinile. \n
+        \u2022 Deși nu este obligatoriu să porți vestă reflectorizantă dacă există iluminat public în localitate, este indicat să o faci, pentru mai multă siguranță în trafic. Daca ieși în afara localității, îmbracamintea cu elemente reflectorizante este obligatorie. Totodată, poți purta diferite elemente reflectorizante pe picior, pe braț sau chiar pe rucsac și pe cască. \n
+        \u2022 Montează în partea din față a bicicletei un far cu lumina puternică, mai ales pentru deplasările lungi pe timp de noapte, eventual setat pe modul intermitent, ca sa fii mai vizibil pentru soferii care ies de pe străduțe laterale. Tot pentru deplasările lungi poți opta pentru un far cu generator, care mai este cunoscut sub denumirea de dinam. Modelele noi au de obicei un dinam integrat în butucul roții, iar atât timp cât roata se învârte, acesta generează curent. \n
     </string>
 
     <string name="rules_bicicleta_ploaie">
-        \t Tine cont de urmatoarele sfaturi: \n\n
-        \u2022 Nu schimba directia si nu frana brusc, deoarece cauciucurile pot sa derapeze pe asfaltul umed. Daca apare o situatie neprevazuta, incearca sa incetinesti treptat si din timp si tine cont de faptul ca distanta de franare creste pe carosabilul umed. \n
-        \u2022 Monteaza aparatori in fata si in spatele bicicletei, eventul si o aparatoare de lant, ca sa nu te stropesti cu apa sau noroi. In plus, poti folosi si o pelerina de ploaie destinata mersului cu bicicleta. \n
-        \u2022 Tot ca sa te feresti de noroiul care poate sa sara de pe rotile bicicletei, poti purta o pereche de ochelari de ciclism. \n
+        \t Ține cont de următoarele sfaturi: \n\n
+        \u2022 Nu schimba direcția și nu frâna brusc, deoarece cauciucurile pot să derapeze pe asfaltul umed. Daca apare o situație neprevăzută, încearca să încetinești treptat și din timp și ține cont de faptul că distanța de franare crește pe carosabilul umed. \n
+        \u2022 Montează apărători în fața și în spatele bicicletei, eventul și o aparatoare de lanț, ca să nu te stropești cu apă sau noroi. În plus, poți folosi și o pelerină de ploaie destinată mersului cu bicicleta. \n
+        \u2022 Tot ca sa te ferești de noroiul care poate să sară de pe roțile bicicletei, poți purta o pereche de ochelari de ciclism. \n
     </string>
 
     <string name="rules_bicicleta_iarna">
-        \t Iata cum te pregatesti pentru mersul cu bicicleta pe timp de iarna: \n\n
-        \u2022 Poarta imbracaminte adecvata, mai ales pentru extremitati (maini, picioare, cap). Alege o pereche de manusi groase, dintr-un material rezistent la apa si vant, si o pereche de ghete de iarna. Daca alegi ghetele obisnuite, acestea ar trebui sa fie prevazute cu o membrana care opreste umezeala din exterior si chiar o pereche in plus de sosete, insa fara ca piciorul sa fie prea inghesuit, deoarece sangele nu va mai circula normal si picioarele ti se vor raci. \n
-        \u2022 Pe cap poti pune o caciula groasa. In cazul in care porti casca, poti opta pentru o caciula subtire dintr-un material rezistent la vant. \n
-        \u2022 Hainele pe care le porti ar trebui sa fie putin mai subtiri decat cele pe care le porti atunci cand mergi pe jos, deoarece corpul produce mai multa caldura cand mergi cu bicicleta. Evita sa porti paltoane lungi care te pot incomoda sau pot intra intre spite.\n
-        \u2022 Doteaza bicicleta cu aparatori pe fata si pe spate, ca sa nu te stropesti cu zapada murdara de pe strada sau cu apa care se strange de la zapada topita. In plus, deoarece atunci cand soseaua este umeda de la zapada care s-a topit, este recomandat sa nu faci manevre bruste sau sa franezi dintr-odata. \n
-        \u2022 Echipeaza bicicleta cu anvelope speciale pentru iarna, care au tinte metalice incorporate in cauciuc. \n
-        \t Nu uita ca nu ai voie sa iesi cu bicicleta iarna, daca strazile sunt acoperite cu gheata, polei sau zapada. \n</string>
+        \t Iată cum te pregătești pentru mersul cu bicicleta pe timp de iarnă: \n\n
+        \u2022 Poartă îmbracaminte adecvată, mai ales pentru extremități (mâini, picioare, cap). Alege o pereche de mănuși groase, dintr-un material rezistent la apă și vânt, și o pereche de ghete de iarnă. \n
+        \u2022 Pe cap poți pune o căciula groasă. În cazul în care porți cască, poți opta pentru o căciulă subțire dintr-un material rezistent la vânt. \n
+        \u2022 Hainele pe care le porți ar trebui să fie puțin mai subtiri decât cele pe care le porți atunci când mergi pe jos, deoarece corpul produce mai multă căldură când mergi cu bicicleta. Evită să porți paltoane lungi care te pot incomoda sau pot intra între spițe.\n
+        \u2022 Dotează bicicleta cu aparatori pe față și pe spate, ca să nu te stropești cu zăpada murdara de pe stradă sau cu apa care se strânge de la zăpada topită. În plus, deoarece atunci când șoseaua este umedă de la zăpada care s-a topit, este recomandat să nu faci manevre bruște sau să frânezi dintr-odată. \n
+        \u2022 Echipează bicicleta cu anvelope speciale pentru iarnă, care au ținte metalice incorporate în cauciuc. \n
+        \t Nu uita că nu ai voie să ieși cu bicicleta iarna, dacă străzile sunt acoperite cu gheață, polei sau zăpadă. \n</string>
+
+    <string name="rules_bicicleta_aglomeratie">
+        \t Dacă mergi cu bicicleta prin zone aglomerate, așa cum este cazul traficului din oraș la ore de vârf, e bine să ții cont de câteva lucruri esențiale pentru siguranța ta:\n\n
+        \u2022 Ca să te asiguri mai usor în trafic, poți monta o oglindă pe ghidon, ca să vezi mașinile care vin din spate și să poți depăși vehicule staționate pe marginea drumului în condiții de siguranță. Bicicleta trebuie dotată cu toate elementele de siguranță și trebuie să aibă un sistem de frânare eficient.\n
+        \u2022 Nu schimba direcția de mers înainte să semnalizezi intenția ta celorlalți participanți la trafic și nu frâna brusc, deoarece poți fi lovit din spate sau poți derapa.\n
+        \u2022 Nu asculta muzică la căști când mergi cu bicicleta, deoarece nu vei reuși să fii atent la tot ceea ce se petrece în jurul tău.\n
+        \u2022 Poartă cască și ochelari de protecție pentru mai multă siguranță și tine întotdeauna ambele mâini pe ghidon.\n
+        \u2022 Ca să te poți strecura mai usor în trafic și să ai libertate de mișcare, nu ține bagaje voluminoase pe bicicletă. Eventual, poți purta un rucsac mic sau o borsetă.\n
+        \u2022 Ai grjiă atunci când treci pe lângă mașini staționate, deoarece șoferii pot deschide ușa fără să se asigure și te poți lovi. Ocolește-le la o distanță sigură, asigură-te că nu vine altă mașină din direcția opusă și semnalizează intenția de depășire cu mâna.\n
+        \u2022 Dacă nu ai suficient spațiu ca să intri în depășire, redu viteza și ține mâna pe frână, în cazul în care vei fi nevoit să oprești. Depășirea se face întotdeauna pe partea stângă, nu pe partea dreaptă, și este interzisă depășirea unei coloane de mașini.\n
+        \u2022 De obicei, bicicliștii trebuie să circule pe banda 1, cât mai aproape de trotuar, în cazul în care nu există pistă de biciclete. Excepție fac cazurile în care trebuie sa schimbi direcția de mers spre stânga. Încadrează-te din timp pe bandă și semnalizează cu mâna intenția ta.\n
+        \u2022 Poți circula între banda 1 și 2 sau banda 2 și 3, în funcție de numărul de benzi pentru virajul la dreapta, atunci când urmeaza o intersecție, iar unele mașini pot lua o curba la dreapta și tu mergi înainte. \n
+        \u2022 Dacă este aglomerat și s-a format coloană de mașini pe banda 1, încearcă să circuli cu atenție, mai ales că există situații în care oamenii pot coborî din mașină și te poți lovi de ușă.\n
+        \u2022 Circulă cu atenție dacă te afli în apropiere de camioane și tiruri, deoarece acestea au zone mai mari care nu sunt acoperite de oglinda retrovizoare și soferul nu o să vadă că ești în apropiere de mașină.\n
+    </string>
 </resources>

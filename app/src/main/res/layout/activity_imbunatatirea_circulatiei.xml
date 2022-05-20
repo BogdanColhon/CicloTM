@@ -5,12 +5,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="20dp"
+    android:paddingEnd="10dp"
+    android:paddingStart="10dp"
     tools:context=".ImbunatatireaCirculatieiActivity">
 
   <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/ImbunatatireRView"
-      android:layout_width="409dp"
-      android:layout_height="729dp"
-      tools:layout_editor_absoluteX="1dp"
-      tools:layout_editor_absoluteY="1dp" />
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

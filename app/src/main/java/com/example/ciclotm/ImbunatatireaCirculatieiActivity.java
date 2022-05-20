@@ -40,11 +40,10 @@ public class ImbunatatireaCirculatieiActivity extends AppCompatActivity {
     }
 
     public void initData(){
-        items.add(new ImbunatatireCirculatieItem("Mersul pe bicicletă noaptea",getString(R.string.rules_bicicleta_noaptea),0));
+        items.add(new ImbunatatireCirculatieItem("Mersul pe bicicletă noaptea",getString(R.string.rules_bicicleta_noaptea),R.drawable.bike_night));
         items.add(new ImbunatatireCirculatieItem("Mersul pe bicicletă pe timp de ploaie",getString(R.string.rules_bicicleta_ploaie),R.drawable.bike_rain));
-        items.add(new ImbunatatireCirculatieItem("Mersul pe bicicletă iarna",getString(R.string.rules_bicicleta_iarna),0));
-        items.add(new ImbunatatireCirculatieItem("Mersul cu bicicleta în zone aglomerate","12",0));
-        items.add(new ImbunatatireCirculatieItem("Gadgeturi utile","12",0));
+        items.add(new ImbunatatireCirculatieItem("Mersul pe bicicletă iarna",getString(R.string.rules_bicicleta_iarna),R.drawable.bike_snow));
+        items.add(new ImbunatatireCirculatieItem("Mersul cu bicicleta în zone aglomerate",getString(R.string.rules_bicicleta_aglomeratie),R.drawable.bike_traffic));
     }
 
     public void setRecycleView(){
