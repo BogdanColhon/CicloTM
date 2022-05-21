@@ -1,5 +1,6 @@
 package com.example.ciclotm;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ciclotm.Models.Report;
 import com.google.firebase.database.ChildEventListener;
@@ -29,19 +31,19 @@ import java.util.ArrayList;
  * Use the {@link FurturiFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FurturiFragment extends Fragment {
+public class FurturiFragment extends Fragment implements furturiRecycleViewAdapter.OnPostListener  {
     private ArrayList<Report> postsList = new ArrayList<>();
     TextView furturiPostsNumberTextView;
+    TextView statsClickableTextView;
     private RecyclerView recyclerView;
     furturiRecycleViewAdapter adapter;
     RecyclerView.LayoutManager layoutManager;
     private DatabaseReference reference;
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -83,10 +85,19 @@ public class FurturiFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_furturi, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.furturiRView);
         furturiPostsNumberTextView = (TextView) view.findViewById(R.id.furturiPostsNumberTextView);
+        statsClickableTextView = (TextView) view.findViewById(R.id.furturiStatsClickableTextView);
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new furturiRecycleViewAdapter(getContext(), postsList);
+        adapter = new furturiRecycleViewAdapter(getContext(), postsList,this);
         recyclerView.setAdapter(adapter);
+
+        statsClickableTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), StatsActivity.class);
+                startActivity(intent);
+            }
+        });
         fetchPostsInfo();
         final Handler handler = new Handler();
         Runnable refresh = new Runnable() {
@@ -133,6 +144,14 @@ public class FurturiFragment extends Fragment {
 
     private void fetchPostsNumber() {
         furturiPostsNumberTextView.setText(String.valueOf(furturiRecycleViewAdapter.furturiPostsCount));
+    }
+
+    @Override
+    public void onPostClick(int position) {
+        Intent intent = new Intent(getContext(), ExpandedFurturiPostActivity.class);
+        intent.putExtra("clicked_report", postsList.get(position));
+        System.out.println(postsList.get(position).getUser_id());
+        startActivity(intent);
     }
 
 

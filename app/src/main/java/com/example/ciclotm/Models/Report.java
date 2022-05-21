@@ -8,6 +8,7 @@ public class Report implements Serializable {
     private Date stolenDate;
     private String address;
     private String user_id;
+    private String user_phone;
     private String bike_brand;
     private String bike_model;
     private String bike_color;
@@ -17,16 +18,18 @@ public class Report implements Serializable {
     private Double theftMarkerLng;
     private String bikeImageUrl;
     private String locationImageUrl;
+    private int status;
 
     public Report() {
 
     }
 
-    public Report(Date publishDate, Date stolenDate, String address, String user_id, String bike_brand, String bike_model, String bike_color, String bike_description,String thief_description,Double theftMarkerLat,Double theftMarkerLng,String bikeImageUrl,String locationImageUrl) {
+    public Report(Date publishDate, Date stolenDate, String address, String user_id, String user_phone, String bike_brand, String bike_model, String bike_color, String bike_description, String thief_description, Double theftMarkerLat, Double theftMarkerLng, String bikeImageUrl, String locationImageUrl, int status) {
         this.publishDate = publishDate;
         this.stolenDate = stolenDate;
         this.address = address;
         this.user_id = user_id;
+        this.user_phone = user_phone;
         this.bike_brand = bike_brand;
         this.bike_model = bike_model;
         this.bike_color = bike_color;
@@ -35,7 +38,8 @@ public class Report implements Serializable {
         this.theftMarkerLat = theftMarkerLat;
         this.theftMarkerLng = theftMarkerLng;
         this.bikeImageUrl = bikeImageUrl;
-        this.locationImageUrl=locationImageUrl;
+        this.locationImageUrl = locationImageUrl;
+        this.status = status;
     }
 
     public Date getPublishDate() {
@@ -142,4 +146,19 @@ public class Report implements Serializable {
         this.locationImageUrl = locationImageUrl;
     }
 
+    public String getUser_phone() {
+        return user_phone;
+    }
+
+    public void setUser_phone(String user_phone) {
+        this.user_phone = user_phone;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
 }

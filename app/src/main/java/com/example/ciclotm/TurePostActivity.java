@@ -4,14 +4,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -38,11 +41,15 @@ public class TurePostActivity extends AppCompatActivity implements AdapterView.O
     private EditText startPointEditText;
     private EditText descriptionEditText;
     private EditText durationEditText;
+    private TextView activityDateTextView;
     private Spinner timeUnitSpinner;
     private FirebaseUser user;
     private DatabaseReference reference;
     private String timeUnit;
     private String userImageUrl;
+    Calendar calendar = Calendar.getInstance();
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +73,30 @@ public class TurePostActivity extends AppCompatActivity implements AdapterView.O
         startPointEditText = findViewById(R.id.startPointEditText);
         descriptionEditText = findViewById(R.id.descriptionEditText);
         durationEditText = findViewById(R.id.durationEditText);
+        activityDateTextView = findViewById(R.id.turePostDateTextView);
+
+        activityDateTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar c = Calendar.getInstance();
+
+                DatePickerDialog dpd = new DatePickerDialog(TurePostActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+                                activityDateTextView.setText(dayOfMonth + "/"
+                                        + (monthOfYear + 1) + "/" + year);
+                                calendar.set(year, monthOfYear, dayOfMonth);
+
+                            }
+                        }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE));
+                dpd.show();
+
+
+            }
+        });
     }
 
     @Override
@@ -95,6 +126,8 @@ public class TurePostActivity extends AppCompatActivity implements AdapterView.O
                 String startTime = startTimeEditText.getText().toString();
                 String startPoint = startPointEditText.getText().toString();
                 String description = descriptionEditText.getText().toString();
+                Date activityDate = calendar.getTime();
+
 
                 user = FirebaseAuth.getInstance().getCurrentUser();
                 reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users");
@@ -108,7 +141,7 @@ public class TurePostActivity extends AppCompatActivity implements AdapterView.O
                         User userProfile = snapshot.getValue(User.class);
                         if (userProfile != null) {
                             userImageUrl = String.valueOf(userProfile.getProfileImageUrl());
-                            turePost post = new turePost(title, distance, duration + " " + timeUnit, startTime, startPoint, 1, description, uid, currentTime, userImageUrl,participants);
+                            turePost post = new turePost(title, distance, duration + " " + timeUnit, startTime, startPoint, 1, description, uid, currentTime, activityDate, userImageUrl,participants);
 
                             FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("TurePosts").child(String.valueOf(currentTime))
                                     .setValue(post).addOnCompleteListener(new OnCompleteListener<Void>() {

@@ -25,12 +25,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class generalCommentsRecyclerViewAdapter extends RecyclerView.Adapter<generalCommentsRecyclerViewAdapter.MyViewHolder> {
 
     Context context;
     private ArrayList<Comment> commentsList;
     private DatabaseReference reference;
-    private String userImageUrl;
+    private String userImageUrl="";
 
     public generalCommentsRecyclerViewAdapter(Context context, ArrayList<Comment> commentsList) {
         this.context = context;
@@ -44,19 +46,40 @@ public class generalCommentsRecyclerViewAdapter extends RecyclerView.Adapter<gen
         return new generalCommentsRecyclerViewAdapter.MyViewHolder(view);
     }
 
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+
+        TextView comment;
+        TextView date;
+        CircleImageView commentUserPhoto;
+
+        public MyViewHolder(final View view) {
+            super(view);
+
+            comment = (TextView) view.findViewById(R.id.commentContentTextView);
+            date = (TextView) view.findViewById(R.id.commentDateTextView);
+            commentUserPhoto = (CircleImageView) view.findViewById(R.id.commentUserProfileImageView);
+
+
+        }
+
+
+    }
+
+
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int i) {
+        String userId = commentsList.get(i).getUid();
+        getUserImageUrl(userId);
         Date dateComment = commentsList.get(i).getDate();
         SimpleDateFormat df = new SimpleDateFormat("HH:mm  dd/MM/yyyy", Locale.getDefault());
         String output = df.format(dateComment);
         holder.date.setText(output);
         String commentContent = commentsList.get(i).getContent();
         holder.comment.setText(commentContent);
-        String userId = commentsList.get(i).getUid();
+        System.out.println(userImageUrl);
+        if (!userImageUrl.equals(""))
+            Picasso.get().load(userImageUrl).fit().centerInside().into(holder.commentUserPhoto);
 
-        getUserImageUrl(userId);
-
-        Picasso.get().load(userImageUrl).fit().centerInside().into(holder.user_photo);
     }
 
     @Override
@@ -64,24 +87,6 @@ public class generalCommentsRecyclerViewAdapter extends RecyclerView.Adapter<gen
         return commentsList.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-
-        TextView comment;
-        TextView date;
-        ImageView user_photo;
-
-        public MyViewHolder(final View view) {
-            super(view);
-
-            comment = (TextView) view.findViewById(R.id.commentContentTextView);
-            date = (TextView) view.findViewById(R.id.commentDateTextView);
-            user_photo = (ImageView) view.findViewById(R.id.commentUserProfileImageView);
-
-
-        }
-
-
-    }
 
     private void getUserImageUrl(String userID) {
         reference = FirebaseDatabase.getInstance("https://ciclotm-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Users");
@@ -92,6 +97,7 @@ public class generalCommentsRecyclerViewAdapter extends RecyclerView.Adapter<gen
 
                 if (userProfile != null) {
                     userImageUrl = userProfile.getProfileImageUrl();
+                    System.out.println(userImageUrl);
                 }
             }
 

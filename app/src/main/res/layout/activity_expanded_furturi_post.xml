@@ -312,9 +312,16 @@
                 </LinearLayout>
 
 
+           </LinearLayout>
+            <Button
+                android:id="@+id/expandedFurturiPostContactButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Contactează proprietarul"
+                android:layout_marginTop="10dp"
+                android:textAllCaps="false"
+                android:textSize="16sp"/>
             </LinearLayout>
-            </LinearLayout>
-
 
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

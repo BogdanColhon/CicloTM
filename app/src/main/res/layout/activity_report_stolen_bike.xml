@@ -56,26 +56,82 @@
                 android:paddingEnd="15dip"
                 android:paddingBottom="20dip">
 
-
-                <TextView
-                    android:id="@+id/dateReportTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="data furtului"
-                    android:textStyle="bold"
-                    android:textColor="#3A3A3A"
-                    android:background="@null"
-                    android:textSize="@dimen/report_text_size" />
-
-                <TextView
-                    android:id="@+id/addressReportTextView"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:textStyle="bold"
-                    android:hint="adresa"
-                    android:textColor="#3A3A3A"
-                    android:textSize="@dimen/report_text_size" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="data furtului: "
+                        android:textStyle="bold"
+                        android:textColor="#3A3A3A"
+                        android:background="@null"
+                        android:textSize="@dimen/report_text_size" />
+
+                    <TextView
+                        android:id="@+id/reportStolenDateTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="-"
+                        android:textStyle="bold"
+                        android:textColor="#3A3A3A"
+                        android:background="@null"
+                        android:textSize="@dimen/report_text_size"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="adresa: "
+                        android:textColor="#3A3A3A"
+                        android:textSize="@dimen/report_text_size" />
+
+                    <TextView
+                        android:id="@+id/reportStolenAddressTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="-"
+                        android:textStyle="bold"
+                        android:textColor="#3A3A3A"
+                        android:background="@null"
+                        android:textSize="@dimen/report_text_size"/>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="telefon: "
+                        android:textStyle="bold"
+                        android:textColor="#3A3A3A"
+                        android:textSize="@dimen/report_text_size"/>
+
+                    <EditText
+                        android:id="@+id/reportStolenPhoneEditText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="-"
+                        android:textStyle="bold"
+                        android:textColor="#3A3A3A"
+                        android:background="@null"
+                        android:textSize="@dimen/report_text_size"/>
+
+                </LinearLayout>
 
 
                 <Space

@@ -1,12 +1,5 @@
 package com.example.ciclotm;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
-
 import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -21,6 +14,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -32,6 +26,13 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import com.example.ciclotm.Models.MapMarker;
 import com.example.ciclotm.Models.Report;
@@ -69,6 +70,7 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
     Bitmap captureImageBitmap;
     TextView dateReportTextView;
     TextView addressReportTextView;
+    EditText phoneReportEditText;
     EditText brandReportEditText;
     EditText colorReportEditText;
     EditText bikeDescriptionEditText;
@@ -110,10 +112,11 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
         locationReportImageView = (ImageView) findViewById(R.id.locationReportImageView);
         stolenBikeReportImageView = (ImageView) findViewById(R.id.stolenBikeImageView);
 
-        dateReportTextView = (TextView) findViewById(R.id.dateReportTextView);
+        dateReportTextView = (TextView) findViewById(R.id.reportStolenDateTextView);
+        phoneReportEditText = (EditText) findViewById(R.id.reportStolenPhoneEditText);
         brandReportEditText = (EditText) findViewById(R.id.brandReportEditText);
         colorReportEditText = (EditText) findViewById(R.id.colorReportEditText);
-        addressReportTextView = (TextView) findViewById(R.id.addressReportTextView);
+        addressReportTextView = (TextView) findViewById(R.id.reportStolenAddressTextView);
         bikeDescriptionEditText = (EditText) findViewById(R.id.bikeDescriptionReportEditText);
         thiefDescriptionEditText = (EditText) findViewById(R.id.thiefDescriptionReportEditText);
 
@@ -192,6 +195,7 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
             @Override
             public void onClick(View v) {
                 String address = addressReportTextView.getText().toString().trim();
+                String phone = phoneReportEditText.getText().toString().trim();
                 String bike_brand = brandReportEditText.getText().toString().trim();
                 String bike_color = colorReportEditText.getText().toString().trim();
                 String bike_model = bikeModel;
@@ -207,6 +211,29 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
                     addressReportTextView.requestFocus();
                     return;
                 }
+
+                if (phone.isEmpty()) {
+                    phoneReportEditText.setError("Câmp obligatoriu!");
+                    phoneReportEditText.requestFocus();
+                    return;
+                }
+
+                if(!PhoneNumberUtils.isGlobalPhoneNumber(phone))
+                {
+                    phoneReportEditText.setError("Număr invalid!\n" +
+                            "\u2022 Verificați să nu existe spații între cifre\n"+
+                            "\u2022 Numărul trebuie să conțină 10 cifre");
+                    phoneReportEditText.requestFocus();
+                    return;
+                }
+                if(phone.length()!=10)
+                {
+                    phoneReportEditText.setError("Număr invalid!\n" +
+                            "\u2022 Verificați să nu existe spații între cifre\n"+
+                            "\u2022 Numărul trebuie să conțină 10 cifre");
+                    phoneReportEditText.requestFocus();
+                    return;
+                }
                 Double theftMarkerLat = theftMarker.latitude;
                 Double theftMarkerLng = theftMarker.longitude;
 
@@ -219,7 +246,7 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
                 if (bikeModel == "model") {
                     bike_model = "-";
                 }
-                Report report = new Report(postDate, date_of_theft, address, user_id, bike_brand, bike_model, bike_color, bike_description, thief_description, theftMarkerLat, theftMarkerLng, bikeImageLink, locationImageLink);
+                Report report = new Report(postDate, date_of_theft, address, user_id, phone, bike_brand, bike_model, bike_color, bike_description, thief_description, theftMarkerLat, theftMarkerLng, bikeImageLink, locationImageLink, 0);
                 FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("furturiPosts").child(String.valueOf(postDate))
                         .setValue(report).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override

@@ -30,16 +30,20 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 public class ExpandedTurePostActivity extends AppCompatActivity {
 
     TextView usernameTextView;
     TextView dateTextView;
+    TextView activityDateTextView;
     TextView titleTextView;
     TextView startPointTextView;
     TextView startTimeTextView;
@@ -67,6 +71,7 @@ public class ExpandedTurePostActivity extends AppCompatActivity {
 
         usernameTextView = (TextView) findViewById(R.id.upperTextView);
         dateTextView = (TextView) findViewById(R.id.lowerTextView);
+        activityDateTextView = (TextView) findViewById(R.id.expandedTurePostActivityDateTextView);
         titleTextView = (TextView) findViewById(R.id.titleTextView);
         startPointTextView = (TextView) findViewById(R.id.startPointTextView2);
         startTimeTextView = (TextView) findViewById(R.id.departureTimeTextView);
@@ -107,6 +112,11 @@ public class ExpandedTurePostActivity extends AppCompatActivity {
                 + "." + month
                 + "." + calendar.get(Calendar.YEAR));
 
+        Date dateComment = post.getActivityDate();
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        String output = df.format(dateComment);
+
+        activityDateTextView.setText(output);
         titleTextView.setText(post.getTitle());
         startPointTextView.setText(post.getStart_point());
         startTimeTextView.setText(post.getStart_time());
@@ -127,7 +137,7 @@ public class ExpandedTurePostActivity extends AppCompatActivity {
                     participants.add(uid);
                     HashMap hashMap = new HashMap();
                     hashMap.put("no_participants", post.getNo_participants() + 1);
-                    hashMap.put("participants",participants);
+                    hashMap.put("participants", participants);
                     FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("TurePosts").child(post.getDate().toString()).updateChildren(hashMap)
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
@@ -137,9 +147,8 @@ public class ExpandedTurePostActivity extends AppCompatActivity {
                                     }
                                 }
                             });
-                }
-                else
-                    Toast.makeText(ExpandedTurePostActivity.this,"Deja participați",Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(ExpandedTurePostActivity.this, "Deja participați", Toast.LENGTH_SHORT).show();
             }
         });
     }

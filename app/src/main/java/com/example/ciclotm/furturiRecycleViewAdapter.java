@@ -33,32 +33,43 @@ public class furturiRecycleViewAdapter extends RecyclerView.Adapter<furturiRecyc
     public static String furturiPostsCount;
     private StorageReference storageReference;
     private ArrayList<Report> postsList;
+    private OnPostListener mOnPostListener;
 
-    public furturiRecycleViewAdapter(Context context, ArrayList<Report> postsList) {
+    public furturiRecycleViewAdapter(Context context, ArrayList<Report> postsList, OnPostListener onPostListener) {
         this.context = context;
         this.postsList = postsList;
+        this.mOnPostListener=onPostListener;
     }
 
     @NonNull
     @Override
     public furturiRecycleViewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.community_furturi_card_layout, parent, false);
-        return new MyViewHolder(itemView);
+        return new MyViewHolder(itemView,mOnPostListener);
     }
 
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView date;
         TextView location;
         TextView description;
         ImageView bike_photo;
+        OnPostListener onPostListener;
 
-        public MyViewHolder(final View view) {
+        public MyViewHolder(final View view, OnPostListener OnPostListener) {
             super(view);
             date = (TextView) view.findViewById(R.id.upperTextView);
             location = (TextView) view.findViewById(R.id.middleTextView);
             description = (TextView) view.findViewById(R.id.lowerTextView);
             bike_photo = (ImageView) view.findViewById(R.id.bike_photo);
+            this.onPostListener = OnPostListener;
+
+            view.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            onPostListener.onPostClick(getAdapterPosition());
         }
     }
 
@@ -83,5 +94,8 @@ public class furturiRecycleViewAdapter extends RecyclerView.Adapter<furturiRecyc
 
        furturiPostsCount = String.valueOf(postsList.size());
         return postsList.size();
+    }
+    public interface OnPostListener {
+        void onPostClick(int position);
     }
 }

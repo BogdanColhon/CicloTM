@@ -5,7 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,6 +39,7 @@ public class ExpandedFurturiPostActivity extends AppCompatActivity {
     private ImageView userImage;
     private ImageView placeImage;
     private ImageView bikeImage;
+    private Button contactOwnerButton;
     private DatabaseReference reference;
 
 
@@ -59,10 +63,13 @@ public class ExpandedFurturiPostActivity extends AppCompatActivity {
         bikeDescriptionTextView = findViewById(R.id.theftBikeDescriptionTextView);
         bikeImage = findViewById(R.id.bikeImage);
 
+        contactOwnerButton = findViewById(R.id.expandedFurturiPostContactButton);
+
         thiefDescriptionTextView = findViewById(R.id.thiefDescriptionTextView);
 
         Intent intent = getIntent();
         Report clicked_report= (Report) intent.getSerializableExtra("clicked_report");
+        System.out.println(clicked_report.getUser_id());
 
         reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users");
         reference.child(clicked_report.getUser_id()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -112,6 +119,15 @@ public class ExpandedFurturiPostActivity extends AppCompatActivity {
         Picasso.get().load(bikeImageUrl).into(bikeImage);
 
         thiefDescriptionTextView.setText(clicked_report.getThief_description());
+
+        contactOwnerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(Intent.ACTION_DIAL);
+                intent1.setData(Uri.parse("tel:0756082029"));
+                startActivity(intent1);
+            }
+        });
 
 
     }

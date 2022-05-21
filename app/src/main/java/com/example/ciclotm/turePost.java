@@ -20,8 +20,8 @@ public class turePost implements Serializable {
     private String description;
     private String uid;
     private Date date;
+    private Date activityDate;
     private String userImageUrl;
-
 
     private List<String> participants;
 
@@ -29,7 +29,7 @@ public class turePost implements Serializable {
 
     }
 
-    public turePost(String title, String distance, String duration, String start_time, String start_point, int no_participants, String description, String uid, Date date,String userImageUrl,List<String> participants) {
+    public turePost(String title, String distance, String duration, String start_time, String start_point, int no_participants, String description, String uid, Date date, Date activityDate, String userImageUrl, List<String> participants) {
         this.title = title;
         this.distance = distance;
         this.duration = duration;
@@ -39,8 +39,9 @@ public class turePost implements Serializable {
         this.description = description;
         this.uid = uid;
         this.date = date;
+        this.activityDate = activityDate;
         this.userImageUrl = userImageUrl;
-        this.participants= participants;
+        this.participants = participants;
 
     }
 
@@ -132,5 +133,11 @@ public class turePost implements Serializable {
         this.participants = participants;
     }
 
+    public Date getActivityDate() {
+        return activityDate;
+    }
 
+    public void setActivityDate(Date activityDate) {
+        this.activityDate = activityDate;
+    }
 }

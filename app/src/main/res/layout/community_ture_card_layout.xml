@@ -23,7 +23,8 @@
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/user_photo"
                 android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="0"
                 android:src="@drawable/user_photo" />
 
@@ -34,10 +35,32 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="16"
                 android:orientation="vertical">
 
+                <LinearLayout
+                    android:id="@+id/l0"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="4"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="Data: "
+                        android:textColor="#3A3A3A"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tureCardDateTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#3A3A3A"
+                        android:text="TextView" />
+                </LinearLayout>
                 <LinearLayout
                     android:id="@+id/l1"
                     android:layout_width="match_parent"

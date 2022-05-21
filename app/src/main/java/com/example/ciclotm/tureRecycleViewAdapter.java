@@ -14,7 +14,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class tureRecycleViewAdapter extends RecyclerView.Adapter<tureRecycleViewAdapter.MyViewHolder> {
     Context context;
@@ -41,6 +44,7 @@ public class tureRecycleViewAdapter extends RecyclerView.Adapter<tureRecycleView
         TextView start_time;
         TextView start_point;
         TextView no_participants;
+        TextView activityDate;
         ImageView user_photo;
         OnPostListener onPostListener;
 
@@ -50,6 +54,7 @@ public class tureRecycleViewAdapter extends RecyclerView.Adapter<tureRecycleView
             start_time = (TextView) view.findViewById(R.id.firstMiddleTextView);
             start_point = (TextView) view.findViewById(R.id.secondMiddleTextView);
             no_participants = (TextView) view.findViewById(R.id.lowerTextView);
+            activityDate = (TextView) view.findViewById(R.id.tureCardDateTextView);
             user_photo = (ImageView) view.findViewById(R.id.user_photo);
             this.onPostListener = OnPostListener;
 
@@ -64,6 +69,12 @@ public class tureRecycleViewAdapter extends RecyclerView.Adapter<tureRecycleView
 
     @Override
     public void onBindViewHolder(@NonNull tureRecycleViewAdapter.MyViewHolder holder, int position) {
+
+        Date dateComment = postsList.get(position).getActivityDate();
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        String output = df.format(dateComment);
+        holder.activityDate.setText(output);
+
         String distance =postsList.get(position).getDistance() + " km";
         holder.distance.setText(distance);
 
