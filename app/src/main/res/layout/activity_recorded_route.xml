@@ -19,7 +19,8 @@
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/routeUserImageView"
                 android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
                 android:layout_weight="0"
                 android:src="@drawable/user_photo" />
 
@@ -39,20 +40,20 @@
                     android:id="@+id/routeUpperTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Nume utilizator"
                     android:singleLine="true"
-                    android:textStyle="bold"
+                    android:text="Nume utilizator"
                     android:textColor="#3A3A3A"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/routeLowerTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="data"
-                    android:textSize="15sp"
                     android:singleLine="true"
-                    android:textColor="#3A3A3A" />
+                    android:text="data"
+                    android:textColor="#3A3A3A"
+                    android:textSize="15sp" />
 
             </LinearLayout>
 
@@ -62,7 +63,7 @@
             android:id="@+id/routeMapView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1.6" />
+            android:layout_weight="1" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -70,59 +71,144 @@
             android:layout_weight="1.4"
             android:orientation="vertical"
             android:padding="10dp">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="30dp"
-            android:padding="10dp">
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:id="@+id/fragmentProfileGalleryLayout"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Distanța"
-                    android:textSize="25sp"></TextView>
+                <ImageView
+                    android:id="@+id/recordedRouteImageView1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5"
+                    android:src="@drawable/empty_photo_3"
+                    android:scaleType="centerCrop" />
 
-                <TextView
-                    android:id="@+id/routeDistanceTextView"
-                    android:layout_width="match_parent"
+                <Space
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="0.0 km"
-                    android:textSize="20sp"
-                    android:textStyle="bold"></TextView>
+                    android:layout_weight="0.2" />
+
+                <ImageView
+                    android:id="@+id/recordedRouteImageView2"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5"
+                    android:src="@drawable/empty_photo_3"
+                    android:scaleType="centerCrop" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.2" />
+
+                <ImageView
+                    android:id="@+id/recordedRouteImageView3"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5"
+                    android:src="@drawable/empty_photo_3"
+                    android:scaleType="centerCrop" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.2" />
+
+                <ImageView
+                    android:id="@+id/recordedRouteImageView4"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5"
+                    android:src="@drawable/empty_photo_3"
+                    android:visibility="gone"
+                    android:scaleType="centerCrop" />
+
+
+                <LinearLayout
+                    android:id="@+id/recordedRouteAddPhotosLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/gallery_button_2"
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="Adaugă poze"/>
+
+                </LinearLayout>
+
+
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal"
+                android:padding="10dp">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Timp"
-                    android:textSize="25sp"></TextView>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/routeElapsedTimeTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="00:00:00"
-                    android:textSize="20sp"
-                    android:textStyle="bold"></TextView>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Timp"
+                        android:textColor="@color/black"
+                        android:textSize="25sp"></TextView>
+
+                    <TextView
+                        android:id="@+id/routeElapsedTimeTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="00:00:00"
+                        android:textSize="20sp"
+                        android:textStyle="bold"></TextView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Distanța"
+                        android:textColor="@color/black"
+                        android:textSize="25sp"></TextView>
+
+                    <TextView
+                        android:id="@+id/routeDistanceTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="0.0 km"
+                        android:textColor="@color/green"
+                        android:textSize="20sp"
+                        android:textStyle="bold"></TextView>
+                </LinearLayout>
+
             </LinearLayout>
-        </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -140,8 +226,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:textColor="@color/black"
                         android:text="Viteza medie"
-                        android:textSize="25sp"></TextView>
+                        android:textSize="20sp"></TextView>
 
                     <TextView
                         android:id="@+id/routeAvgSpeedTextView"
@@ -149,7 +236,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="0.0 km/h"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:textStyle="bold"></TextView>
                 </LinearLayout>
 
@@ -163,8 +250,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="Vitexa maximă"
-                        android:textSize="25sp"></TextView>
+                        android:textColor="@color/black"
+                        android:text="Viteza maximă"
+                        android:textSize="20sp"></TextView>
 
                     <TextView
                         android:id="@+id/routeMaxSpeedTextView"
@@ -172,13 +260,10 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="0.0 km/h"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:textStyle="bold"></TextView>
                 </LinearLayout>
             </LinearLayout>
-
-
-
 
 
         </LinearLayout>

@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="2dp"
     app:cardElevation="3dp"
+    android:layout_marginTop="10dp"
     app:cardUseCompatPadding="true">
 
     <LinearLayout
@@ -18,8 +19,9 @@
             android:layout_height="wrap_content"
             android:id="@+id/categoryTextView"
             android:text="Categorie"
-            android:textSize="22sp"
+            android:textSize="20sp"
             android:padding="16dp"
+            android:textStyle="bold"
             android:textColor="@color/black"/>
 
     <RelativeLayout
@@ -34,7 +36,7 @@
             android:justificationMode="inter_word"
             android:padding="16dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="15sp" />
 
     </RelativeLayout>
 </LinearLayout>

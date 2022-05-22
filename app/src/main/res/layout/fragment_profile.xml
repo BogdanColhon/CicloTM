@@ -16,69 +16,24 @@
         android:orientation="vertical">
 
 
-
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="7"
-            android:paddingTop="10dp"
-            android:background="@drawable/green_degrade"
-            android:orientation="vertical">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/userProfileImageView"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_gravity="center"
-                android:src="@drawable/user_photo" />
-
-            <TextView
-                android:id="@+id/profileNameTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.1"
-                android:gravity="center"
-                android:text="Nume Prenume"
-                android:textColor="@color/black"
-                android:textSize="20dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/profileAgeTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.1"
-                android:gravity="center"
-                android:text="Varsta"
-                android:textColor="@color/black"
-                android:textSize="17dp" />
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="15dp"></Space>
-
-        </LinearLayout>
-
-        <LinearLayout
+            android:id="@+id/fragmentProfileGalleryLayout"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:orientation="horizontal"
-            android:layout_marginBottom="20dp"
-            android:paddingStart="15dp"
-            android:paddingEnd="10dp">
+            android:layout_marginBottom="10dp">
 
             <ImageView
                 android:id="@+id/imageView1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="5"
-                android:scaleType="centerCrop"
-                android:src="@drawable/bike1" />
+                android:scaleType="centerCrop" />
 
             <Space
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5" />
+                android:layout_weight="0.1" />
 
             <ImageView
                 android:id="@+id/imageView2"
@@ -86,12 +41,12 @@
                 android:layout_height="match_parent"
                 android:layout_weight="5"
                 android:scaleType="centerCrop"
-                android:src="@drawable/bike_rain" />
+                 />
 
             <Space
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5" />
+                android:layout_weight="0.1" />
 
             <ImageView
                 android:id="@+id/imageView3"
@@ -99,21 +54,96 @@
                 android:layout_height="match_parent"
                 android:layout_weight="5"
                 android:scaleType="centerCrop"
-                android:src="@drawable/bike2" />
+                />
 
             <Space
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.3" />
+                android:layout_weight="0.1" />
 
-            <ImageButton
-                android:id="@+id/galleryImageButton"
+            <RelativeLayout
+                android:id="@+id/profileFragmentGalleryRelativeLayout"
                 android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="3"
-                android:background="@drawable/gallery_button_2" />
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                >
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:foreground="#66000000"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Vezi toate"
+                    android:textColor="@color/white" />
+            </RelativeLayout>
+
+
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/userProfileImageView"
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                app:civ_border_overlay="true"
+                app:civ_border_width="2dp"
+                app:civ_border_color="@color/black"
+                android:src="@drawable/user_photo" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/profileFragmentNameTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="Nume Prenume, 23"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/profileFragmentBioTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="bio"
+                    android:textColor="@color/black"
+                    android:textSize="17dp" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="#ABDADADA"/>
+
 
 
         <LinearLayout
@@ -121,7 +151,8 @@
             android:layout_height="0dp"
             android:layout_weight="15"
             android:orientation="vertical"
-            android:paddingStart="25dp"
+            android:layout_marginTop="30dp"
+            android:paddingStart="20dp"
             android:paddingEnd="15dp">
 
             <ListView

@@ -1,22 +1,24 @@
 package com.example.ciclotm.Models;
 
+import java.util.Date;
+
 public class Photo {
-    private String PhotoTitle;
+    private Date PhotoDate;
     private String PhotoUrl;
 
     public Photo(){}
 
-    public Photo(String photoTitle, String photoUrl) {
-        PhotoTitle  = photoTitle;
+    public Photo(Date photoDate, String photoUrl) {
+        PhotoDate  = photoDate;
         PhotoUrl = photoUrl;
     }
 
-    public String getPhotoTitle() {
-        return PhotoTitle;
+    public Date getPhotoDate() {
+        return PhotoDate;
     }
 
-    public void setPhotoTitle(String photoTitle) {
-        PhotoTitle = photoTitle;
+    public void setPhotoDate(Date photoDate) {
+        PhotoDate = photoDate;
     }
 
     public String getPhotoUrl() {

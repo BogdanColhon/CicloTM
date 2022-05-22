@@ -13,7 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.ciclotm.Models.Photo;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class galleryRecycleViewAdapter extends RecyclerView.Adapter<galleryRecycleViewAdapter.MyViewHolder>{
 
@@ -34,12 +37,12 @@ public class galleryRecycleViewAdapter extends RecyclerView.Adapter<galleryRecyc
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements com.example.ciclotm.MyViewHolder {
-        TextView title;
+        TextView date;
         ImageView imageView;
 
         public MyViewHolder(final View view) {
             super(view);
-            title = (TextView) view.findViewById(R.id.galleryItemDateTextView);
+            date = (TextView) view.findViewById(R.id.galleryItemDateTextView);
             imageView = (ImageView) view.findViewById(R.id.galleryItemImageView);
         }
     }
@@ -47,8 +50,10 @@ public class galleryRecycleViewAdapter extends RecyclerView.Adapter<galleryRecyc
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int i) {
 
-        String title_text = items.get(i).getPhotoTitle();
-        holder.title.setText(title_text);
+        Date dateItem = items.get(i).getPhotoDate();
+        SimpleDateFormat df = new SimpleDateFormat("hh:mm dd/MM/yyyy", Locale.getDefault());
+        String output = df.format(dateItem);
+        holder.date.setText(output);
 
         String imageUrl = items.get(i).getPhotoUrl();
         System.out.println(imageUrl);

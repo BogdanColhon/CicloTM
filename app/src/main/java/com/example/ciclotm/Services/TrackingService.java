@@ -196,7 +196,7 @@ public class TrackingService extends Service implements LifecycleOwner {
     }
 
     private void stopForegroundService() {
-       if(serviceKilled == false)
+       if(serviceKilled == false && isTracking == true)
        {
         running = false;
         isTracking = false;

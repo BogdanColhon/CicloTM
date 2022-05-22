@@ -14,7 +14,9 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
@@ -56,11 +58,14 @@ public class ProfileFragment extends Fragment {
     private Calendar today, birthday;
     private int i = 0;
     ImageView userProfileImageView;
-    ImageView imageView1, imageView2, imageView3;
+    ImageView imageView1, imageView2, imageView3, imageView4;
     ImageButton openGalleryButton;
+    LinearLayout galleryLayout;
+    RelativeLayout seeGalleryLayout;
     ArrayList<String> gallery_links = new ArrayList<>();
     ArrayList<ImageView> gallery = new ArrayList<>();
     private StorageReference storageReference;
+    private boolean hasPhotos = false;
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -129,32 +134,26 @@ public class ProfileFragment extends Fragment {
         reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users");
         userID = user.getUid();
 
-        final TextView nameTextView = (TextView) view.findViewById(R.id.profileNameTextView);
-        final TextView ageTextView = (TextView) view.findViewById(R.id.profileAgeTextView);
+        final TextView nameTextView = (TextView) view.findViewById(R.id.profileFragmentNameTextView);
+        final TextView bioTextView = (TextView) view.findViewById(R.id.profileFragmentBioTextView);
         userProfileImageView = (ImageView) view.findViewById(R.id.userProfileImageView);
 
         imageView1 = (ImageView) view.findViewById(R.id.imageView1);
         imageView2 = (ImageView) view.findViewById(R.id.imageView2);
         imageView3 = (ImageView) view.findViewById(R.id.imageView3);
+        imageView4 = (ImageView) view.findViewById(R.id.imageView4);
 
-        openGalleryButton = (ImageButton) view.findViewById(R.id.galleryImageButton);
+        galleryLayout = (LinearLayout) view.findViewById(R.id.fragmentProfileGalleryLayout);
+        seeGalleryLayout = (RelativeLayout) view.findViewById(R.id.profileFragmentGalleryRelativeLayout);
+
 
         gallery.add(imageView1);
         gallery.add(imageView2);
         gallery.add(imageView3);
+        gallery.add(imageView4);
 
 
-        //  Button editProfileButton = (Button) view.findViewById(R.id.editProfileButton);
-//        editProfileButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getContext(), EditProfileActivity.class);
-//                intent.putExtra("uId", userID);
-//                startActivity(intent);
-//            }
-//        });
-
-        openGalleryButton.setOnClickListener(new View.OnClickListener() {
+        seeGalleryLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), GalleryActivity.class);
@@ -162,6 +161,7 @@ public class ProfileFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
         reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -170,6 +170,7 @@ public class ProfileFragment extends Fragment {
                 if (userProfile != null) {
                     String firstname = userProfile.getFirstName().toString();
                     String lastname = userProfile.getLastName().toString();
+                    String bio = userProfile.getBio().toString();
                     Date birthDate = userProfile.getBirthDate();
 
                     birthday = Calendar.getInstance();
@@ -180,8 +181,8 @@ public class ProfileFragment extends Fragment {
                         age--;
                     }
 
-                    nameTextView.setText(firstname + " " + lastname);
-                    ageTextView.setText(String.valueOf(age) + " ani");
+                    nameTextView.setText(firstname + " " + lastname + ", " + String.valueOf(age));
+                    bioTextView.setText(bio);
                     try {
                         getUserProfilePhoto(userProfile.getProfileImageUrl());
                     } catch (IOException e) {
@@ -195,15 +196,34 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        reference.child(userID).child("Gallery").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() == null) {
+                    galleryLayout.setVisibility(View.GONE);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         reference.child(userID).child("Gallery").addChildEventListener(new ChildEventListener() {
 
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Photo photo = dataSnapshot.getValue(Photo.class);
-                gallery_links.add(0, photo.getPhotoUrl());
-                if (i < 3)
-                    Picasso.get().load(photo.getPhotoUrl()).resize(300, 300).centerCrop().into(gallery.get(i));
-                i++;
+                if (photo.getPhotoUrl() != null) {
+                    gallery_links.add(0, photo.getPhotoUrl());
+                    if (i < 4)
+                        Picasso.get().load(photo.getPhotoUrl()).resize(300, 300).centerCrop().into(gallery.get(i));
+                    i++;
+                    hasPhotos = true;
+                }
+
             }
 
             @Override
@@ -223,7 +243,6 @@ public class ProfileFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
 
         });
