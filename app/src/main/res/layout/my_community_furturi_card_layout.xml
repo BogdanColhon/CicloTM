@@ -7,22 +7,21 @@
     android:layout_marginTop="5dp"
     android:layout_marginBottom="7dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/custom_border"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp">
+        android:background="@drawable/custom_border">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/user_photo"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+            <ImageView
+                android:id="@+id/bike_photo"
+                android:layout_width="140dp"
+                android:layout_height="100dp"
                 android:layout_weight="0"
-                android:src="@drawable/user_photo" />
+                android:scaleType="centerCrop"
+                android:background="@drawable/stolen_bike_empty_photo_4" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -32,40 +31,34 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="16"
                 android:gravity="center"
+                android:layout_weight="16"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/upperTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Titlu"
-                    android:singleLine="true"
+                    android:text="Data"
                     android:textStyle="bold"
-                    android:textColor="#3A3A3A"
-                    android:textSize="18sp" />
+                    android:textColor="@color/black" />
 
                 <TextView
-                    android:id="@+id/middleGeneralTextView"
+                    android:id="@+id/middleTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
-                    android:layout_marginBottom="5dp"
-                    android:textSize="13sp"
-                    android:text="-" />
+                    android:text="Locatie" />
 
                 <TextView
                     android:id="@+id/lowerTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Continut"
-                    android:textSize="15sp"
-                    android:singleLine="true"
-                    android:textColor="#3A3A3A" />
+                    android:textColor="@color/black"
+                    android:text="Descriere bicicleta" />
+
 
             </LinearLayout>
-
             <ImageView
                 android:id="@+id/deleteImageView"
                 android:layout_width="wrap_content"
@@ -75,5 +68,5 @@
 
         </LinearLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </androidx.cardview.widget.CardView>

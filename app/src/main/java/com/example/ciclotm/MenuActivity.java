@@ -14,6 +14,7 @@ import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.ciclotm.Services.TrackingService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MenuActivity extends AppCompatActivity {
@@ -49,9 +50,9 @@ public class MenuActivity extends AppCompatActivity {
         navigateToTrackingFragmentIfNeeded(intent);
     }
 
-    private void navigateToTrackingFragmentIfNeeded(Intent intent){
+    private void navigateToTrackingFragmentIfNeeded(Intent intent) {
         //if(intent.getAction() == Constants.ACTION_SHOW_TRACKING_FRAGMENT)
-         //   navController.navigate(R.id.action_global_trackingFragment);
+        //   navController.navigate(R.id.action_global_trackingFragment);
     }
 
     public void setActionBarTitle(String title) {

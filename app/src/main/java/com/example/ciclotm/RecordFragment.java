@@ -89,7 +89,7 @@ public class RecordFragment extends Fragment {
 
     private MapView mapView;
     public static GoogleMap map;
-    public static ArrayList<Location> routePoints = new ArrayList<Location>();
+    public static ArrayList<com.example.ciclotm.Models.Location> routePoints = new ArrayList<com.example.ciclotm.Models.Location>();
     public static ArrayList<Marker> routeMarker = new ArrayList<Marker>();
     private static ArrayList<LiveEventsMarker> liveEventsMarker = new ArrayList<LiveEventsMarker>();
     LatLng newMarkerPosition;
@@ -100,7 +100,7 @@ public class RecordFragment extends Fragment {
     private static double maxSpeed = 0;
     private static double speedSum = 0;
     private static int samples = 1;
-    public static Location point;
+    public static com.example.ciclotm.Models.Location point;
     public static Marker startMarker;
 
     public static Fragment terminator;
@@ -112,6 +112,7 @@ public class RecordFragment extends Fragment {
 
     public static boolean shouldRefreshOnResume = false;
     public static boolean isFirst = true;
+    static int i = 0;
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
     // TODO: Rename parameter arguments, choose names that match
@@ -159,7 +160,7 @@ public class RecordFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_record, container, false);
 
-        terminator=this;
+        terminator = this;
         elapsedTime = view.findViewById(R.id.recordElapsedTimeTextView);
         distanceText = view.findViewById(R.id.distanceTV);
         speedText = view.findViewById(R.id.speedTV);
@@ -172,6 +173,8 @@ public class RecordFragment extends Fragment {
         addLiveEventButton = view.findViewById(R.id.liveEventAddFloatingButton);
         mapView = view.findViewById(R.id.recordMapView);
         mapView.onCreate(savedInstanceState);
+
+
 
         rfNavBar = getActivity().findViewById(R.id.bottomNavigationView);
 
@@ -297,14 +300,13 @@ public class RecordFragment extends Fragment {
         });
 
 
-            client = LocationServices.getFusedLocationProviderClient(getContext());
-            getStartingLocation();
+        client = LocationServices.getFusedLocationProviderClient(getContext());
+        getStartingLocation();
 
 
         return view;
 
     }
-
 
 
     public static void removeMarker() {
@@ -320,14 +322,6 @@ public class RecordFragment extends Fragment {
         intent.putExtra("startLat", routePoints.get(0).getLatitude());
         intent.putExtra("startLng", routePoints.get(0).getLongitude());
         getActivity().startService(intent);
-//        if(action==Constants.ACTION_STOP_SERVICE)
-//        {
-//            getActivity().stopService(intent);
-//        }
-//        else
-//        {
-//            getActivity().startService(intent);
-//        }
     }
 
     public void openDescriptionDialog(int drawable, String type) {
@@ -351,7 +345,7 @@ public class RecordFragment extends Fragment {
         dialogPostButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LiveEventsMarker marker = new LiveEventsMarker(type, type, dialogDescription, currentTime, expiringTime, newMarkerPosition.latitude, newMarkerPosition.longitude);
+                LiveEventsMarker marker = new LiveEventsMarker(type, type, dialogDescription, currentTime, expiringTime, newMarkerPosition.latitude, newMarkerPosition.longitude, 0);
 
                 FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("LiveEventsMarkers").child(String.valueOf(currentTime))
                         .setValue(marker).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -370,24 +364,52 @@ public class RecordFragment extends Fragment {
     }
 
     public static void checkProximityLiveEvents(LatLng currentPoint) {
-        for (int i = 0; i < liveEventsMarker.size(); i++) {
+        alertDialog.setContentView(R.layout.live_event_dialog);
+        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        for (i = 0; i < liveEventsMarker.size(); i++) {
 
-            if (TrackingService.DistanceCalculation(currentPoint.latitude, currentPoint.longitude, liveEventsMarker.get(i).getLat(), liveEventsMarker.get(i).getLng()) <= 0.01) {
+            if (TrackingService.DistanceCalculation(currentPoint.latitude, currentPoint.longitude, liveEventsMarker.get(i).getLat(), liveEventsMarker.get(i).getLng()) <= 0.05) {
+                LiveEventsMarker liveEvent = liveEventsMarker.get(i);
                 if (!alertDialog.isShowing()) {
-                    alertDialog.setMessage("Confirmi evenimentul?");
-                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Da",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            });
-                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Nu", new DialogInterface.OnClickListener() {
+
+                    ImageView image = alertDialog.findViewById(R.id.liveEventDialogImageView);
+                    TextView title = alertDialog.findViewById(R.id.liveEventDialogTitle);
+                    TextView positive = alertDialog.findViewById(R.id.liveEventDialogPositive);
+                    TextView negative = alertDialog.findViewById(R.id.liveEventDialogNegative);
+                    if (liveEvent.getType().equals("Groapă")) {
+                        Picasso.get().load(R.drawable.ground_hole_marker_2).into(image);
+                    }
+                    if (liveEvent.getType().equals("Gheață")) {
+                        Picasso.get().load(R.drawable.snowflake_2).into(image);
+                    }
+                    if (liveEvent.getType().equals("Cioburi")) {
+                        Picasso.get().load(R.drawable.broken_bottle_2).into(image);
+                    }
+                    if (liveEvent.getType().equals("Lucrări")) {
+                        Picasso.get().load(R.drawable.road_work_marker_4).into(image);
+                    }
+                    if (liveEvent.getType().equals("Accident")) {
+                        Picasso.get().load(R.drawable.accident_marker_3).into(image);
+                    }
+                    title.setText(liveEvent.getType() + " în apropiere");
+                    //alertDialog.setMessage("Atenție! "+ liveEvent.getType()+" în apropierea dumneavoastră. \n Confirmați evenimentul?");
+                    positive.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
+                        public void onClick(View v) {
+                            changeExpiringTime(liveEvent);
+                            liveEventsMarker.remove(liveEvent);
+                            alertDialog.dismiss();
                         }
                     });
+                    negative.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            updateEventStatus(liveEvent);
+                            liveEventsMarker.remove(liveEvent);
+                            alertDialog.dismiss();
+                        }
+                    });
+
                     alertDialog.show();
 
                     // Hide after some seconds
@@ -412,6 +434,25 @@ public class RecordFragment extends Fragment {
                 }
             }
         }
+    }
+
+    public static void changeExpiringTime(LiveEventsMarker liveEvent) {
+        Date expiringTime = new Date();
+        expiringTime.setTime(System.currentTimeMillis() + (6 * 60 * 60 * 1000));
+        DatabaseReference ref = FirebaseDatabase.getInstance("https://ciclotm-default-rtdb.europe-west1.firebasedatabase.app/").getReference("LiveEventsMarkers");
+        ref.child(String.valueOf(liveEvent.getPublishDate())).child("expiringDate").setValue(expiringTime);
+    }
+
+    public static void updateEventStatus(LiveEventsMarker liveEvent) {
+        DatabaseReference ref = FirebaseDatabase.getInstance("https://ciclotm-default-rtdb.europe-west1.firebasedatabase.app/").getReference("LiveEventsMarkers");
+        int newValue = liveEvent.getConfirmationCounter() + 1;
+        if (newValue == 1) {
+            ref.child(String.valueOf(liveEvent.getPublishDate())).child("confirmationCounter").setValue(newValue);
+        }
+        if (newValue == 2) {
+            ref.child(String.valueOf(liveEvent.getPublishDate())).removeValue();
+        }
+
     }
 
 
@@ -442,7 +483,7 @@ public class RecordFragment extends Fragment {
                                 map = mMap;
                                 map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                                point = new Location("point");
+                                point = new com.example.ciclotm.Models.Location();
                                 point.setLatitude(latLng.latitude);
                                 point.setLongitude(latLng.longitude);
                                 routePoints.add(point);
@@ -461,7 +502,7 @@ public class RecordFragment extends Fragment {
         }
     }
 
-    public static void setData(double rfDistance, double rfSpeed, int rfSamples,Location rfPoint, Marker rfMarker, PolylineOptions rfPolylineOptions) {
+    public static void setData(double rfDistance, double rfSpeed, int rfSamples, com.example.ciclotm.Models.Location rfPoint, Marker rfMarker, PolylineOptions rfPolylineOptions) {
 
         distanceText.setText(String.format("%.2f", rfDistance));
         speedText.setText(String.format("%.2f", rfSpeed));
@@ -474,7 +515,6 @@ public class RecordFragment extends Fragment {
 
         routePoints.add(rfPoint);
         routeMarker.add(rfMarker);
-
 
 
         Polyline polyline = map.addPolyline(rfPolylineOptions);
@@ -590,11 +630,9 @@ public class RecordFragment extends Fragment {
         ((MenuActivity) getActivity())
                 .setActionBarTitle("Înregistrează");
         mapView.onResume();
-        if(shouldRefreshOnResume == true)
-        {
+        if (shouldRefreshOnResume == true) {
             resetFragment();
-            if(isFirst == false)
-            {
+            if (isFirst == false) {
                 client = LocationServices.getFusedLocationProviderClient(getContext());
                 getStartingLocation();
             }
@@ -602,7 +640,7 @@ public class RecordFragment extends Fragment {
         }
     }
 
-    private void resetFragment(){
+    private void resetFragment() {
         map.clear();
         rfNavBar.setVisibility(View.VISIBLE);
         startLinear.setVisibility(View.VISIBLE);
@@ -610,15 +648,15 @@ public class RecordFragment extends Fragment {
         stopButton.setVisibility(View.INVISIBLE);
         resumeButton.setVisibility(View.INVISIBLE);
         addLiveEventButton.setVisibility(View.INVISIBLE);
-        routeMarker= new ArrayList<Marker>();
-        routePoints= new ArrayList<Location>();
+        routeMarker = new ArrayList<Marker>();
+        routePoints = new ArrayList<com.example.ciclotm.Models.Location>();
         totalDistance = 0.0;
         distanceText.setText("0.0 km");
         time = "0:00:00";
         elapsedTime.setText("0:00:00");
         speedText.setText("0.0 km/h");
-        speedSum=0;
-        samples=1;
+        speedSum = 0;
+        samples = 1;
         TrackingService.isFirstRun = true;
         TrackingService.serviceKilled = true;
         shouldRefreshOnResume = false;
@@ -677,5 +715,6 @@ public class RecordFragment extends Fragment {
         );
     }
 
-
 }
+
+

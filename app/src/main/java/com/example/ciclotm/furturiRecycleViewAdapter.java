@@ -76,7 +76,7 @@ public class furturiRecycleViewAdapter extends RecyclerView.Adapter<furturiRecyc
     @Override
     public void onBindViewHolder(@NonNull furturiRecycleViewAdapter.MyViewHolder holder, int position) {
         Date date = postsList.get(position).getStolenDate();
-        SimpleDateFormat df = new SimpleDateFormat("HH:mm  dd/MM/yyyy", Locale.getDefault());
+        SimpleDateFormat df = new SimpleDateFormat("HH:mm | dd/MM/yyyy", Locale.getDefault());
         String output = df.format(date);
         holder.date.setText(output);
         String location = postsList.get(position).getAddress();

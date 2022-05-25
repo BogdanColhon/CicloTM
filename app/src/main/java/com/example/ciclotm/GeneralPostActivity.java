@@ -85,7 +85,7 @@ public class GeneralPostActivity extends AppCompatActivity {
                                     }
                                 }
                             });
-                            FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users").child(uid).child("CommunityPosts").child(String.valueOf(currentTime))
+                            FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users").child(uid).child("CommunityPosts").child("MyGeneralPosts").child(String.valueOf(currentTime))
                                     .setValue(post);
                         }
                     }

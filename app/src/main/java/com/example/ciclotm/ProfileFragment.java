@@ -3,6 +3,8 @@ package com.example.ciclotm;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
@@ -25,6 +28,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.ciclotm.Models.Photo;
+import com.example.ciclotm.Models.Route;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -57,8 +61,10 @@ public class ProfileFragment extends Fragment {
     private String userID;
     private Calendar today, birthday;
     private int i = 0;
+    TextView text;
+    Space space;
     ImageView userProfileImageView;
-    ImageView imageView1, imageView2, imageView3, imageView4;
+    ImageView imageView0, imageView1, imageView2, imageView3, imageView4;
     ImageButton openGalleryButton;
     LinearLayout galleryLayout;
     RelativeLayout seeGalleryLayout;
@@ -66,6 +72,8 @@ public class ProfileFragment extends Fragment {
     ArrayList<ImageView> gallery = new ArrayList<>();
     private StorageReference storageReference;
     private boolean hasPhotos = false;
+    final int color = 0x66000000;
+    final Drawable dr = new ColorDrawable(color);
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -138,6 +146,13 @@ public class ProfileFragment extends Fragment {
         final TextView bioTextView = (TextView) view.findViewById(R.id.profileFragmentBioTextView);
         userProfileImageView = (ImageView) view.findViewById(R.id.userProfileImageView);
 
+        text = (TextView) view.findViewById(R.id.profileFragmentGalleryTextView);
+        text.setVisibility(View.INVISIBLE);
+
+        space = (Space) view.findViewById(R.id.spacer);
+        space.setVisibility(View.INVISIBLE);
+
+        imageView0 = (ImageView) view.findViewById(R.id.imageView0);
         imageView1 = (ImageView) view.findViewById(R.id.imageView1);
         imageView2 = (ImageView) view.findViewById(R.id.imageView2);
         imageView3 = (ImageView) view.findViewById(R.id.imageView3);
@@ -154,6 +169,15 @@ public class ProfileFragment extends Fragment {
 
 
         seeGalleryLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), GalleryActivity.class);
+                intent.putExtra("uId", userID);
+                startActivity(intent);
+            }
+        });
+
+        text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), GalleryActivity.class);
@@ -211,15 +235,24 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        reference.child(userID).child("Gallery").addChildEventListener(new ChildEventListener() {
+        reference.child(userID).child("Gallery").limitToLast(4).addChildEventListener(new ChildEventListener() {
 
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Photo photo = dataSnapshot.getValue(Photo.class);
                 if (photo.getPhotoUrl() != null) {
-                    gallery_links.add(0, photo.getPhotoUrl());
-                    if (i < 4)
+                    gallery_links.add( photo.getPhotoUrl());
+                    if (i < 3)
                         Picasso.get().load(photo.getPhotoUrl()).resize(300, 300).centerCrop().into(gallery.get(i));
+                    if(i == 3)
+                    {
+                        seeGalleryLayout.setVisibility(View.GONE);
+                        imageView1.setForeground(dr);
+                        imageView4.setVisibility(View.VISIBLE);
+                        text.setVisibility(View.VISIBLE);
+                        space.setVisibility(View.VISIBLE);
+                        Picasso.get().load(photo.getPhotoUrl()).resize(300, 300).centerCrop().into(gallery.get(i));
+                    }
                     i++;
                     hasPhotos = true;
                 }
@@ -264,7 +297,7 @@ public class ProfileFragment extends Fragment {
                         startActivity(i);
                         break;
                     case 1:
-                        i = new Intent(getActivity(), StatsActivity.class);
+                        i = new Intent(getActivity(), BikeStatsActivity.class);
                         startActivity(i);
                         break;
                     case 2:
@@ -294,6 +327,7 @@ public class ProfileFragment extends Fragment {
 
 
     }
+
 
 
     public void getUserProfilePhoto(String profileImageUrl) throws IOException {

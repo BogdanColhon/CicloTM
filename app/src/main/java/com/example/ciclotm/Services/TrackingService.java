@@ -44,7 +44,7 @@ import java.util.Locale;
 public class TrackingService extends Service implements LifecycleOwner {
 
     public static boolean isFirstRun = true;
-    public boolean isTracking = false;
+    public static boolean isTracking = false;
     private FusedLocationProviderClient client;
     private LocationManager locationManager;
     private LocationListener locationListener = null;
@@ -58,9 +58,9 @@ public class TrackingService extends Service implements LifecycleOwner {
     public static Intent intent;
     Notification notificationBuilder;
     NotificationManager notificationManager;
-    public static ArrayList<Location> serRoutePoints = new ArrayList<Location>();
+    public static ArrayList<com.example.ciclotm.Models.Location> serRoutePoints = new ArrayList<com.example.ciclotm.Models.Location>();
     public static ArrayList<Marker> serRouteMarker = new ArrayList<Marker>();
-    Location pointx;
+    com.example.ciclotm.Models.Location pointx;
     Marker markerx;
 
     @Nullable
@@ -268,7 +268,7 @@ public class TrackingService extends Service implements LifecycleOwner {
 
 
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        pointx = new Location("point");
+        pointx = new com.example.ciclotm.Models.Location();
         pointx.setLatitude(latLng.latitude);
         pointx.setLongitude(latLng.longitude);
         serRoutePoints.add(pointx);

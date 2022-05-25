@@ -23,25 +23,36 @@ public class routePostsRecycleViewAdapter extends RecyclerView.Adapter<routePost
 
     Context context;
     private ArrayList<Route> routeList;
+    private OnPostListener mOnPostListener;
 
-    public routePostsRecycleViewAdapter(Context context, ArrayList<Route> routeList) {
+    public routePostsRecycleViewAdapter(Context context, ArrayList<Route> routeList, OnPostListener onPostListener) {
         this.context = context;
         this.routeList = routeList;
+        this.mOnPostListener=onPostListener;
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView dateText;
         TextView distanceText;
         TextView elapsedTimeText;
         ImageView mapImageView;
+        OnPostListener onPostListener;
 
-        public MyViewHolder(final View view) {
+        public MyViewHolder(final View view, OnPostListener OnPostListener) {
             super(view);
             dateText = (TextView) view.findViewById(R.id.routePostsDateTextView);
             distanceText = (TextView) view.findViewById(R.id.routePostsDistanceTextView);
-            elapsedTimeText = (TextView) view.findViewById(R.id.routePostsElapsedTimeTextView);
+            elapsedTimeText = (TextView) view.findViewById(R.id.routePostsTimeTextView);
 
             mapImageView = (ImageView) view.findViewById(R.id.routePostsMapImageView);
+            this.onPostListener = OnPostListener;
+
+            view.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            onPostListener.onPostClick(getAdapterPosition());
         }
     }
 
@@ -49,7 +60,7 @@ public class routePostsRecycleViewAdapter extends RecyclerView.Adapter<routePost
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.route_posts_card_layout, viewGroup, false);
-        return new routePostsRecycleViewAdapter.MyViewHolder(itemView);
+        return new routePostsRecycleViewAdapter.MyViewHolder(itemView,mOnPostListener);
     }
 
     @Override
@@ -75,6 +86,8 @@ public class routePostsRecycleViewAdapter extends RecyclerView.Adapter<routePost
     public int getItemCount() {
         return routeList.size();
     }
-
+    public interface OnPostListener {
+        void onPostClick(int position);
+    }
 
 }

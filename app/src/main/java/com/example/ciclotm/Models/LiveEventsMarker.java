@@ -11,12 +11,13 @@ public class LiveEventsMarker {
     private Date expiringDate;
     private Double Lat;
     private Double Lng;
+    private int ConfirmationCounter;
 
     public LiveEventsMarker() {
 
     }
 
-    public LiveEventsMarker(String title, String type, String description, Date publishDate, Date expiringDate, Double lat, Double lng) {
+    public LiveEventsMarker(String title, String type, String description, Date publishDate, Date expiringDate, Double lat, Double lng, int confirmationCounter) {
         Title = title;
         Type = type;
         Description = description;
@@ -24,6 +25,15 @@ public class LiveEventsMarker {
         this.expiringDate = expiringDate;
         Lat = lat;
         Lng = lng;
+        ConfirmationCounter = confirmationCounter;
+    }
+
+    public int getConfirmationCounter() {
+        return ConfirmationCounter;
+    }
+
+    public void setConfirmationCounter(int confirmationCounter) {
+        ConfirmationCounter = confirmationCounter;
     }
 
     public String getTitle() {

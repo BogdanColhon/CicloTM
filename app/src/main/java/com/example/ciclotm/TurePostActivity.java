@@ -153,7 +153,7 @@ public class TurePostActivity extends AppCompatActivity implements AdapterView.O
                                     }
                                 }
                             });
-                            FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users").child(uid).child("CommunityPosts").child(String.valueOf(currentTime))
+                            FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users").child(uid).child("CommunityPosts").child("MyTurePosts").child(String.valueOf(currentTime))
                                     .setValue(post);
                         }
                     }

@@ -1,9 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="20dp"
+    android:orientation="vertical"
     tools:context=".CommunityPostsActivity">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+    <LinearLayout
+        android:id="@+id/myGeneralPostsLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:paddingStart="10dp"
+            android:background="@color/black"
+            android:text="General"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/myGeneralCommunityPostsRView"
+            android:layout_width="match_parent"
+            android:isScrollContainer="false"
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteX="1dp"
+            tools:layout_editor_absoluteY="1dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/myTurePostsLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:paddingStart="10dp"
+            android:background="@color/black"
+            android:text="Ture"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/myTureCommunityPostsRView"
+            android:layout_width="match_parent"
+            android:isScrollContainer="false"
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteX="1dp"
+            tools:layout_editor_absoluteY="1dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/myFurturiPostsLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:paddingStart="10dp"
+            android:background="@color/black"
+            android:text="Furturi"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/myFurturiCommunityPostsRView"
+            android:isScrollContainer="false"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteX="1dp"
+            tools:layout_editor_absoluteY="1dp" />
+
+    </LinearLayout>
+</LinearLayout>
+    </ScrollView>
+</LinearLayout>

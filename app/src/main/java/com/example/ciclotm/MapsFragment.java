@@ -59,6 +59,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -501,59 +502,62 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 LiveEventsMarker newMarker = snapshot.getValue(LiveEventsMarker.class);
-                LatLng latLng = new LatLng(newMarker.getLat(), newMarker.getLng());
+                Date currentTime = Calendar.getInstance().getTime();
+                if(newMarker.getExpiringDate().after(currentTime)) {
+                    LatLng latLng = new LatLng(newMarker.getLat(), newMarker.getLng());
 
-                if (String.valueOf(newMarker.getType()).equals("Groapă")) {
-                    Marker marker = map.addMarker(new MarkerOptions()
-                            .position(latLng)
-                            .title(newMarker.getTitle())
-                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ground_hole_marker_2)));
-                }
-                if (String.valueOf(newMarker.getType()).equals("Gheață")) {
-                    Marker marker = map.addMarker(new MarkerOptions()
-                            .position(latLng)
-                            .title(newMarker.getTitle())
-                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.snowflake_2)));
-                }
-                if (String.valueOf(newMarker.getType()).equals("Cioburi")) {
-                    Marker marker = map.addMarker(new MarkerOptions()
-                            .position(latLng)
-                            .title(newMarker.getTitle())
-                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.broken_bottle_2)));
-                }
-                if (String.valueOf(newMarker.getType()).equals("Lucrări")) {
-                    Marker marker = map.addMarker(new MarkerOptions()
-                            .position(latLng)
-                            .title(newMarker.getTitle())
-                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.road_work_marker_4)));
-                }
-                if (String.valueOf(newMarker.getType()).equals("Accident")) {
-                    Marker marker = map.addMarker(new MarkerOptions()
-                            .position(latLng)
-                            .title(newMarker.getTitle())
-                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.accident_marker_3)));
-                }
-
-                map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-                    @Nullable
-                    @Override
-                    public View getInfoContents(@NonNull Marker marker) {
-                        View v = getLayoutInflater().inflate(R.layout.live_events_marker_info, null);
-                        TextView t1 = (TextView) v.findViewById(R.id.liveEventsMarkerInfoTitleTextView);
-                        TextView t2 = (TextView) v.findViewById(R.id.liveEventsMarkerInfoTimeTextView);
-                        TextView t3 = (TextView) v.findViewById(R.id.liveEventsMarkerContentTextView);
-                        t1.setText(newMarker.getTitle());
-                        t2.setText(newMarker.getPublishDate().toString());
-                        t3.setText(newMarker.getDescription());
-                        return v;
+                    if (String.valueOf(newMarker.getType()).equals("Groapă")) {
+                        Marker marker = map.addMarker(new MarkerOptions()
+                                .position(latLng)
+                                .title(newMarker.getTitle())
+                                .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ground_hole_marker_2)));
+                    }
+                    if (String.valueOf(newMarker.getType()).equals("Gheață")) {
+                        Marker marker = map.addMarker(new MarkerOptions()
+                                .position(latLng)
+                                .title(newMarker.getTitle())
+                                .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.snowflake_2)));
+                    }
+                    if (String.valueOf(newMarker.getType()).equals("Cioburi")) {
+                        Marker marker = map.addMarker(new MarkerOptions()
+                                .position(latLng)
+                                .title(newMarker.getTitle())
+                                .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.broken_bottle_2)));
+                    }
+                    if (String.valueOf(newMarker.getType()).equals("Lucrări")) {
+                        Marker marker = map.addMarker(new MarkerOptions()
+                                .position(latLng)
+                                .title(newMarker.getTitle())
+                                .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.road_work_marker_4)));
+                    }
+                    if (String.valueOf(newMarker.getType()).equals("Accident")) {
+                        Marker marker = map.addMarker(new MarkerOptions()
+                                .position(latLng)
+                                .title(newMarker.getTitle())
+                                .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.accident_marker_3)));
                     }
 
-                    @Nullable
-                    @Override
-                    public View getInfoWindow(@NonNull Marker marker) {
-                        return null;
-                    }
-                });
+                    map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                        @Nullable
+                        @Override
+                        public View getInfoContents(@NonNull Marker marker) {
+                            View v = getLayoutInflater().inflate(R.layout.live_events_marker_info, null);
+                            TextView t1 = (TextView) v.findViewById(R.id.liveEventsMarkerInfoTitleTextView);
+                            TextView t2 = (TextView) v.findViewById(R.id.liveEventsMarkerInfoTimeTextView);
+                            TextView t3 = (TextView) v.findViewById(R.id.liveEventsMarkerContentTextView);
+                            t1.setText(newMarker.getTitle());
+                            t2.setText(newMarker.getPublishDate().toString());
+                            t3.setText(newMarker.getDescription());
+                            return v;
+                        }
+
+                        @Nullable
+                        @Override
+                        public View getInfoWindow(@NonNull Marker marker) {
+                            return null;
+                        }
+                    });
+                }
 
             }
 

@@ -1,8 +1,9 @@
 package com.example.ciclotm.Models;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Route {
+public class Route implements Serializable {
     private Date publishDate;
     private String userId;
     private double distance;

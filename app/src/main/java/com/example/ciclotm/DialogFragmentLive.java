@@ -62,7 +62,7 @@ public class DialogFragmentLive extends androidx.fragment.app.DialogFragment {
                     return;
                 }
 
-                LiveEventsMarker marker = new LiveEventsMarker(val1,val3,val2,currentTime,expiringTime,val4,val5);
+                LiveEventsMarker marker = new LiveEventsMarker(val1,val3,val2,currentTime,expiringTime,val4,val5,0);
 
                 FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("LiveEventsMarkers").child(val1)
                         .setValue(marker).addOnCompleteListener(new OnCompleteListener<Void>() {

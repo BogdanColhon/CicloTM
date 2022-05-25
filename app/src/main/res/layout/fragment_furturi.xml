@@ -28,18 +28,23 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="81"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:textStyle="bold"
+                android:layout_marginEnd="3dp"
+                android:textColor="#DCDCDC"
+                android:textSize="18sp"  />
 
-            <Space
-                android:layout_width="5dp"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="0" />
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="!"
+                android:textStyle="bold"
+                android:layout_marginEnd="3dp"
+                android:textColor="#DCDCDC"
+                android:textSize="23sp"  />
 
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@drawable/ic_baseline_pedal_bike_24" />
+
 
             <TextView
                 android:id="@+id/furturiStatsClickableTextView"
@@ -47,7 +52,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginEnd="20dp"
                 android:gravity="center|right"
-                android:text="Vezi statistici"
+                android:text="Vezi statistici ➔"
+                android:textStyle="bold"
                 android:textColor="@color/black"
                 android:textSize="17sp" />
 
@@ -57,9 +63,9 @@
             android:id="@+id/furturiRView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="10dp"
+            android:paddingStart="20dp"
             android:paddingTop="10dp"
-            android:paddingEnd="10dp"
+            android:paddingEnd="20dp"
             android:paddingBottom="10dp" />
 
     </LinearLayout>

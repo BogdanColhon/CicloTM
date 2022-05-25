@@ -4,12 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="10dp"
-    android:layout_marginEnd="10dp"
     android:layout_marginTop="5dp"
     android:layout_marginBottom="7dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/custom_border">
@@ -19,11 +17,11 @@
 
             <ImageView
                 android:id="@+id/bike_photo"
-                android:layout_width="151dp"
-                android:layout_height="104dp"
+                android:layout_width="140dp"
+                android:layout_height="100dp"
                 android:layout_weight="0"
                 android:scaleType="centerCrop"
-                android:background="@drawable/no_image_available" />
+                android:background="@drawable/stolen_bike_empty_photo_4" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -42,6 +40,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Data"
+                    android:textStyle="bold"
                     android:textColor="@color/black" />
 
                 <TextView
@@ -63,5 +62,5 @@
 
         </LinearLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </androidx.cardview.widget.CardView>
