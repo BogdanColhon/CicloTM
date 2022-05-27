@@ -77,22 +77,23 @@ public class StolenBikeLocationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stolen_bike_location);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mapView = findViewById(R.id.mapViewStolenBike);
         mapView.onCreate(savedInstanceState);
-        terminator=this;
+        terminator = this;
         FloatingActionButton checkButton = findViewById(R.id.checkFloatingButton);
 
         searchPlaces = (TextView) findViewById(R.id.stolenBikeLocationTextView);
-        Places.initialize(StolenBikeLocationActivity.this,getResources().getString(R.string.google_maps_api_key));
+        Places.initialize(StolenBikeLocationActivity.this, getResources().getString(R.string.google_maps_api_key));
         searchPlaces.setFocusable(false);
         searchPlaces.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 List<Place.Field> fieldList = Arrays.asList(Place.Field.ADDRESS,
-                        Place.Field.LAT_LNG,Place.Field.NAME);
+                        Place.Field.LAT_LNG, Place.Field.NAME);
                 Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY
-                        ,fieldList).build(StolenBikeLocationActivity.this);
-                startActivityForResult(intent,200);
+                        , fieldList).build(StolenBikeLocationActivity.this);
+                startActivityForResult(intent, 200);
             }
         });
 
@@ -108,21 +109,21 @@ public class StolenBikeLocationActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 200 && resultCode !=0) {
-            if(data != null) {
+        if (requestCode == 200 && resultCode != 0) {
+            if (data != null) {
                 System.out.println(data);
                 Place place = Autocomplete.getPlaceFromIntent(data);
                 searchPlaces.setText(place.getAddress());
                 full_address = place.getAddress();
-                newTheftMarker=place.getLatLng();
+                newTheftMarker = place.getLatLng();
             }
         }
     }
 
     public void startReportStolenBikeActivity(View v) {
         Intent myIntent = new Intent(StolenBikeLocationActivity.this, ReportStolenBikeActivity.class);
-        myIntent.putExtra("location",full_address);
-        myIntent.putExtra("newTheftMarker",newTheftMarker);
+        myIntent.putExtra("location", full_address);
+        myIntent.putExtra("newTheftMarker", newTheftMarker);
         StolenBikeLocationActivity.this.startActivity(myIntent);
     }
 
@@ -180,7 +181,7 @@ public class StolenBikeLocationActivity extends AppCompatActivity {
                                             getCurrentLocation(location);
                                         }
                                         LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
-                                        newTheftMarker=current;
+                                        newTheftMarker = current;
                                         convertCoordinatesToAddress(location);
                                         searchPlaces.setText(full_address);
                                         i++;
@@ -274,4 +275,11 @@ public class StolenBikeLocationActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         mapView.onSaveInstanceState(outState);
     }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return super.onSupportNavigateUp();
+    }
+
 }

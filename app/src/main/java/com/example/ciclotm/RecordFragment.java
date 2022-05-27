@@ -504,8 +504,8 @@ public class RecordFragment extends Fragment {
 
     public static void setData(double rfDistance, double rfSpeed, int rfSamples, com.example.ciclotm.Models.Location rfPoint, Marker rfMarker, PolylineOptions rfPolylineOptions) {
 
-        distanceText.setText(String.format("%.2f", rfDistance));
-        speedText.setText(String.format("%.2f", rfSpeed));
+        distanceText.setText(String.format("%.2f km", rfDistance));
+        speedText.setText(String.format("%.2f km/h", rfSpeed));
         totalDistance = rfDistance;
         if (rfSpeed > maxSpeed) {
             maxSpeed = rfSpeed;
@@ -711,7 +711,7 @@ public class RecordFragment extends Fragment {
         ActivityCompat.requestPermissions(
                 getActivity(),
                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                Constants.REQ_PERMISSION
+                Constants.REQ_PERMISSION_LOCATION
         );
     }
 

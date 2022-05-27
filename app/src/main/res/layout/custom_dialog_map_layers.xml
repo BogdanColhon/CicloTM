@@ -32,8 +32,8 @@
         android:gravity="center"
         app:backgroundTint="@null"
         android:textStyle="bold"
-        android:textSize="15sp"
-       android:drawableRight="@drawable/th3"
+        android:textSize="14sp"
+       android:drawableLeft="@drawable/th2"
         android:text="Furturi" />
 
     <Button
@@ -49,8 +49,8 @@
         android:gravity="center"
         app:backgroundTint="@null"
         android:textStyle="bold"
-        android:textSize="15sp"
-        android:drawableRight="@drawable/live_button_2"
+        android:textSize="14sp"
+        android:drawableLeft="@drawable/live_button_3"
         android:text="Live" />
 
 
@@ -60,7 +60,6 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="15dp"
-
         android:gravity="center"
         android:focusable="true"
         app:backgroundTint="@null"
@@ -68,7 +67,8 @@
         android:layout_height="80dp"
         android:layout_weight="1"
         android:textStyle="bold"
-        android:drawableRight="@drawable/point8"
+        android:textSize="13sp"
+        android:drawableLeft="@drawable/point9"
         android:text="Puncte de interes" />
 
     <Button
@@ -83,8 +83,8 @@
         app:backgroundTint="@null"
         android:background="@drawable/login_button_shape"
         android:layout_weight="1"
-       android:drawableRight="@drawable/heatmap4"
+       android:drawableLeft="@drawable/heatmap5"
         android:textStyle="bold"
-        android:textSize="15sp"
+        android:textSize="14sp"
         android:text="HEAT MAP" />
 </LinearLayout>

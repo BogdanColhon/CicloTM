@@ -1,6 +1,7 @@
 package com.example.ciclotm;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,26 +70,24 @@ import java.util.HashMap;
  * create an instance of this fragment.
  */
 public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClickListener {
-    public static String newReportMarkerUrl;
-    private final int REQ_PERMISSION = 5;
+
     private MapView mapView;
     private GoogleMap map;
+
     private DatabaseReference reference;
+
     private ArrayList<Report> reportList = new ArrayList<>();
     private ArrayList<WeightedLatLng> arr = new ArrayList<>();
-    ArrayList<String> markers = new ArrayList<>();
-    FloatingActionButton reportButton;
-    FloatingActionButton liveEventButton;
-    FloatingActionButton mapLayerButton;
-    FusedLocationProviderClient client;
+
+    private FloatingActionButton reportButton;
+    private FloatingActionButton liveEventButton;
+    private FloatingActionButton mapLayerButton;
+
+    public static String newReportMarkerUrl;
     private LatLng newMarkerPosition = null;
-
-
+    private Location city_center;
     private int i = 0;
 
-
-    TextView t_markerWindow;
-    ImageView i_markerWindow;
     int[] colors = {
             Color.rgb(102, 225, 0), // green
             Color.rgb(255, 0, 0)    // red
@@ -101,6 +101,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
 
     HashMap hash_markers = new HashMap();
     HashMap hash_markers2 = new HashMap();
+
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -115,15 +116,6 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MapsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static MapsFragment newInstance(String param1, String param2) {
         MapsFragment fragment = new MapsFragment();
         Bundle args = new Bundle();
@@ -147,18 +139,9 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_maps, container, false);
-        mapView = view.findViewById(R.id.mapView);
-        mapView.onCreate(savedInstanceState);
-        reportButton = view.findViewById(R.id.reportFloatingButton);
-        liveEventButton = view.findViewById(R.id.liveEventFloatingButton);
-        mapLayerButton = view.findViewById(R.id.layersFloatingButton);
 
-        //Initialize fused location
-        client = LocationServices.getFusedLocationProviderClient(getActivity());
-        Location loc = null;
-        getCurrentLocation(loc);
-
-       // fetchMarkers();
+        init(view, savedInstanceState);
+        getCurrentLocation(city_center, null);
 
         reportButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,68 +179,77 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
         return view;
     }
 
-    public void getCurrentLocation(Location new_location) {
+    private void init(View view,Bundle savedInstanceState){
+        mapView = view.findViewById(R.id.mapView);
+        mapView.onCreate(savedInstanceState);
+        reportButton = view.findViewById(R.id.reportFloatingButton);
+        liveEventButton = view.findViewById(R.id.liveEventFloatingButton);
+        mapLayerButton = view.findViewById(R.id.layersFloatingButton);
+
+        city_center = new Location("provider");
+        city_center.setLatitude(45.75804742621145);
+        city_center.setLongitude(21.228941951330423);
+    }
+
+    public void getCurrentLocation(Location location, Location new_location) {
         try {
             MapsInitializer.initialize(getContext());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (checkPermission()) {
-            Task<Location> task = client.getLastLocation();
-            task.addOnSuccessListener(new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
-                    if (location != null) {
-                        if (location != new_location) {
-                            mapView.getMapAsync(new OnMapReadyCallback() {
-                                @Override
-                                public void onMapReady(GoogleMap mMap) {
-                                    MapsInitializer.initialize(getContext());
-                                    map = mMap;
-                                    map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        if (location != null) {
+            if (location != new_location) {
+                mapView.getMapAsync(new OnMapReadyCallback() {
+                    @Override
+                    public void onMapReady(GoogleMap mMap) {
+                        fetchMarkers();
+                        MapsInitializer.initialize(getContext());
+                        map = mMap;
+                        map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-                                    if (checkPermission()) {
-                                        mMap.setMyLocationEnabled(true);
-                                    } else
-                                        askPermission();
+                        if (checkPermission()) {
+                            mMap.setMyLocationEnabled(true);
+                        } else
+                            askPermission();
 
-                                    LatLng city_center = new LatLng(45.75804742621145, 21.228941951330423);
-                                    CameraPosition city = CameraPosition.builder().target(city_center).zoom(16).build();
-                                    map.moveCamera(CameraUpdateFactory.newCameraPosition(city));
-
-                                    if (i >= 1) {
-                                        LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
-                                        CameraPosition current_camera_position = CameraPosition.builder().target(current).zoom(16).build();
-                                        map.moveCamera(CameraUpdateFactory.newCameraPosition(current_camera_position));
-                                    }
-
-                                    map.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
-                                        @Override
-                                        public boolean onMyLocationButtonClick() {
-                                            if (i >= 1) {
-                                                getCurrentLocation(location);
-                                            }
-                                            LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
-                                            newMarkerPosition = current;
-                                            System.out.println(newMarkerPosition.longitude + "\n" + newMarkerPosition.latitude);
-                                            i++;
-
-                                            return false;
-
-                                        }
-
-                                    });
-                                    fetchMarkers();
-                                }
-                            });
+                        if (i == 0) {
+                            LatLng city_center = new LatLng(location.getLatitude(), location.getLongitude());
+                            CameraPosition city = CameraPosition.builder().target(city_center).zoom(16).build();
+                            map.moveCamera(CameraUpdateFactory.newCameraPosition(city));
                         }
+
+                        if (i >= 1) {
+                            LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
+                            CameraPosition current_camera_position = CameraPosition.builder().target(current).zoom(16).build();
+                            map.moveCamera(CameraUpdateFactory.newCameraPosition(current_camera_position));
+                        }
+
+                        map.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+                            @Override
+                            public boolean onMyLocationButtonClick() {
+                                LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+                                @SuppressLint("MissingPermission") Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+                                if (i >= 1) {
+                                    getCurrentLocation(new_location, lastLocation);
+                                }
+                                LatLng current = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
+                                newMarkerPosition = current;
+                                System.out.println(newMarkerPosition.longitude + "\n" + newMarkerPosition.latitude);
+                                i++;
+
+                                return false;
+
+                            }
+
+                        });
+
                     }
-                }
-            });
+                });
+            }
         }
-        else
-            askPermission();
     }
+
 
     private void showCustomDialog() {
         final Dialog dialog = new Dialog(getContext());
@@ -338,53 +330,55 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(newMarker.getStolenDate());
                 int month = calendar.get(Calendar.MONTH) + 1;
-                Marker marker = map.addMarker(new MarkerOptions()
-                        .position(latLng)
-                        .title("Furată pe " + calendar.get(Calendar.DAY_OF_MONTH)
-                                + "." + month
-                                + "." + calendar.get(Calendar.YEAR))
-                        .icon(bitmapDescriptorFromVector(getContext(), R.drawable.ic_baseline_dot)));
-                hash_markers.put(marker.getId(), newMarker.getBikeImageUrl());
-                hash_markers2.put(marker.getId(), newMarker);
-                map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-                    @Nullable
-                    @Override
-                    public View getInfoContents(@NonNull Marker marker) {
-                        View v = getLayoutInflater().inflate(R.layout.marker_info_window, null);
-                        String url = (String) hash_markers.get(marker.getId());
-                        TextView t1 = (TextView) v.findViewById(R.id.textView);
-                        ImageView i1 = (ImageView) v.findViewById(R.id.markerInfoWindowImageView);
+                if (getContext() != null) {
+                    Marker marker = map.addMarker(new MarkerOptions()
+                            .position(latLng)
+                            .title("Furată pe " + calendar.get(Calendar.DAY_OF_MONTH)
+                                    + "." + month
+                                    + "." + calendar.get(Calendar.YEAR))
+                            .icon(bitmapDescriptorFromVector(getContext(), R.drawable.ic_baseline_dot)));
+                    hash_markers.put(marker.getId(), newMarker.getBikeImageUrl());
+                    hash_markers2.put(marker.getId(), newMarker);
+                    map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                        @Nullable
+                        @Override
+                        public View getInfoContents(@NonNull Marker marker) {
+                            View v = getLayoutInflater().inflate(R.layout.marker_info_window, null);
+                            String url = (String) hash_markers.get(marker.getId());
+                            TextView t1 = (TextView) v.findViewById(R.id.textView);
+                            ImageView i1 = (ImageView) v.findViewById(R.id.markerInfoWindowImageView);
 
 
-                        if (!url.equals(""))
-                            Picasso.get().load(url).resize(500, 500).centerInside().into(i1);
-                        if (url.equals(""))
-                            Picasso.get().load(newReportMarkerUrl).resize(500, 500).centerInside().into(i1);
+                            if (!url.equals(""))
+                                Picasso.get().load(url).resize(500, 500).centerInside().into(i1);
+                            if (url.equals(""))
+                                Picasso.get().load(newReportMarkerUrl).resize(500, 500).centerInside().into(i1);
 
-                        t1.setText(marker.getTitle());
-                        return v;
-                    }
+                            t1.setText(marker.getTitle());
+                            return v;
+                        }
 
-                    @Nullable
-                    @Override
-                    public View getInfoWindow(@NonNull Marker marker) {
-                        return null;
-                    }
-                });
-                map.setOnInfoWindowLongClickListener(new GoogleMap.OnInfoWindowLongClickListener() {
-                    @Override
-                    public void onInfoWindowLongClick(@NonNull Marker marker) {
-                        Report clicked_report = (Report) hash_markers2.get(marker.getId());
-                        Intent intent = new Intent(getContext(), ExpandedFurturiPostActivity.class);
-                        intent.putExtra("clicked_report", clicked_report);
-                        getActivity().startActivity(intent);
-                    }
+                        @Nullable
+                        @Override
+                        public View getInfoWindow(@NonNull Marker marker) {
+                            return null;
+                        }
+                    });
+                    map.setOnInfoWindowLongClickListener(new GoogleMap.OnInfoWindowLongClickListener() {
+                        @Override
+                        public void onInfoWindowLongClick(@NonNull Marker marker) {
+                            Report clicked_report = (Report) hash_markers2.get(marker.getId());
+                            Intent intent = new Intent(getContext(), ExpandedFurturiPostActivity.class);
+                            intent.putExtra("clicked_report", clicked_report);
+                            getActivity().startActivity(intent);
+                        }
 
-                });
+                    });
 
 
-                WeightedLatLng weightedLatLng = new WeightedLatLng(latLng, 10);
-                arr.add(weightedLatLng);
+                    WeightedLatLng weightedLatLng = new WeightedLatLng(latLng, 10);
+                    arr.add(weightedLatLng);
+                }
             }
 
             @Override
@@ -416,17 +410,6 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
             }
         });
     }
-
-    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
-
-        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
-        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
-        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        vectorDrawable.draw(canvas);
-        return BitmapDescriptorFactory.fromBitmap(bitmap);
-    }
-
 
     private void fetchPointOfInterestMarkers() {
         reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("PointsOfInterestMarkers");
@@ -503,7 +486,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 LiveEventsMarker newMarker = snapshot.getValue(LiveEventsMarker.class);
                 Date currentTime = Calendar.getInstance().getTime();
-                if(newMarker.getExpiringDate().after(currentTime)) {
+                if (newMarker.getExpiringDate().after(currentTime)) {
                     LatLng latLng = new LatLng(newMarker.getLat(), newMarker.getLng());
 
                     if (String.valueOf(newMarker.getType()).equals("Groapă")) {
@@ -585,6 +568,16 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
     }
 
 
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
+
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -602,15 +595,14 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
     private void askPermission() {
         ActivityCompat.requestPermissions(
                 getActivity(),
-                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                REQ_PERMISSION
+                new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                Constants.REQ_PERMISSION_LOCATION
         );
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        System.out.println("---------------start");
         mapView.onStart();
     }
 
@@ -619,21 +611,18 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
         super.onResume();
         ((MenuActivity) getActivity())
                 .setActionBarTitle("Hărți");
-        System.out.println("--------------resume");
         mapView.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        System.out.println("-----------------------pause");
         mapView.onPause();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        System.out.println("-----------------------stop");
         mapView.onStop();
     }
 

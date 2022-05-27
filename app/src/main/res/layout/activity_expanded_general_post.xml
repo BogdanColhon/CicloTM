@@ -24,8 +24,7 @@
                     android:id="@+id/user_photo"
                     android:layout_width="60dp"
                     android:layout_height="80dp"
-                    android:layout_weight="0"
-                    android:src="@drawable/user_photo" />
+                    android:layout_weight="0"/>
 
                 <Space
                     android:layout_width="wrap_content"
@@ -44,7 +43,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:singleLine="true"
-                        android:text="username"
                         android:textColor="#222222"
                         android:textSize="20dp" />
 
@@ -52,7 +50,6 @@
                         android:id="@+id/lowerTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="00.00.2000"
                         android:textColor="@color/black"
                         android:textSize="15dp" />
 
@@ -66,7 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:text="titlu"
+                android:text="―"
                 android:textSize="23sp"
                 android:textStyle="bold" />
 
@@ -74,19 +71,23 @@
                 android:id="@+id/contentTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="content"
+                android:text="―"
                 android:textSize="18sp" />
+
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/comments_icon"></ImageView>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
                 android:background="#c0c0c0" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Comentarii:"
-                android:textSize="18sp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/expandedGeneralPostRView"
@@ -96,6 +97,7 @@
         </LinearLayout>
 
     </ScrollView>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -105,23 +107,24 @@
             android:id="@+id/expandedGeneralPostCommentUserImageView"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/no_image_available"
             android:padding="5dp"
-            app:civ_border_width="1dp"
-            app:civ_border_color="@color/black"/>
+            android:src="@drawable/no_image_available"
+            app:civ_border_color="@color/black"
+            app:civ_border_width="1dp" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <EditText
                 android:id="@+id/expandedGeneralPostCommentInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_toStartOf="@+id/expandedGeneralPostSendImageView"
                 android:hint="Adaugă comentariu..."
-                android:padding="10dp"
                 android:inputType="textMultiLine|text"
-                android:textColor="@color/black"
-                android:layout_toStartOf="@+id/expandedGeneralPostSendImageView"/>
+                android:padding="10dp"
+                android:textColor="@color/black" />
 
             <ImageView
                 android:id="@+id/expandedGeneralPostSendImageView"

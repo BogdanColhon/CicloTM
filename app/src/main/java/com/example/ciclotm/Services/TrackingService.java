@@ -137,7 +137,6 @@ public class TrackingService extends Service implements LifecycleOwner {
 
             final String action = intent.getAction();
             if (Constants.ACTION_START_OR_RESUME_SERVICE.equals(action)) {
-                System.out.println(isFirstRun+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~)()(0");
                 if (isFirstRun) {
                     serRoutePoints.add(RecordFragment.point);
                     serRouteMarker.add(RecordFragment.startMarker);

@@ -34,11 +34,12 @@
         android:background="@drawable/custom_search_location_edittext"
         android:drawableRight="@drawable/ic_baseline_search_24"
         android:ems="10"
+        android:fontFamily="@font/roboto_medium"
         android:hint="Adresa"
         android:inputType="textPersonName"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
         android:textColor="@color/black"
-        android:textSize="20dp" />
+        android:textSize="18sp" />
 
 </RelativeLayout>
