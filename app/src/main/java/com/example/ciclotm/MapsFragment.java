@@ -28,11 +28,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.example.ciclotm.Models.PointOfInterestMarker;
+import com.bumptech.glide.Glide;
 import com.example.ciclotm.Models.LiveEventsMarker;
+import com.example.ciclotm.Models.PointOfInterestMarker;
 import com.example.ciclotm.Models.Report;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -46,8 +45,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -57,7 +54,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.maps.android.heatmaps.Gradient;
 import com.google.maps.android.heatmaps.HeatmapTileProvider;
 import com.google.maps.android.heatmaps.WeightedLatLng;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -350,9 +346,9 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
 
 
                             if (!url.equals(""))
-                                Picasso.get().load(url).resize(500, 500).centerInside().into(i1);
+                                Glide.with(getContext()).load(url).into(i1);
                             if (url.equals(""))
-                                Picasso.get().load(newReportMarkerUrl).resize(500, 500).centerInside().into(i1);
+                                Glide.with(getContext()).load(newReportMarkerUrl).into(i1);
 
                             t1.setText(marker.getTitle());
                             return v;

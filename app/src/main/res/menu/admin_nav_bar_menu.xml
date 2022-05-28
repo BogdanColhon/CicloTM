@@ -9,16 +9,13 @@
         android:id="@+id/adminCommunityFragment"
         android:icon="@drawable/community_button"
         android:title="Comunitate" />
+
     <item
-        android:id="@+id/adminStoreFragment"
-        android:icon="@drawable/store_button"
-        android:title="Magazin" />
-    <item
-        android:id="@+id/adminRulesFragment"
+        android:id="@+id/rulesFragment"
         android:icon="@drawable/rules_button"
         android:title="Legislație" />
     <item
-        android:id="@+id/adminProfileFragment"
-        android:icon="@drawable/profile_button"
-        android:title="Profil" />
+        android:id="@+id/adminLogoutFragment"
+        android:icon="@drawable/log_out_button_white"
+        android:title="Ieșire" />
 </menu>

@@ -18,7 +18,7 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
     ArrayList<Fragment> fragmentArrayList = new ArrayList<>();
     ArrayList<String> fragmentTitle;
 
-    public ViewPagerAdapter(@NonNull CommunityFragment fragmentActivity) {
+    public ViewPagerAdapter(@NonNull Fragment fragmentActivity) {
         super(fragmentActivity);
     }
 

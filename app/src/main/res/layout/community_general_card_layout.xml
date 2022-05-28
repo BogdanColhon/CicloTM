@@ -40,30 +40,33 @@
                     android:id="@+id/upperTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Titlu"
+                    android:fontFamily="@font/roboto_medium"
                     android:singleLine="true"
-                    android:textStyle="bold"
+                    android:text="Titlu"
                     android:textColor="@color/black"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/middleGeneralTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
                     android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="-"
+                    android:textColor="@color/black"
                     android:textSize="13sp"
-                    android:textStyle="bold"
-                    android:text="-" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/lowerTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Continut"
-                    android:textSize="15sp"
+                    android:fontFamily="@font/roboto_medium"
                     android:singleLine="true"
-                    android:textColor="@color/black" />
+                    android:text="Continut"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
 
             </LinearLayout>
 

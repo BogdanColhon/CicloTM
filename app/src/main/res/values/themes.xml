@@ -14,7 +14,7 @@
         <!-- Customize your theme here. -->
 
         <item name="android:actionOverflowButtonStyle">@style/MyTheme</item>
-
+        <item name="android:actionMenuTextColor">@color/green</item>
 
 
     </style>

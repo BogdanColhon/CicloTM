@@ -61,13 +61,10 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
 
     ProgressDialog TempDialog;
     CountDownTimer mCountDownTimer;
-    int i =0;
+    int i = 0;
 
     File f, f2;
     Uri contentUri, contentUri2;
-    Uri locationCaptureImageURI;
-    Uri stolenCaptureImageURI;
-    Bitmap captureImageBitmap;
     TextView dateReportTextView;
     TextView addressReportTextView;
     EditText phoneReportEditText;
@@ -120,7 +117,7 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
         bikeDescriptionEditText = (EditText) findViewById(R.id.bikeDescriptionReportEditText);
         thiefDescriptionEditText = (EditText) findViewById(R.id.thiefDescriptionReportEditText);
 
-        TempDialog = new ProgressDialog(ReportStolenBikeActivity.this,R.style.MyAlertDialogStyle);
+        TempDialog = new ProgressDialog(ReportStolenBikeActivity.this, R.style.MyAlertDialogStyle);
         TempDialog.setMessage("Wait");
         TempDialog.setCancelable(false);
         TempDialog.setProgress(i);
@@ -218,18 +215,16 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
                     return;
                 }
 
-                if(!PhoneNumberUtils.isGlobalPhoneNumber(phone))
-                {
+                if (!PhoneNumberUtils.isGlobalPhoneNumber(phone)) {
                     phoneReportEditText.setError("Număr invalid!\n" +
-                            "\u2022 Verificați să nu existe spații între cifre\n"+
+                            "\u2022 Verificați să nu existe spații între cifre\n" +
                             "\u2022 Numărul trebuie să conțină 10 cifre");
                     phoneReportEditText.requestFocus();
                     return;
                 }
-                if(phone.length()!=10)
-                {
+                if (phone.length() != 10) {
                     phoneReportEditText.setError("Număr invalid!\n" +
-                            "\u2022 Verificați să nu existe spații între cifre\n"+
+                            "\u2022 Verificați să nu existe spații între cifre\n" +
                             "\u2022 Numărul trebuie să conțină 10 cifre");
                     phoneReportEditText.requestFocus();
                     return;
@@ -254,7 +249,7 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
                         if (task.isSuccessful()) {
                             uploadPhotos();
                             TempDialog.show();
-                            mCountDownTimer = new CountDownTimer(2000,1000) {
+                            mCountDownTimer = new CountDownTimer(2000, 1000) {
                                 @Override
                                 public void onTick(long millisUntilFinished) {
                                     TempDialog.setMessage("wait");
@@ -303,7 +298,7 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
             public void onClick(View v) {
                 Intent pickPhoto = new Intent(Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(pickPhoto,1);
+                startActivityForResult(pickPhoto, 1);
                 dialog.dismiss();
             }
         });
@@ -343,6 +338,14 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
 
                                                     }
                                                 });
+                                        FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference()
+                                                .child("Users").child(user_Id).child("Furturi").child(String.valueOf(currentTime)).updateChildren(hashMap)
+                                                .addOnSuccessListener(new OnSuccessListener() {
+                                                    @Override
+                                                    public void onSuccess(Object o) {
+
+                                                    }
+                                                });
 
                                     }
                                 });
@@ -373,8 +376,16 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
                                                     public void onSuccess(Object o) {
                                                         MapMarker marker = new MapMarker(theftMarker.latitude, theftMarker.longitude, calendar.getTime(), uri.toString(), locationImageLink);
                                                         FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("StolenBikesMarkers").child("Coordonate").child(String.valueOf(currentTime))
-                                                               .setValue(marker);
-                                                        MapsFragment.newReportMarkerUrl =uri.toString();
+                                                                .setValue(marker);
+                                                        MapsFragment.newReportMarkerUrl = uri.toString();
+
+                                                    }
+                                                });
+                                        FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference()
+                                                .child("Users").child(user_Id).child("Furturi").child(String.valueOf(currentTime)).updateChildren(hashMap)
+                                                .addOnSuccessListener(new OnSuccessListener() {
+                                                    @Override
+                                                    public void onSuccess(Object o) {
 
                                                     }
                                                 });
@@ -407,7 +418,7 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             contentUri = data.getData();
-             f = new File(contentUri.getPath());
+            f = new File(contentUri.getPath());
             locationReportImageView.setImageURI(contentUri);
         }
         if (requestCode == 2) {

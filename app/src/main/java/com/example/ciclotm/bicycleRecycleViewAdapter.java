@@ -1,8 +1,6 @@
 package com.example.ciclotm;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,15 +10,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.ciclotm.Models.Bike;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Picasso;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class bicycleRecycleViewAdapter extends RecyclerView.Adapter<bicycleRecycleViewAdapter.MyViewHolder> {
@@ -80,7 +73,7 @@ public class bicycleRecycleViewAdapter extends RecyclerView.Adapter<bicycleRecyc
 
         String link = bikeList.get(position).getBikePhotoUrl();
         if (!link.equals(""))
-            Picasso.get().load(link).resize(500, 500).centerInside().into(holder.bikeImageView);
+            Glide.with(context).load(link).into(holder.bikeImageView);
     }
 
     @Override

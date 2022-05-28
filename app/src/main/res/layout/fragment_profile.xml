@@ -144,8 +144,8 @@
                     android:id="@+id/profileFragmentNameTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
                     android:gravity="left"
-                    android:text="Nume Prenume, 23"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -154,6 +154,7 @@
                     android:id="@+id/profileFragmentBioTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
                     android:gravity="left"
                     android:text="bio"
                     android:textColor="@color/black"

@@ -28,10 +28,11 @@
                 android:id="@+id/dotariObligatoriiTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:fontFamily="@font/roboto_medium"
                 android:justificationMode="inter_word"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                android:layout_marginBottom="20dp"
                 android:text="TextView"
                 android:textColor="@color/black"
                 android:textSize="15sp" />

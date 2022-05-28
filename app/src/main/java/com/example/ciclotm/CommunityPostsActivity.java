@@ -227,7 +227,7 @@ public class CommunityPostsActivity extends AppCompatActivity implements mygener
     @Override
     public void onPostFurturiClick(int position) {
         Intent intent = new Intent(CommunityPostsActivity.this, ExpandedFurturiPostActivity.class);
-        intent.putExtra("clicked_post", myFurturiPosts.get(position));
+        intent.putExtra("clicked_report", myFurturiPosts.get(position));
         startActivity(intent);
     }
 

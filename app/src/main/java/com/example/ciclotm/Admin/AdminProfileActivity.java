@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.ciclotm.BicyclesActivity;
 import com.example.ciclotm.CommunityPostsActivity;
 import com.example.ciclotm.R;
@@ -21,9 +22,6 @@ import com.example.ciclotm.StatsActivity;
 import com.example.ciclotm.User;
 import com.example.ciclotm.profileListViewAdapter;
 import com.example.ciclotm.profileListViewButton;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -121,7 +119,7 @@ public class AdminProfileActivity extends AppCompatActivity {
 
     public void getUserProfilePhoto(String profileImageUrl) throws IOException {
         if (!profileImageUrl.equals("")) {
-            Picasso.get().load(profileImageUrl).fit().centerInside().into(userProfileImageView);
+            Glide.with(this).load(profileImageUrl).into(userProfileImageView);
         }
     }
 }

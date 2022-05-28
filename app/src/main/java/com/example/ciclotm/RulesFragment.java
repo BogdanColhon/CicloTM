@@ -11,7 +11,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import com.example.ciclotm.Admin.AdminDotariObligatoriiActivity;
+import com.example.ciclotm.Admin.AdminReguliCirculatieActivity;
 import com.example.ciclotm.ReguliCirculatie.ReguliCirculatieActivity;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,6 +24,8 @@ import com.example.ciclotm.ReguliCirculatie.ReguliCirculatieActivity;
  */
 public class RulesFragment extends Fragment {
 
+    FirebaseUser user;
+    DatabaseReference reference;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -68,23 +74,34 @@ public class RulesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_rules, container, false);
+
         gridView = (GridView) view.findViewById(R.id.gridView);
-        String [] titles = {"Reguli de circulație","Semne de circulație","Echipare obligatorie","Îmbunătățirea siguranței"};
-        int[] images= {R.drawable.rules_attention_sign,R.drawable.rules_traffic_signs,R.drawable.rules_echipare_obligatorie,R.drawable.rules_improve_safety};
-        adapter = new GridAdapter(getContext(),titles,images);
+        String[] titles = {"Reguli de circulație", "Semne de circulație", "Echipare obligatorie", "Îmbunătățirea siguranței"};
+        int[] images = {R.drawable.rules_attention_sign, R.drawable.rules_traffic_signs, R.drawable.rules_echipare_obligatorie, R.drawable.rules_improve_safety};
+        adapter = new GridAdapter(getContext(), titles, images);
         gridView.setAdapter(adapter);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch(position){
-                    case 0: startActivity(new Intent(getActivity(), ReguliCirculatieActivity.class));
-                            break;
-                    case 1: startActivity(new Intent(getActivity(), SemneCirculatieActivity.class));
+                switch (position) {
+                    case 0:
+                        if (MainActivity.role.equals("0"))
+                            startActivity(new Intent(getActivity(), ReguliCirculatieActivity.class));
+                        else
+                            startActivity(new Intent(getActivity(), AdminReguliCirculatieActivity.class));
                         break;
-                    case 2: startActivity(new Intent(getActivity(), DotariObligatoriiActivity.class));
+                    case 1:
+                        startActivity(new Intent(getActivity(), SemneCirculatieActivity.class));
                         break;
-                    case 3: startActivity(new Intent(getActivity(), ImbunatatireaCirculatieiActivity.class));
+                    case 2:
+                        if (MainActivity.role.equals("0"))
+                            startActivity(new Intent(getActivity(), DotariObligatoriiActivity.class));
+                        else
+                            startActivity(new Intent(getActivity(), AdminDotariObligatoriiActivity.class));
+                        break;
+                    case 3:
+                        startActivity(new Intent(getActivity(), ImbunatatireaCirculatieiActivity.class));
                         break;
 
                 }
@@ -95,12 +112,16 @@ public class RulesFragment extends Fragment {
 
 
     }
-    public void onResume(){
+
+    public void onResume() {
         super.onResume();
 
         // Set title bar
-        ((MenuActivity) getActivity())
-                .setActionBarTitle("Legislație");
+        if (MainActivity.role.equals("0"))
+            ((MenuActivity) getActivity()).setActionBarTitle("Legislație");
+        else {
+            ((AdminMenuActivity2) getActivity()).setActionBarTitle("Legislație");
+        }
 
     }
 }

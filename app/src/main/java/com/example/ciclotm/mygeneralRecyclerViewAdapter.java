@@ -10,8 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,7 +34,7 @@ public class mygeneralRecyclerViewAdapter extends RecyclerView.Adapter<mygeneral
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.community_admin_general_card_layout, viewGroup, false);
-        return  new MyViewHolder(itemView, mOnPostListener);
+        return new MyViewHolder(itemView, mOnPostListener);
     }
 
     @Override
@@ -49,7 +48,7 @@ public class mygeneralRecyclerViewAdapter extends RecyclerView.Adapter<mygeneral
         String output = df.format(date);
         holder.data.setText(output);
         String userImageUrl = postsList.get(position).getUserImageUrl();
-        Picasso.get().load(userImageUrl).fit().centerInside().into(holder.user_photo);
+        Glide.with(context).load(userImageUrl).into(holder.user_photo);
     }
 
 

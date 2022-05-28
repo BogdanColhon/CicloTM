@@ -1,5 +1,7 @@
 package com.example.ciclotm.ReguliCirculatie;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,7 +13,11 @@ import android.view.Menu;
 import com.example.ciclotm.R;
 import com.example.ciclotm.turePost;
 import com.example.ciclotm.tureRecycleViewAdapter;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -30,7 +36,7 @@ public class ReguliCirculatieActivity extends AppCompatActivity {
         setContentView(R.layout.activity_reguli_circulatie);
 
         initActionBar();
-        initData();
+        fetchReguliCirculatie();
         setRecycleView();
     }
 
@@ -42,9 +48,36 @@ public class ReguliCirculatieActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
-    public void initData() {
-        rulesList.add(new CategorieReguli("Obligații", getString(R.string.rules_obligatii)));
-        rulesList.add(new CategorieReguli("Interdicții", getString(R.string.rules_interdictii)));
+    public void fetchReguliCirculatie() {
+        reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Legislație").child("Reguli_Circulatie");
+        reference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                CategorieReguli regula = snapshot.getValue(CategorieReguli.class);
+                rulesList.add(0, regula);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     public void setRecycleView() {

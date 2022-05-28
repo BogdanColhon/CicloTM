@@ -28,6 +28,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_marginEnd="3dp"
+                android:fontFamily="@font/roboto_medium"
                 android:gravity="center"
                 android:text="81"
                 android:textColor="#DCDCDC"

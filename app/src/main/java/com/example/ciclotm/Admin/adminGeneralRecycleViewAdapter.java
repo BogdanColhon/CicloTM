@@ -10,18 +10,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.ciclotm.R;
 import com.example.ciclotm.generalPost;
-import com.example.ciclotm.generalRecycleViewAdapter;
 import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-public class adminGeneralRecycleViewAdapter  extends RecyclerView.Adapter<adminGeneralRecycleViewAdapter.MyViewHolder> {
+public class adminGeneralRecycleViewAdapter extends RecyclerView.Adapter<adminGeneralRecycleViewAdapter.MyViewHolder> {
     Context context;
     public static String generalPostsCount;
     private StorageReference storageReference;
@@ -62,9 +61,9 @@ public class adminGeneralRecycleViewAdapter  extends RecyclerView.Adapter<adminG
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(OnPostListener !=null){
+                    if (OnPostListener != null) {
                         int position = getAbsoluteAdapterPosition();
-                        if(position!=RecyclerView.NO_POSITION){
+                        if (position != RecyclerView.NO_POSITION) {
                             OnPostListener.OnDeleteClick(position);
                         }
                     }
@@ -96,8 +95,7 @@ public class adminGeneralRecycleViewAdapter  extends RecyclerView.Adapter<adminG
         String output = df.format(date);
         holder.data.setText(output);
         String userImageUrl = postsList.get(position).getUserImageUrl();
-        Picasso.get().load(userImageUrl).fit().centerInside().into(holder.user_photo);
-
+        Glide.with(context).load(userImageUrl).into(holder.user_photo);
     }
 
     @Override
@@ -110,6 +108,7 @@ public class adminGeneralRecycleViewAdapter  extends RecyclerView.Adapter<adminG
 
     public interface OnPostListener {
         void onPostClick(int position);
+
         void OnDeleteClick(int position);
     }
 }

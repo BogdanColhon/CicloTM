@@ -10,8 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.ciclotm.Models.Photo;
-import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -57,7 +57,7 @@ public class galleryRecycleViewAdapter extends RecyclerView.Adapter<galleryRecyc
 
         String imageUrl = items.get(i).getPhotoUrl();
         System.out.println(imageUrl);
-        Picasso.get().load(imageUrl).into(holder.imageView);
+        Glide.with(context).load(imageUrl).into(holder.imageView);
     }
 
     @Override

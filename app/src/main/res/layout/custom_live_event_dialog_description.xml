@@ -16,24 +16,25 @@
         android:id="@+id/liveEventDialogDescriptionTypeImageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:textStyle="bold"
+        android:fontFamily="@font/roboto_medium"
         android:gravity="center"
-        ></TextView>
+        android:textSize="20sp"
+        android:textStyle="bold"></TextView>
 
     <TextView
         android:id="@+id/liveEventDialogDescriptionDateImageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:textStyle="bold"
+        android:fontFamily="@font/roboto_medium"
         android:gravity="center"
-        ></TextView>
+        android:textSize="20sp"
+        android:textStyle="bold"></TextView>
 
     <EditText
         android:id="@+id/liveEventDialogDescriptionEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_medium"
         android:hint="Descriere"
         android:textColor="#3A3A3A"></EditText>
 

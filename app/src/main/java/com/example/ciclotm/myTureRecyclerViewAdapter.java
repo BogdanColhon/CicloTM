@@ -10,9 +10,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class myTureRecyclerViewAdapter extends RecyclerView.Adapter<myTureRecycl
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.my_community_ture_card_layout, viewGroup, false);
-        return  new MyViewHolder(itemView, mOnPostListener);
+        return new MyViewHolder(itemView, mOnPostListener);
     }
 
     @Override
@@ -46,23 +46,23 @@ public class myTureRecyclerViewAdapter extends RecyclerView.Adapter<myTureRecycl
         String output = df.format(dateComment);
         holder.activityDate.setText(output);
 
-        String distance =postsList.get(position).getDistance() + " km";
+        String distance = postsList.get(position).getDistance() + " km";
         holder.distance.setText(distance);
 
-        String start_point =postsList.get(position).getStart_point();
+        String start_point = postsList.get(position).getStart_point();
         holder.start_point.setText(start_point);
 
         int no_participants = postsList.get(position).getNo_participants();
         String text_participants = String.valueOf(no_participants);
         holder.no_participants.setText(text_participants);
 
-        String start_time =postsList.get(position).getStart_time();
+        String start_time = postsList.get(position).getStart_time();
         holder.start_time.setText(start_time);
 
         String userProfilePicture = "UsersProfilePicture/" + postsList.get(position).getUid() + ".png";
         storageReference = FirebaseStorage.getInstance().getReference().child(userProfilePicture);
         String userImageUrl = postsList.get(position).getUserImageUrl();
-        Picasso.get().load(userImageUrl).fit().centerInside().into(holder.user_photo);
+        Glide.with(context).load(userImageUrl).into(holder.user_photo);
     }
 
 

@@ -4,21 +4,18 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.ciclotm.Models.Comment;
-import com.example.ciclotm.ReguliCirculatie.CategorieReguliAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,7 +29,7 @@ public class generalCommentsRecyclerViewAdapter extends RecyclerView.Adapter<gen
     Context context;
     private ArrayList<Comment> commentsList;
     private DatabaseReference reference;
-    private String userImageUrl="";
+    private String userImageUrl = "";
 
     public generalCommentsRecyclerViewAdapter(Context context, ArrayList<Comment> commentsList) {
         this.context = context;
@@ -78,8 +75,7 @@ public class generalCommentsRecyclerViewAdapter extends RecyclerView.Adapter<gen
         holder.comment.setText(commentContent);
         System.out.println(userImageUrl);
         if (!userImageUrl.equals(""))
-            Picasso.get().load(userImageUrl).fit().centerInside().into(holder.commentUserPhoto);
-
+            Glide.with(context).load(userImageUrl).into(holder.commentUserPhoto);
     }
 
     @Override

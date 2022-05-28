@@ -26,12 +26,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
+                android:layout_marginEnd="3dp"
+                android:fontFamily="@font/roboto_medium"
                 android:gravity="center"
                 android:text="81"
-                android:textStyle="bold"
-                android:layout_marginEnd="3dp"
                 android:textColor="#DCDCDC"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="30dp"

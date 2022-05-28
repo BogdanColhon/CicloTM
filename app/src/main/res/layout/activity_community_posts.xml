@@ -24,12 +24,13 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:paddingStart="10dp"
             android:background="@color/black"
-            android:text="General"/>
+            android:fontFamily="@font/roboto_medium"
+            android:paddingStart="10dp"
+            android:text="General"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/myGeneralCommunityPostsRView"
             android:layout_width="match_parent"
@@ -51,12 +52,13 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:paddingStart="10dp"
             android:background="@color/black"
-            android:text="Ture"/>
+            android:fontFamily="@font/roboto_medium"
+            android:paddingStart="10dp"
+            android:text="Ture"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/myTureCommunityPostsRView"
             android:layout_width="match_parent"
@@ -76,12 +78,13 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:paddingStart="10dp"
             android:background="@color/black"
-            android:text="Furturi"/>
+            android:fontFamily="@font/roboto_medium"
+            android:paddingStart="10dp"
+            android:text="Furturi"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/myFurturiCommunityPostsRView"
             android:isScrollContainer="false"

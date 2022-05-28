@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ciclotm.Admin.adminGeneralRecycleViewAdapter;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,17 +25,20 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
+import dagger.multibindings.ElementsIntoSet;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link TureFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GeneralFragment extends Fragment implements generalRecycleViewAdapter.OnPostListener {
+public class GeneralFragment extends Fragment implements generalRecycleViewAdapter.OnPostListener , adminGeneralRecycleViewAdapter.OnPostListener{
 
     private ArrayList<generalPost> postsList = new ArrayList<>();
     TextView generalPostsNumberTextView;
     private RecyclerView recyclerView;
     generalRecycleViewAdapter adapter;
+    adminGeneralRecycleViewAdapter adminAdapter;
     RecyclerView.LayoutManager layoutManager;
     private DatabaseReference reference;
     private int counter = 0;
@@ -87,8 +91,15 @@ public class GeneralFragment extends Fragment implements generalRecycleViewAdapt
         generalPostsNumberTextView = (TextView) view.findViewById(R.id.generalPostsNumberTextView);
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
+
         adapter = new generalRecycleViewAdapter(getContext(), postsList, this);
-        recyclerView.setAdapter(adapter);
+        adminAdapter = new adminGeneralRecycleViewAdapter(getContext(), postsList, this);
+
+        if (MainActivity.role.equals("0"))
+            recyclerView.setAdapter(adapter);
+        else
+            recyclerView.setAdapter(adminAdapter);
+
         fetchPostsInfo();
         System.out.println(postsList.size());
         ImageButton addPost = (ImageButton) view.findViewById(R.id.addPostImageButton);
@@ -126,7 +137,10 @@ public class GeneralFragment extends Fragment implements generalRecycleViewAdapt
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 generalPost newPost = snapshot.getValue(generalPost.class);
                 postsList.add(0, newPost);
+                if (MainActivity.role.equals("0"))
                 adapter.notifyDataSetChanged();
+                else
+                    adminAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -153,7 +167,10 @@ public class GeneralFragment extends Fragment implements generalRecycleViewAdapt
 
 
     private void fetchPostsNumber() {
+        if (MainActivity.role.equals("0"))
         generalPostsNumberTextView.setText(String.valueOf(generalRecycleViewAdapter.generalPostsCount));
+        else
+            generalPostsNumberTextView.setText(String.valueOf(adminGeneralRecycleViewAdapter.generalPostsCount));
     }
 
     @Override
@@ -161,5 +178,19 @@ public class GeneralFragment extends Fragment implements generalRecycleViewAdapt
         Intent intent = new Intent(getContext(), ExpandedGeneralPostActivity.class);
         intent.putExtra("clicked_post", postsList.get(position));
         startActivity(intent);
+    }
+
+    @Override
+    public void OnDeleteClick(int position) {
+        removeItem(position);
+    }
+
+    public void removeItem(int position){
+        System.out.println("Removed position: "+position);
+        DatabaseReference PostReference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference()
+                .child("GeneralPosts").child(String.valueOf(postsList.get(position).getDate()));
+        PostReference.removeValue();
+        postsList.remove(position);
+        adminAdapter.notifyItemRemoved(position);
     }
 }

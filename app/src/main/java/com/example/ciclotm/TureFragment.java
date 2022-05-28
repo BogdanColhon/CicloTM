@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.ciclotm.Admin.adminTureRecyclerViewAdapter;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,12 +37,13 @@ import java.util.Observer;
  * Use the {@link TureFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TureFragment extends Fragment  implements tureRecycleViewAdapter.OnPostListener {
+public class TureFragment extends Fragment  implements tureRecycleViewAdapter.OnPostListener, adminTureRecyclerViewAdapter.OnPostListener {
 
     private ArrayList<turePost> postsList = new ArrayList<>();
     TextView turePostsNumberTextView;
     private RecyclerView recyclerView;
     tureRecycleViewAdapter adapter;
+    adminTureRecyclerViewAdapter adminAdapter;
     RecyclerView.LayoutManager layoutManager;
     private DatabaseReference reference;
     // TODO: Rename parameter arguments, choose names that match
@@ -93,11 +95,17 @@ public class TureFragment extends Fragment  implements tureRecycleViewAdapter.On
         recyclerView = (RecyclerView) view.findViewById(R.id.tureRView);
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
+
         adapter = new tureRecycleViewAdapter(getContext(), postsList,this);
-        recyclerView.setAdapter(adapter);
+        adminAdapter = new adminTureRecyclerViewAdapter(getContext(), postsList,this);
+
+        if (MainActivity.role.equals("0"))
+            recyclerView.setAdapter(adapter);
+        else
+            recyclerView.setAdapter(adminAdapter);
+
         turePostsNumberTextView = (TextView) view.findViewById(R.id.turePostsNumberTextView);
         fetchPostsInfo();
-        System.out.println(postsList.size());
         ImageButton addPost = (ImageButton) view.findViewById(R.id.addPostImageButton);
         addPost.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,7 +133,10 @@ public class TureFragment extends Fragment  implements tureRecycleViewAdapter.On
                 turePost newPost = snapshot.getValue(turePost.class);
                 if (newPost != null) {
                     postsList.add(0, newPost);
-                    adapter.notifyDataSetChanged();
+                    if (MainActivity.role.equals("0"))
+                        adapter.notifyDataSetChanged();
+                    else
+                        adminAdapter.notifyDataSetChanged();
                 }
 
             }
@@ -142,7 +153,10 @@ public class TureFragment extends Fragment  implements tureRecycleViewAdapter.On
                             postsList.set(postsList.indexOf(p),newPost);
                         }
                     }
-                    adapter.notifyDataSetChanged();
+                    if (MainActivity.role.equals("0"))
+                        adapter.notifyDataSetChanged();
+                    else
+                        adminAdapter.notifyDataSetChanged();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -167,7 +181,10 @@ public class TureFragment extends Fragment  implements tureRecycleViewAdapter.On
     }
 
     private void fetchPostsNumber() {
+        if (MainActivity.role.equals("0"))
         turePostsNumberTextView.setText(String.valueOf(tureRecycleViewAdapter.turePostsCount));
+        else
+            turePostsNumberTextView.setText(String.valueOf(adminTureRecyclerViewAdapter.turePostsCount));
     }
 
 
@@ -176,5 +193,26 @@ public class TureFragment extends Fragment  implements tureRecycleViewAdapter.On
         Intent intent = new Intent(getContext(), ExpandedTurePostActivity.class);
         intent.putExtra("clicked_post", postsList.get(position));
         startActivity(intent);
+    }
+
+    @Override
+    public void onPostTureClick(int position) {
+        Intent intent = new Intent(getContext(), ExpandedTurePostActivity.class);
+        intent.putExtra("clicked_post", postsList.get(position));
+        startActivity(intent);
+    }
+
+    @Override
+    public void OnDeleteTureClick(int position) {
+        removeTureItem(position);
+    }
+
+    public void removeTureItem(int position) {
+        System.out.println("Removed position: " + position);
+        DatabaseReference PostReference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference()
+                .child("TurePosts").child(String.valueOf(postsList.get(position).getDate()));
+        PostReference.removeValue();
+        postsList.remove(position);
+        adminAdapter.notifyItemRemoved(position);
     }
 }

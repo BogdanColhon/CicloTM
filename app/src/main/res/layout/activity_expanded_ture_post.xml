@@ -42,9 +42,10 @@
                         android:id="@+id/upperTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="username"
-                        android:singleLine="true"
                         android:layout_marginBottom="5dp"
+                        android:fontFamily="@font/roboto_medium"
+                        android:singleLine="true"
+                        android:text="username"
                         android:textColor="@color/black"
                         android:textSize="20dp" />
 
@@ -52,9 +53,10 @@
                         android:id="@+id/lowerTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="00.00.2000"
                         android:textColor="@color/black"
-                        android:textSize="15dp"
-                        android:text="00.00.2000" />
+                        android:textSize="15dp" />
 
 
                 </LinearLayout>
@@ -65,21 +67,23 @@
                 android:id="@+id/titleTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textSize="25sp"
                 android:layout_marginBottom="10dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="titlu"
                 android:textColor="@color/black"
-                android:text="titlu" />
+                android:textSize="25sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/startTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textColor="@color/black"
                 android:layout_marginBottom="5dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="Plecare"
+                android:textColor="@color/black"
                 android:textSize="17sp"
-                android:text="Plecare" />
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -93,6 +97,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:fontFamily="@font/roboto_medium"
                     android:textStyle="bold" />
 
 
@@ -111,14 +116,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textStyle="bold"
-                    android:text="Punct start:" />
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="Punct start:"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/departureTimeTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:fontFamily="@font/roboto_medium" />
 
             </LinearLayout>
 
@@ -126,11 +133,12 @@
                 android:id="@+id/effortTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textColor="@color/black"
                 android:layout_marginBottom="5dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="Efort aproximativ"
+                android:textColor="@color/black"
                 android:textSize="17sp"
-                android:text="Efort aproximativ" />
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -144,6 +152,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:fontFamily="@font/roboto_medium"
                     android:text="~km" />
 
                 <TextView
@@ -151,6 +160,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:fontFamily="@font/roboto_medium"
                     android:text="~h" />
             </LinearLayout>
 
@@ -158,11 +168,12 @@
                 android:id="@+id/ridersHeaderTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textColor="@color/black"
                 android:layout_marginBottom="5dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="Număr de participanți"
+                android:textColor="@color/black"
                 android:textSize="17sp"
-                android:text="Număr de participanți" />
+                android:textStyle="bold" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -175,6 +186,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:fontFamily="@font/roboto_medium"
                     android:text="TextView" />
 
 
@@ -184,20 +196,22 @@
                 android:id="@+id/contentHeaderTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textColor="@color/black"
                 android:layout_marginBottom="5dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="Detalii"
+                android:textColor="@color/black"
                 android:textSize="17sp"
-                android:text="Detalii" />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/contentTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
-                android:textColor="@color/black"
                 android:background="@drawable/custom_linear_layout"
-                android:text="content" />
+                android:fontFamily="@font/roboto_medium"
+                android:text="content"
+                android:textColor="@color/black" />
             <Button
                 android:id="@+id/joinButton"
                 android:layout_width="200dp"

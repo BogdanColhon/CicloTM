@@ -16,6 +16,7 @@
             android:layout_width="500dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:fontFamily="@font/roboto_medium"
             android:gravity="center"
             android:text="Raport furt"
             android:textColor="@color/black"
@@ -36,6 +37,7 @@
                 android:id="@+id/generalsTitleTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
                 android:text="Info general"
                 android:textColor="@color/black"
                 android:textSize="20dp"
@@ -45,8 +47,9 @@
                 android:id="@+id/dateReportTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="data furtului"
                 android:background="@null"
+                android:fontFamily="@font/roboto_medium"
+                android:hint="data furtului"
                 android:textSize="@dimen/report_text_size" />
 
             <EditText
@@ -54,6 +57,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
+                android:fontFamily="@font/roboto_medium"
                 android:hint="adresa"
                 android:textSize="@dimen/report_text_size" />
 
@@ -66,8 +70,9 @@
                 android:id="@+id/photoLocationTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="Poză locație (opțional)" />
+                android:fontFamily="@font/roboto_medium"
+                android:text="Poză locație (opțional)"
+                android:textColor="@color/black" />
 
             <ImageView
                 android:id="@+id/locationReportImageView"
@@ -91,6 +96,7 @@
                 android:id="@+id/bikeInfoTitleTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
                 android:text="Info bicicletă"
                 android:textColor="@color/black"
                 android:textSize="20dp"
@@ -100,8 +106,9 @@
                 android:id="@+id/brandReportEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="marca"
                 android:background="@null"
+                android:fontFamily="@font/roboto_medium"
+                android:hint="marca"
                 android:textSize="@dimen/report_text_size" />
 
             <LinearLayout
@@ -116,6 +123,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
+                    android:fontFamily="@font/roboto_medium"
                     android:hint="culoare"
                     android:textSize="@dimen/report_text_size" />
 
@@ -132,9 +140,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@null"
-                android:textSize="@dimen/report_text_size"
+                android:fontFamily="@font/roboto_medium"
+                android:hint="descriere.."
                 android:inputType="textMultiLine"
-                android:hint="descriere.." />
+                android:textSize="@dimen/report_text_size" />
 
             <Space
                 android:layout_width="match_parent"
@@ -144,8 +153,9 @@
                 android:id="@+id/photoBikeTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="Poză bicicletă (opțional)" />
+                android:fontFamily="@font/roboto_medium"
+                android:text="Poză bicicletă (opțional)"
+                android:textColor="@color/black" />
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -174,6 +184,7 @@
                 android:id="@+id/thiefInfoTitleTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
                 android:text="Info hoț"
                 android:textColor="@color/black"
                 android:textSize="20dp"
@@ -183,9 +194,10 @@
                 android:id="@+id/thiefDescriptionReportEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@null"
+                android:fontFamily="@font/roboto_medium"
                 android:hint="descriere.."
                 android:inputType="textMultiLine"
-                android:background="@null"
                 android:textSize="@dimen/report_text_size" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton

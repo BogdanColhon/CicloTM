@@ -48,6 +48,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
                     android:gravity="center"
                     android:text="Distanța"
                     android:textSize="25sp"></TextView>
@@ -56,6 +57,7 @@
                     android:id="@+id/distanceTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
                     android:gravity="center"
                     android:text="0.0 km"
                     android:textSize="20sp"
@@ -71,6 +73,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
                     android:gravity="center"
                     android:text="Viteza"
                     android:textSize="25sp"></TextView>
@@ -79,6 +82,7 @@
                     android:id="@+id/speedTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
                     android:gravity="center"
                     android:text="0.0 km/h"
                     android:textSize="20sp"
@@ -94,6 +98,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
                     android:gravity="center"
                     android:text="Timp"
                     android:textSize="25sp"></TextView>
@@ -102,6 +107,7 @@
                     android:id="@+id/recordElapsedTimeTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
                     android:gravity="center"
                     android:text="0:00:00"
                     android:textSize="20sp"
@@ -150,6 +156,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:fontFamily="@font/roboto_medium"
                     android:text="Start"
                     android:textSize="30sp"
                     android:textStyle="bold"></TextView>
@@ -177,6 +184,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:fontFamily="@font/roboto_medium"
                     android:text="Finish"
                     android:textSize="30sp"
                     android:textStyle="bold"></TextView>

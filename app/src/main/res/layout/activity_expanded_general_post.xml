@@ -42,6 +42,7 @@
                         android:id="@+id/upperTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
                         android:singleLine="true"
                         android:textColor="#222222"
                         android:textSize="20dp" />
@@ -50,6 +51,7 @@
                         android:id="@+id/lowerTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
                         android:textColor="@color/black"
                         android:textSize="15dp" />
 
@@ -63,6 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
+                android:fontFamily="@font/roboto_medium"
                 android:text="―"
                 android:textSize="23sp"
                 android:textStyle="bold" />
@@ -71,6 +74,7 @@
                 android:id="@+id/contentTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
                 android:text="―"
                 android:textSize="18sp" />
 
@@ -121,6 +125,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toStartOf="@+id/expandedGeneralPostSendImageView"
+                android:fontFamily="@font/roboto_medium"
                 android:hint="Adaugă comentariu..."
                 android:inputType="textMultiLine|text"
                 android:padding="10dp"

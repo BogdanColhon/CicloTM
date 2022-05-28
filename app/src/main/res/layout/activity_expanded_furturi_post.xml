@@ -45,6 +45,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="5dp"
+                        android:fontFamily="@font/roboto_medium"
                         android:singleLine="true"
                         android:text="username"
                         android:textColor="@color/black"
@@ -54,6 +55,7 @@
                         android:id="@+id/lowerTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
                         android:text="00.00.2000"
                         android:textColor="@color/black"
                         android:textSize="15dp" />
@@ -71,10 +73,12 @@
                 android:padding="20dp"
                 android:layout_marginBottom="20dp"
                 android:orientation="vertical">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="15dp"
+                    android:fontFamily="@font/roboto_medium"
                     android:text="General"
                     android:textAllCaps="true"
                     android:textColor="@color/black"
@@ -91,16 +95,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="5dp"
+                        android:fontFamily="@font/roboto_medium"
                         android:text="Data furtului: "
-                        android:textSize="@dimen/expanded_report_description"
-                        />
+                        android:textSize="@dimen/expanded_report_description" />
 
                     <TextView
                         android:id="@+id/theftDateTextView"
                         android:layout_width="wrap_content"
-                        android:textSize="@dimen/expanded_report_content"
                         android:layout_height="wrap_content"
-                        android:textStyle="bold"/>
+                        android:fontFamily="@font/roboto_medium"
+                        android:textSize="@dimen/expanded_report_content"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
                 <LinearLayout
@@ -113,16 +118,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="5dp"
+                        android:fontFamily="@font/roboto_medium"
                         android:text="Locul: "
-                        android:textSize="@dimen/expanded_report_description"
-                        />
+                        android:textSize="@dimen/expanded_report_description" />
 
                     <TextView
                         android:id="@+id/theftAddressTextView"
                         android:layout_width="wrap_content"
-                        android:textStyle="bold"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
                         android:textSize="@dimen/expanded_report_content"
-                        android:layout_height="wrap_content" />
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
@@ -149,6 +155,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="15dp"
+                    android:fontFamily="@font/roboto_medium"
                     android:text="Bicicletă"
                     android:textAllCaps="true"
                     android:textColor="@color/black"
@@ -165,16 +172,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="5dp"
+                        android:fontFamily="@font/roboto_medium"
                         android:text="Marca: "
-                        android:textSize="@dimen/expanded_report_description"
-                        />
+                        android:textSize="@dimen/expanded_report_description" />
 
                     <TextView
                         android:id="@+id/theftBikeBrandTextView"
                         android:layout_width="wrap_content"
-                        android:textStyle="bold"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
                         android:textSize="@dimen/expanded_report_content"
-                        android:layout_height="wrap_content" />
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -187,16 +195,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="5dp"
+                        android:fontFamily="@font/roboto_medium"
                         android:text="Model: "
-                        android:textSize="@dimen/expanded_report_description"
-                        />
+                        android:textSize="@dimen/expanded_report_description" />
 
                     <TextView
                         android:id="@+id/theftBikeModelTextView"
                         android:layout_width="wrap_content"
-                        android:textStyle="bold"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
                         android:textSize="@dimen/expanded_report_content"
-                        android:layout_height="wrap_content" />
+                        android:textStyle="bold" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -208,16 +217,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="5dp"
+                        android:fontFamily="@font/roboto_medium"
                         android:text="Tip: "
-                        android:textSize="@dimen/expanded_report_description"
-                        />
+                        android:textSize="@dimen/expanded_report_description" />
 
                     <TextView
                         android:id="@+id/theftBikeTypeTextView"
                         android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
                         android:textSize="@dimen/expanded_report_content"
-                        android:textStyle="bold"
-                        android:layout_height="wrap_content" />
+                        android:textStyle="bold" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -229,15 +239,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="5dp"
-                        android:textSize="@dimen/expanded_report_description"
-                        android:text="Culoare: " />
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="Culoare: "
+                        android:textSize="@dimen/expanded_report_description" />
 
                     <TextView
                         android:id="@+id/theftBikeColorTextView"
                         android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
                         android:textSize="@dimen/expanded_report_content"
-                        android:textStyle="bold"
-                        android:layout_height="wrap_content" />
+                        android:textStyle="bold" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -249,16 +261,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="5dp"
+                        android:fontFamily="@font/roboto_medium"
                         android:text="Descriere: "
-                        android:textSize="@dimen/expanded_report_description"
-                        />
+                        android:textSize="@dimen/expanded_report_description" />
 
                     <TextView
                         android:id="@+id/theftBikeDescriptionTextView"
                         android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
                         android:textSize="@dimen/expanded_report_content"
-                        android:textStyle="bold"
-                        android:layout_height="wrap_content" />
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <ImageView
@@ -278,10 +291,12 @@
                 android:background="@drawable/custom_linear_layout_expanded_theft"
                 android:padding="20dp"
                 android:orientation="vertical">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="15dp"
+                    android:fontFamily="@font/roboto_medium"
                     android:text="Hoț"
                     android:textAllCaps="true"
                     android:textColor="@color/black"
@@ -298,16 +313,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="5dp"
+                        android:fontFamily="@font/roboto_medium"
                         android:text="Descriere: "
-                        android:textSize="@dimen/expanded_report_description"
-                        />
+                        android:textSize="@dimen/expanded_report_description" />
 
                     <TextView
                         android:id="@+id/thiefDescriptionTextView"
                         android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
                         android:textSize="@dimen/expanded_report_content"
-                        android:textStyle="bold"
-                        android:layout_height="wrap_content" />
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 

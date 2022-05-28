@@ -40,6 +40,7 @@
                     android:id="@+id/routeUpperTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
                     android:singleLine="true"
                     android:text="Nume utilizator"
                     android:textColor="#3A3A3A"
@@ -50,6 +51,7 @@
                     android:id="@+id/routeLowerTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
                     android:singleLine="true"
                     android:text="data"
                     android:textColor="#3A3A3A"
@@ -144,8 +146,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:fontFamily="@font/roboto_medium"
                         android:gravity="center"
-                        android:text="Adaugă poze"/>
+                        android:text="Adaugă poze" />
 
                 </LinearLayout>
 
@@ -168,6 +171,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
                         android:gravity="center"
                         android:text="Timp"
                         android:textColor="@color/black"
@@ -177,6 +181,7 @@
                         android:id="@+id/routeElapsedTimeTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
                         android:gravity="center"
                         android:text="00:00:00"
                         android:textSize="20sp"
@@ -192,6 +197,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
                         android:gravity="center"
                         android:text="Distanța"
                         android:textColor="@color/black"
@@ -201,6 +207,7 @@
                         android:id="@+id/routeDistanceTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
                         android:gravity="center"
                         android:text="0.0 km"
                         android:textColor="@color/green"
@@ -225,15 +232,17 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
                         android:gravity="center"
-                        android:textColor="@color/black"
                         android:text="Viteza medie"
+                        android:textColor="@color/black"
                         android:textSize="20sp"></TextView>
 
                     <TextView
                         android:id="@+id/routeAvgSpeedTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
                         android:gravity="center"
                         android:text="0.0 km/h"
                         android:textSize="18sp"
@@ -249,15 +258,17 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
                         android:gravity="center"
-                        android:textColor="@color/black"
                         android:text="Viteza maximă"
+                        android:textColor="@color/black"
                         android:textSize="20sp"></TextView>
 
                     <TextView
                         android:id="@+id/routeMaxSpeedTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
                         android:gravity="center"
                         android:text="0.0 km/h"
                         android:textSize="18sp"

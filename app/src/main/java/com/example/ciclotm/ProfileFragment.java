@@ -13,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,14 +20,13 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Space;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.example.ciclotm.Models.Photo;
-import com.example.ciclotm.Models.Route;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -38,7 +36,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -241,17 +238,16 @@ public class ProfileFragment extends Fragment {
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Photo photo = dataSnapshot.getValue(Photo.class);
                 if (photo.getPhotoUrl() != null) {
-                    gallery_links.add( photo.getPhotoUrl());
+                    gallery_links.add(photo.getPhotoUrl());
                     if (i < 3)
-                        Picasso.get().load(photo.getPhotoUrl()).resize(300, 300).centerCrop().into(gallery.get(i));
-                    if(i == 3)
-                    {
+                        Glide.with(getContext()).load(photo.getPhotoUrl()).into(gallery.get(i));
+                    if (i == 3) {
                         seeGalleryLayout.setVisibility(View.GONE);
                         imageView1.setForeground(dr);
                         imageView4.setVisibility(View.VISIBLE);
                         text.setVisibility(View.VISIBLE);
                         space.setVisibility(View.VISIBLE);
-                        Picasso.get().load(photo.getPhotoUrl()).resize(300, 300).centerCrop().into(gallery.get(i));
+                        Glide.with(getContext()).load(photo.getPhotoUrl()).into(gallery.get(i));
                     }
                     i++;
                     hasPhotos = true;
@@ -329,10 +325,9 @@ public class ProfileFragment extends Fragment {
     }
 
 
-
     public void getUserProfilePhoto(String profileImageUrl) throws IOException {
         if (!profileImageUrl.equals("")) {
-            Picasso.get().load(profileImageUrl).fit().centerInside().into(userProfileImageView);
+            Glide.with(getContext()).load(profileImageUrl).into(userProfileImageView);
         }
     }
 

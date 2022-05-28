@@ -34,10 +34,11 @@
                 <TextView
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
+                    android:fontFamily="@font/roboto_medium"
+                    android:gravity="center"
                     android:text="Groapă"
                     android:textSize="20sp"
-                    android:gravity="center"></TextView>
+                    android:textStyle="bold"></TextView>
             </LinearLayout>
 
             <LinearLayout
@@ -54,10 +55,11 @@
                 <TextView
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
+                    android:fontFamily="@font/roboto_medium"
+                    android:gravity="center"
                     android:text="Cioburi"
                     android:textSize="20sp"
-                    android:gravity="center"></TextView>
+                    android:textStyle="bold"></TextView>
             </LinearLayout>
         </LinearLayout>
 
@@ -81,10 +83,11 @@
                 <TextView
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
+                    android:fontFamily="@font/roboto_medium"
+                    android:gravity="center"
                     android:text="Gheață"
                     android:textSize="20sp"
-                    android:gravity="center"></TextView>
+                    android:textStyle="bold"></TextView>
             </LinearLayout>
 
             <LinearLayout
@@ -101,10 +104,11 @@
                 <TextView
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
+                    android:fontFamily="@font/roboto_medium"
+                    android:gravity="center"
                     android:text="Lucrări"
                     android:textSize="20sp"
-                    android:gravity="center"></TextView>
+                    android:textStyle="bold"></TextView>
             </LinearLayout>
         </LinearLayout>
 
@@ -129,10 +133,11 @@
                 <TextView
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
+                    android:fontFamily="@font/roboto_medium"
+                    android:gravity="center"
                     android:text="Accident"
                     android:textSize="20sp"
-                    android:gravity="center"></TextView>
+                    android:textStyle="bold"></TextView>
             </LinearLayout>
 
         </LinearLayout>

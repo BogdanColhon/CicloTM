@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ciclotm.Admin.adminFurturiRecyclerViewAdapter;
 import com.example.ciclotm.Models.Report;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -31,12 +32,15 @@ import java.util.ArrayList;
  * Use the {@link FurturiFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FurturiFragment extends Fragment implements furturiRecycleViewAdapter.OnPostListener  {
+public class FurturiFragment extends Fragment implements furturiRecycleViewAdapter.OnPostListener, adminFurturiRecyclerViewAdapter.OnPostListener {
     private ArrayList<Report> postsList = new ArrayList<>();
     TextView furturiPostsNumberTextView;
     TextView statsClickableTextView;
     private RecyclerView recyclerView;
+
     furturiRecycleViewAdapter adapter;
+    adminFurturiRecyclerViewAdapter adminAdapter;
+
     RecyclerView.LayoutManager layoutManager;
     private DatabaseReference reference;
 
@@ -88,8 +92,14 @@ public class FurturiFragment extends Fragment implements furturiRecycleViewAdapt
         statsClickableTextView = (TextView) view.findViewById(R.id.furturiStatsClickableTextView);
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new furturiRecycleViewAdapter(getContext(), postsList,this);
-        recyclerView.setAdapter(adapter);
+
+        adapter = new furturiRecycleViewAdapter(getContext(), postsList, this);
+        adminAdapter = new adminFurturiRecyclerViewAdapter(getContext(), postsList, this);
+
+        if (MainActivity.role.equals("0"))
+            recyclerView.setAdapter(adapter);
+        else
+            recyclerView.setAdapter(adminAdapter);
 
         statsClickableTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,6 +120,7 @@ public class FurturiFragment extends Fragment implements furturiRecycleViewAdapt
         handler.postDelayed(refresh, 100);
         return view;
     }
+
     private void fetchPostsInfo() {
         reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("furturiPosts");
         reference.addChildEventListener(new ChildEventListener() {
@@ -117,7 +128,10 @@ public class FurturiFragment extends Fragment implements furturiRecycleViewAdapt
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Report newPost = snapshot.getValue(Report.class);
                 postsList.add(0, newPost);
-                adapter.notifyDataSetChanged();
+                if (MainActivity.role.equals("0"))
+                    adapter.notifyDataSetChanged();
+                else
+                    adminAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -143,16 +157,40 @@ public class FurturiFragment extends Fragment implements furturiRecycleViewAdapt
     }
 
     private void fetchPostsNumber() {
-        furturiPostsNumberTextView.setText(String.valueOf(furturiRecycleViewAdapter.furturiPostsCount));
+        if (MainActivity.role.equals("0"))
+            furturiPostsNumberTextView.setText(String.valueOf(furturiRecycleViewAdapter.furturiPostsCount));
+        else
+            furturiPostsNumberTextView.setText(String.valueOf(adminFurturiRecyclerViewAdapter.furturiPostsCount));
     }
 
     @Override
     public void onPostClick(int position) {
         Intent intent = new Intent(getContext(), ExpandedFurturiPostActivity.class);
         intent.putExtra("clicked_report", postsList.get(position));
-        System.out.println(postsList.get(position).getUser_id());
         startActivity(intent);
     }
 
 
+    @Override
+    public void onPostFurturiClick(int position) {
+        Intent intent = new Intent(getContext(), ExpandedFurturiPostActivity.class);
+        intent.putExtra("clicked_report", postsList.get(position));
+        startActivity(intent);
+    }
+
+    @Override
+    public void OnDeleteFurturiClick(int position) {removeFurturiItem(position);
+
+    }
+    public void removeFurturiItem(int position) {
+        System.out.println("Removed position: " + position);
+        DatabaseReference PostReference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference()
+                .child("furturiPosts").child(String.valueOf(postsList.get(position).getPublishDate()));
+        PostReference.removeValue();
+        DatabaseReference LocalPostsReference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference()
+                .child("Users").child(postsList.get(position).getUser_id()).child("Furturi").child(String.valueOf(postsList.get(position).getPublishDate()));
+        LocalPostsReference.removeValue();
+        postsList.remove(position);
+        adminAdapter.notifyItemRemoved(position);
+    }
 }

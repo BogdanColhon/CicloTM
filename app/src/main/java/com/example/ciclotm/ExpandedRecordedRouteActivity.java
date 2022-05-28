@@ -1,11 +1,5 @@
 package com.example.ciclotm;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +17,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import com.bumptech.glide.Glide;
 import com.example.ciclotm.Models.Location;
 import com.example.ciclotm.Models.Photo;
 import com.example.ciclotm.Models.Route;
@@ -38,11 +39,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -53,13 +51,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -162,7 +158,7 @@ public class ExpandedRecordedRouteActivity extends AppCompatActivity {
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Photo photo = dataSnapshot.getValue(Photo.class);
                 if (photo.getPhotoUrl() != null) {
-                    if(fetched == false) {
+                    if (fetched == false) {
                         if (i == 2) {
                             addPhotosLayout.setVisibility(View.GONE);
                             imageView4.setVisibility(View.VISIBLE);
@@ -170,7 +166,7 @@ public class ExpandedRecordedRouteActivity extends AppCompatActivity {
                         System.out.println(photo.getPhotoUrl() + "\n");
                         gallery_links.add(0, photo.getPhotoUrl());
                         i++;
-                        Picasso.get().load(photo.getPhotoUrl()).resize(300, 300).centerCrop().into(gallery.get(i));
+                        Glide.with(getApplicationContext()).load(photo.getPhotoUrl()).into(gallery.get(i));
 
                     }
 
@@ -251,14 +247,13 @@ public class ExpandedRecordedRouteActivity extends AppCompatActivity {
 
     public void getUserProfilePhoto(String profileImageUrl) throws IOException {
         if (!profileImageUrl.equals("")) {
-            Picasso.get().load(profileImageUrl).fit().centerInside().into(userImage);
+            Glide.with(this).load(profileImageUrl).into(userImage);
         }
     }
 
     private void setMapLayout() {
 
         System.out.println(expandedRoutePoints.size());
-
 
 
         mapView.getMapAsync(new OnMapReadyCallback() {
@@ -391,14 +386,14 @@ public class ExpandedRecordedRouteActivity extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(Uri uri) {
                                         Photo photo = new Photo(openedRoute.getPublishDate(), uri.toString());
-                                         FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users").child(userID).child("routePosts").child(String.valueOf(openedRoute.getPublishDate())).child("Photos").child("Photo" + i).setValue(photo)
+                                        FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users").child(userID).child("routePosts").child(String.valueOf(openedRoute.getPublishDate())).child("Photos").child("Photo" + i).setValue(photo)
                                                 .addOnSuccessListener(new OnSuccessListener() {
-                                                   @Override
-                                                   public void onSuccess(Object o) {
+                                                    @Override
+                                                    public void onSuccess(Object o) {
 
-                                                      }
-                                                  });
-                                        FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users").child(userID).child("Gallery").child(String.valueOf(openedRoute.getPublishDate())+i)
+                                                    }
+                                                });
+                                        FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users").child(userID).child("Gallery").child(String.valueOf(openedRoute.getPublishDate()) + i)
                                                 .setValue(photo);
 
                                     }
@@ -421,7 +416,8 @@ public class ExpandedRecordedRouteActivity extends AppCompatActivity {
                 fetched = true;
                 System.out.println(contentUriAux.size());
                 for (int k = 0; k < contentUriAux.size(); k++) {
-                    uploadPhotos(contentUriAux.get(k),fAux.get(k));
+                    uploadPhotos(contentUriAux.get(k), fAux.get(k));
+                    Toast.makeText(ExpandedRecordedRouteActivity.this,"Imagine adaugată",Toast.LENGTH_SHORT).show();
                     i++;
                 }
 

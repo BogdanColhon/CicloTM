@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference reference;
     private User userProfile;
     private String email;
-    private String role;
+    public static String role;
 
     SharedPreferences sharedPreferences;
     public static final String fileName = "credentials";
@@ -59,11 +59,13 @@ public class MainActivity extends AppCompatActivity {
         if (check_email != null) {
             System.out.println(check_role);
             if(check_role.equals("0")) {
+                role = "0";
                 Intent intent = new Intent(MainActivity.this, MenuActivity.class);
                 startActivity((intent));
                 finish();
             }
             if(check_role.equals("1")) {
+                role = "1";
                 Intent intent = new Intent(MainActivity.this, AdminMenuActivity2.class);
                 startActivity((intent));
                 finish();

@@ -14,7 +14,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +30,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.example.ciclotm.Models.LiveEventsMarker;
 import com.example.ciclotm.Services.TrackingService;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -57,7 +57,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -86,6 +85,7 @@ public class RecordFragment extends Fragment {
     private LocationManager locationManager;
     private FusedLocationProviderClient client;
     private DatabaseReference reference;
+    private static Context context;
 
     private MapView mapView;
     public static GoogleMap map;
@@ -112,6 +112,7 @@ public class RecordFragment extends Fragment {
 
     public static boolean shouldRefreshOnResume = false;
     public static boolean isFirst = true;
+    private boolean firstEvent = true;
     static int i = 0;
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
@@ -159,7 +160,7 @@ public class RecordFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_record, container, false);
-
+        context = getContext();
         terminator = this;
         elapsedTime = view.findViewById(R.id.recordElapsedTimeTextView);
         distanceText = view.findViewById(R.id.distanceTV);
@@ -173,7 +174,6 @@ public class RecordFragment extends Fragment {
         addLiveEventButton = view.findViewById(R.id.liveEventAddFloatingButton);
         mapView = view.findViewById(R.id.recordMapView);
         mapView.onCreate(savedInstanceState);
-
 
 
         rfNavBar = getActivity().findViewById(R.id.bottomNavigationView);
@@ -247,7 +247,6 @@ public class RecordFragment extends Fragment {
         addLiveEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendCommandToService(Constants.ACTION_PAUSE_SERVICE);
                 newMarkerPosition = new LatLng(routePoints.get(routePoints.size() - 1).getLatitude(), routePoints.get(routePoints.size() - 1).getLongitude());
                 if (newMarkerPosition != null) {
 
@@ -335,7 +334,7 @@ public class RecordFragment extends Fragment {
         final TextView dialogDate = dialog2.findViewById(R.id.liveEventDialogDescriptionDateImageView);
         final EditText dialogDescriptionEditText = dialog2.findViewById(R.id.liveEventDialogDescriptionEditText);
         final Button dialogPostButton = dialog2.findViewById(R.id.liveEventDialogDescriptionPostButton);
-        Picasso.get().load(drawable).into(icon);
+        Glide.with(getContext()).load(drawable).into(icon);
         dialogType.setText(type);
         Date currentTime = Calendar.getInstance().getTime();
         Date expiringTime = new Date();
@@ -354,7 +353,6 @@ public class RecordFragment extends Fragment {
                         if (task.isSuccessful()) {
                             dialog.dismiss();
                             dialog2.dismiss();
-                            sendCommandToService(Constants.ACTION_START_OR_RESUME_SERVICE);
                         }
                     }
                 });
@@ -364,76 +362,59 @@ public class RecordFragment extends Fragment {
     }
 
     public static void checkProximityLiveEvents(LatLng currentPoint) {
-        alertDialog.setContentView(R.layout.live_event_dialog);
-        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        String text;
+        int type = 0;
         for (i = 0; i < liveEventsMarker.size(); i++) {
-
             if (TrackingService.DistanceCalculation(currentPoint.latitude, currentPoint.longitude, liveEventsMarker.get(i).getLat(), liveEventsMarker.get(i).getLng()) <= 0.05) {
                 LiveEventsMarker liveEvent = liveEventsMarker.get(i);
-                if (!alertDialog.isShowing()) {
-
-                    ImageView image = alertDialog.findViewById(R.id.liveEventDialogImageView);
-                    TextView title = alertDialog.findViewById(R.id.liveEventDialogTitle);
-                    TextView positive = alertDialog.findViewById(R.id.liveEventDialogPositive);
-                    TextView negative = alertDialog.findViewById(R.id.liveEventDialogNegative);
-                    if (liveEvent.getType().equals("Groapă")) {
-                        Picasso.get().load(R.drawable.ground_hole_marker_2).into(image);
-                    }
-                    if (liveEvent.getType().equals("Gheață")) {
-                        Picasso.get().load(R.drawable.snowflake_2).into(image);
-                    }
-                    if (liveEvent.getType().equals("Cioburi")) {
-                        Picasso.get().load(R.drawable.broken_bottle_2).into(image);
-                    }
-                    if (liveEvent.getType().equals("Lucrări")) {
-                        Picasso.get().load(R.drawable.road_work_marker_4).into(image);
-                    }
-                    if (liveEvent.getType().equals("Accident")) {
-                        Picasso.get().load(R.drawable.accident_marker_3).into(image);
-                    }
-                    title.setText(liveEvent.getType() + " în apropiere");
-                    //alertDialog.setMessage("Atenție! "+ liveEvent.getType()+" în apropierea dumneavoastră. \n Confirmați evenimentul?");
-                    positive.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            changeExpiringTime(liveEvent);
-                            liveEventsMarker.remove(liveEvent);
-                            alertDialog.dismiss();
-                        }
-                    });
-                    negative.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            updateEventStatus(liveEvent);
-                            liveEventsMarker.remove(liveEvent);
-                            alertDialog.dismiss();
-                        }
-                    });
-
-                    alertDialog.show();
-
-                    // Hide after some seconds
-                    final Handler handler = new Handler();
-                    final Runnable runnable = new Runnable() {
-                        @Override
-                        public void run() {
-                            if (alertDialog.isShowing()) {
-                                alertDialog.dismiss();
-                            }
-                        }
-                    };
-
-                    alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                            handler.removeCallbacks(runnable);
-                        }
-                    });
-
-                    handler.postDelayed(runnable, 15000);
+                text = liveEvent.getType() + " în apropiere";
+                switch (liveEvent.getType()) {
+                    case "Groapă":
+                        type = R.drawable.ground_hole_marker_2;
+                        break;
+                    case "Gheață":
+                        type = R.drawable.snowflake_2;
+                        break;
+                    case "Cioburi":
+                        type = R.drawable.broken_bottle_2;
+                        break;
+                    case "Lucrări":
+                        type = R.drawable.road_work_marker_4;
+                        break;
+                    case "Accident":
+                        type = R.drawable.accident_marker_3;
+                        break;
                 }
+
+                alertDialog.setContentView(R.layout.live_event_dialog);
+                ImageView image = alertDialog.findViewById(R.id.liveEventDialogImageView);
+                TextView title = alertDialog.findViewById(R.id.liveEventDialogTitle);
+                TextView positive = alertDialog.findViewById(R.id.liveEventDialogPositive);
+                TextView negative = alertDialog.findViewById(R.id.liveEventDialogNegative);
+
+                title.setText(text);
+                Glide.with(context).load(type).into(image);
+                positive.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        changeExpiringTime(liveEvent);
+                        liveEventsMarker.remove(liveEvent);
+                        alertDialog.dismiss();
+                    }
+                });
+                negative.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        updateEventStatus(liveEvent);
+                        liveEventsMarker.remove(liveEvent);
+                        alertDialog.dismiss();
+                    }
+                });
+
+                alertDialog.show();
             }
         }
+
     }
 
     public static void changeExpiringTime(LiveEventsMarker liveEvent) {
@@ -538,60 +519,66 @@ public class RecordFragment extends Fragment {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 LiveEventsMarker newMarker = snapshot.getValue(LiveEventsMarker.class);
-                LatLng latLng = new LatLng(newMarker.getLat(), newMarker.getLng());
-                liveEventsMarker.add(newMarker);
+                if (newMarker != null) {
+                    LatLng latLng = new LatLng(newMarker.getLat(), newMarker.getLng());
 
-                if (String.valueOf(newMarker.getType()).equals("Groapă")) {
-                    Marker marker = map.addMarker(new MarkerOptions()
-                            .position(latLng)
-                            .title(newMarker.getTitle())
-                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ground_hole_marker_2)));
-                }
-                if (String.valueOf(newMarker.getType()).equals("Gheață")) {
-                    Marker marker = map.addMarker(new MarkerOptions()
-                            .position(latLng)
-                            .title(newMarker.getTitle())
-                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.snowflake_2)));
-                }
-                if (String.valueOf(newMarker.getType()).equals("Cioburi")) {
-                    Marker marker = map.addMarker(new MarkerOptions()
-                            .position(latLng)
-                            .title(newMarker.getTitle())
-                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.broken_bottle_2)));
-                }
-                if (String.valueOf(newMarker.getType()).equals("Lucrări")) {
-                    Marker marker = map.addMarker(new MarkerOptions()
-                            .position(latLng)
-                            .title(newMarker.getTitle())
-                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.road_work_marker_4)));
-                }
-                if (String.valueOf(newMarker.getType()).equals("Accident")) {
-                    Marker marker = map.addMarker(new MarkerOptions()
-                            .position(latLng)
-                            .title(newMarker.getTitle())
-                            .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.accident_marker_3)));
-                }
+                    Date currentTime = Calendar.getInstance().getTime();
+                    if (newMarker.getExpiringDate().after(currentTime)) {
+                        liveEventsMarker.add(newMarker);
 
-                map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-                    @Nullable
-                    @Override
-                    public View getInfoContents(@NonNull Marker marker) {
-                        View v = getLayoutInflater().inflate(R.layout.live_events_marker_info, null);
-                        TextView t1 = (TextView) v.findViewById(R.id.liveEventsMarkerInfoTitleTextView);
-                        TextView t2 = (TextView) v.findViewById(R.id.liveEventsMarkerInfoTimeTextView);
-                        TextView t3 = (TextView) v.findViewById(R.id.liveEventsMarkerContentTextView);
-                        t1.setText(newMarker.getTitle());
-                        t2.setText(newMarker.getPublishDate().toString());
-                        t3.setText(newMarker.getDescription());
-                        return v;
+                        if (String.valueOf(newMarker.getType()).equals("Groapă")) {
+                            Marker marker = map.addMarker(new MarkerOptions()
+                                    .position(latLng)
+                                    .title(newMarker.getTitle())
+                                    .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ground_hole_marker_2)));
+                        }
+                        if (String.valueOf(newMarker.getType()).equals("Gheață")) {
+                            Marker marker = map.addMarker(new MarkerOptions()
+                                    .position(latLng)
+                                    .title(newMarker.getTitle())
+                                    .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.snowflake_2)));
+                        }
+                        if (String.valueOf(newMarker.getType()).equals("Cioburi")) {
+                            Marker marker = map.addMarker(new MarkerOptions()
+                                    .position(latLng)
+                                    .title(newMarker.getTitle())
+                                    .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.broken_bottle_2)));
+                        }
+                        if (String.valueOf(newMarker.getType()).equals("Lucrări")) {
+                            Marker marker = map.addMarker(new MarkerOptions()
+                                    .position(latLng)
+                                    .title(newMarker.getTitle())
+                                    .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.road_work_marker_4)));
+                        }
+                        if (String.valueOf(newMarker.getType()).equals("Accident")) {
+                            Marker marker = map.addMarker(new MarkerOptions()
+                                    .position(latLng)
+                                    .title(newMarker.getTitle())
+                                    .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.accident_marker_3)));
+                        }
+
+                        map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                            @Nullable
+                            @Override
+                            public View getInfoContents(@NonNull Marker marker) {
+                                View v = getLayoutInflater().inflate(R.layout.live_events_marker_info, null);
+                                TextView t1 = (TextView) v.findViewById(R.id.liveEventsMarkerInfoTitleTextView);
+                                TextView t2 = (TextView) v.findViewById(R.id.liveEventsMarkerInfoTimeTextView);
+                                TextView t3 = (TextView) v.findViewById(R.id.liveEventsMarkerContentTextView);
+                                t1.setText(newMarker.getTitle());
+                                t2.setText(newMarker.getPublishDate().toString());
+                                t3.setText(newMarker.getDescription());
+                                return v;
+                            }
+
+                            @Nullable
+                            @Override
+                            public View getInfoWindow(@NonNull Marker marker) {
+                                return null;
+                            }
+                        });
                     }
-
-                    @Nullable
-                    @Override
-                    public View getInfoWindow(@NonNull Marker marker) {
-                        return null;
-                    }
-                });
+                }
 
             }
 
@@ -616,12 +603,14 @@ public class RecordFragment extends Fragment {
 
             }
         });
+
     }
 
     @Override
     public void onStart() {
         super.onStart();
         mapView.onStart();
+        System.out.println("start--------------------------------");
     }
 
     @Override
@@ -638,6 +627,7 @@ public class RecordFragment extends Fragment {
             }
 
         }
+        System.out.println("resume--------------------------------");
     }
 
     private void resetFragment() {
@@ -665,25 +655,28 @@ public class RecordFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        distanceText.setText("125-125");
+        System.out.println("detach--------------------------------");
     }
 
     @Override
     public void onPause() {
         super.onPause();
         mapView.onPause();
+        System.out.println("pause--------------------------------");
     }
 
     @Override
     public void onStop() {
         super.onStop();
         mapView.onStop();
+        System.out.println("stop--------------------------------");
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
         mapView.onLowMemory();
+        System.out.println("memory--------------------------------");
     }
 
     @Override
@@ -691,6 +684,7 @@ public class RecordFragment extends Fragment {
         super.onDestroy();
         mapView.onDestroy();
         sendCommandToService(Constants.ACTION_STOP_SERVICE);
+        System.out.println("destroy--------------------------------");
     }
 
     @Override

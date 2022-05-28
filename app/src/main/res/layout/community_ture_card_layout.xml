@@ -49,6 +49,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
                         android:singleLine="true"
                         android:text="Data: "
                         android:textColor="@color/black"
@@ -58,8 +59,9 @@
                         android:id="@+id/tureCardDateTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:text="TextView" />
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="TextView"
+                        android:textColor="@color/black" />
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/l1"
@@ -71,6 +73,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
                         android:singleLine="true"
                         android:text="Punct de plecare: "
                         android:textColor="@color/black"
@@ -80,8 +83,9 @@
                         android:id="@+id/secondMiddleTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:text="TextView" />
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="TextView"
+                        android:textColor="@color/black" />
                 </LinearLayout>
 
 
@@ -95,6 +99,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
                         android:singleLine="true"
                         android:text="Ora de plecare: "
                         android:textColor="@color/black"
@@ -104,8 +109,9 @@
                         android:id="@+id/firstMiddleTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:text="TextView" />
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="TextView"
+                        android:textColor="@color/black" />
                 </LinearLayout>
 
 
@@ -119,6 +125,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
                         android:singleLine="true"
                         android:text="Distanța: "
                         android:textColor="@color/black"
@@ -128,8 +135,9 @@
                         android:id="@+id/upperTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:text="TextView" />
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="TextView"
+                        android:textColor="@color/black" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -142,6 +150,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
                         android:singleLine="true"
                         android:text="Participanți: "
                         android:textColor="@color/black"
@@ -151,8 +160,9 @@
                         android:id="@+id/lowerTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:text="TextView" />
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="TextView"
+                        android:textColor="@color/black" />
                 </LinearLayout>
 
             </LinearLayout>

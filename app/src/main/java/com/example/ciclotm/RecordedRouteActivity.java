@@ -9,13 +9,11 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,8 +22,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.ReportFragment;
 
+import com.bumptech.glide.Glide;
 import com.example.ciclotm.Models.Photo;
 import com.example.ciclotm.Models.Route;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -51,11 +49,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.database.core.Repo;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -64,7 +60,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -221,7 +216,7 @@ public class RecordedRouteActivity extends AppCompatActivity {
 
     public void getUserProfilePhoto(String profileImageUrl) throws IOException {
         if (!profileImageUrl.equals("")) {
-            Picasso.get().load(profileImageUrl).fit().centerInside().into(userImage);
+            Glide.with(this).load(profileImageUrl).into(userImage);
         }
     }
 

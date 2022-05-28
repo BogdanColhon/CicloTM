@@ -11,10 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.ciclotm.AdminMenuActivity2;
-import com.example.ciclotm.MenuActivity;
 import com.example.ciclotm.R;
 import com.example.ciclotm.ViewPagerAdapter;
-import com.example.ciclotm.ViewPagerAdapterAdmin;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -27,7 +25,7 @@ public class AdminCommunityFragment extends Fragment {
 
     TabLayout tabLayout;
     ViewPager2 viewPager;
-    ViewPagerAdapterAdmin vpAdapter;
+    ViewPagerAdapter vpAdapter;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -72,11 +70,11 @@ public class AdminCommunityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_admin_community, container, false);
+        View view = inflater.inflate(R.layout.fragment_community, container, false);
         String[] tabTtiles = {"General", "Ture", "Furturi"};
-        tabLayout = (TabLayout) view.findViewById(R.id.tabLayout2);
-        viewPager = (ViewPager2) view.findViewById(R.id.viewPager2);
-        vpAdapter = new ViewPagerAdapterAdmin(this);
+        tabLayout = (TabLayout) view.findViewById(R.id.tabLayout);
+        viewPager = (ViewPager2) view.findViewById(R.id.viewPager);
+        vpAdapter = new ViewPagerAdapter(this);
         viewPager.setAdapter(vpAdapter);
         new TabLayoutMediator(tabLayout, viewPager,
                 new TabLayoutMediator.TabConfigurationStrategy() {

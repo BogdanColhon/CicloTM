@@ -10,8 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.ciclotm.Models.Report;
-import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class myFurturiRecyclerViewAdapter extends RecyclerView.Adapter<myFurturi
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.my_community_furturi_card_layout, viewGroup, false);
-        return  new MyViewHolder(itemView, mOnPostListener);
+        return new MyViewHolder(itemView, mOnPostListener);
     }
 
     @Override
@@ -47,8 +47,8 @@ public class myFurturiRecyclerViewAdapter extends RecyclerView.Adapter<myFurturi
         String description = postsList.get(position).getBike_model();
         holder.description.setText(description);
         String link = postsList.get(position).getBikeImageUrl();
-        if(!link.equals(""))
-            Picasso.get().load(link).resize(500,500).centerInside().into(holder.bike_photo);
+        if (!link.equals(""))
+            Glide.with(context).load(link).into(holder.bike_photo);
     }
 
 

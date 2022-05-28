@@ -2,9 +2,6 @@ package com.example.ciclotm;
 
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,15 +11,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.ciclotm.Models.Report;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Picasso;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -85,7 +77,7 @@ public class furturiRecycleViewAdapter extends RecyclerView.Adapter<furturiRecyc
         holder.description.setText(description);
         String link = postsList.get(position).getBikeImageUrl();
         if(!link.equals(""))
-        Picasso.get().load(link).resize(500,500).centerInside().into(holder.bike_photo);
+            Glide.with(context).load(link).into(holder.bike_photo);
     }
 
 

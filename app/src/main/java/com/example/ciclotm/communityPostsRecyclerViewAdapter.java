@@ -10,13 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.ciclotm.Models.Route;
-import com.squareup.picasso.Picasso;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 public class communityPostsRecyclerViewAdapter extends RecyclerView.Adapter<communityPostsRecyclerViewAdapter.MyViewHolder> {
 

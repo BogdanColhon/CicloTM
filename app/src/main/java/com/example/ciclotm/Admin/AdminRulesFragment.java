@@ -1,5 +1,6 @@
 package com.example.ciclotm.Admin;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,9 +8,16 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.GridView;
 
 import com.example.ciclotm.AdminMenuActivity2;
+import com.example.ciclotm.DotariObligatoriiActivity;
+import com.example.ciclotm.GridAdapter;
+import com.example.ciclotm.ImbunatatireaCirculatieiActivity;
 import com.example.ciclotm.R;
+import com.example.ciclotm.ReguliCirculatie.ReguliCirculatieActivity;
+import com.example.ciclotm.SemneCirculatieActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,7 +25,8 @@ import com.example.ciclotm.R;
  * create an instance of this fragment.
  */
 public class AdminRulesFragment extends Fragment {
-
+    private GridAdapter adapter;
+    private GridView gridView;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -62,7 +71,31 @@ public class AdminRulesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_admin_rules, container, false);
+        View view = inflater.inflate(R.layout.fragment_rules, container, false);
+        gridView = (GridView) view.findViewById(R.id.gridView);
+        String [] titles = {"Reguli de circulație","Semne de circulație","Echipare obligatorie","Îmbunătățirea siguranței"};
+        int[] images= {R.drawable.rules_attention_sign,R.drawable.rules_traffic_signs,R.drawable.rules_echipare_obligatorie,R.drawable.rules_improve_safety};
+        adapter = new GridAdapter(getContext(),titles,images);
+        gridView.setAdapter(adapter);
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch(position){
+                    case 0: startActivity(new Intent(getActivity(), ReguliCirculatieActivity.class));
+                        break;
+                    case 1: startActivity(new Intent(getActivity(), SemneCirculatieActivity.class));
+                        break;
+                    case 2: startActivity(new Intent(getActivity(), DotariObligatoriiActivity.class));
+                        break;
+                    case 3: startActivity(new Intent(getActivity(), ImbunatatireaCirculatieiActivity.class));
+                        break;
+
+                }
+
+            }
+        });
+        return view;
     }
 
     @Override

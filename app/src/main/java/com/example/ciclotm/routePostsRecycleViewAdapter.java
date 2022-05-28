@@ -10,9 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.ciclotm.Models.Route;
-import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,7 +27,7 @@ public class routePostsRecycleViewAdapter extends RecyclerView.Adapter<routePost
     public routePostsRecycleViewAdapter(Context context, ArrayList<Route> routeList, OnPostListener onPostListener) {
         this.context = context;
         this.routeList = routeList;
-        this.mOnPostListener=onPostListener;
+        this.mOnPostListener = onPostListener;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -60,7 +59,7 @@ public class routePostsRecycleViewAdapter extends RecyclerView.Adapter<routePost
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.route_posts_card_layout, viewGroup, false);
-        return new routePostsRecycleViewAdapter.MyViewHolder(itemView,mOnPostListener);
+        return new routePostsRecycleViewAdapter.MyViewHolder(itemView, mOnPostListener);
     }
 
     @Override
@@ -79,13 +78,14 @@ public class routePostsRecycleViewAdapter extends RecyclerView.Adapter<routePost
 
         String link = routeList.get(i).getMapImageUrl();
         if (!link.equals(""))
-            Picasso.get().load(link).resize(500, 500).centerInside().into(holder.mapImageView);
+            Glide.with(context).load(link).into(holder.mapImageView);
     }
 
     @Override
     public int getItemCount() {
         return routeList.size();
     }
+
     public interface OnPostListener {
         void onPostClick(int position);
     }

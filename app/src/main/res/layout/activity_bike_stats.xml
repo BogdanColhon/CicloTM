@@ -26,6 +26,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:fontFamily="@font/roboto_medium"
                 android:gravity="center"
                 android:text="Ture:"
                 android:textColor="@color/black"
@@ -45,8 +46,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.5"
-                android:textColor="@color/black"
-                android:text="-" />
+                android:fontFamily="@font/roboto_medium"
+                android:text="-"
+                android:textColor="@color/black" />
 
         </LinearLayout>
 
@@ -62,11 +64,13 @@
                 android:layout_height="30dp"
                 android:layout_marginEnd="5dp"
                 android:src="@drawable/fastest_ride_4"/>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Cea mai rapidă tură: "
+                android:fontFamily="@font/roboto_medium"
                 android:gravity="center"
+                android:text="Cea mai rapidă tură: "
                 android:textColor="@color/black"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -82,12 +86,13 @@
                 android:id="@+id/fastestRideTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
                 android:layout_weight="0.7"
-                android:ems="10"
                 android:background="@null"
+                android:ems="10"
+                android:fontFamily="@font/roboto_medium"
                 android:hint="-"
-                android:inputType="text" />
+                android:inputType="text"
+                android:textColor="@color/black" />
 
         </LinearLayout>
 
@@ -102,9 +107,11 @@
                 android:layout_height="30dp"
                 android:layout_marginEnd="5dp"
                 android:src="@drawable/best_effort_icon_2"/>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:fontFamily="@font/roboto_medium"
                 android:gravity="center"
                 android:text="Cea mai lungă tură: "
                 android:textColor="@color/black"
@@ -123,12 +130,13 @@
                 android:id="@+id/biggestRideTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
                 android:layout_weight="0.7"
-                android:ems="10"
                 android:background="@null"
+                android:ems="10"
+                android:fontFamily="@font/roboto_medium"
                 android:hint="-"
-                android:inputType="text" />
+                android:inputType="text"
+                android:textColor="@color/black" />
 
         </LinearLayout>
 

@@ -10,8 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -78,7 +78,7 @@ public class generalRecycleViewAdapter extends RecyclerView.Adapter<generalRecyc
         String output = df.format(date);
         holder.data.setText(output);
         String userImageUrl = postsList.get(position).getUserImageUrl();
-        Picasso.get().load(userImageUrl).fit().centerInside().into(holder.user_photo);
+        Glide.with(context).load(userImageUrl).into(holder.user_photo);
 
     }
 

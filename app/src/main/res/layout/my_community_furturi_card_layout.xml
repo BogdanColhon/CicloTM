@@ -39,23 +39,26 @@
                     android:id="@+id/upperTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
                     android:text="Data"
-                    android:textStyle="bold"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/middleTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:text="Locatie" />
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="Locatie"
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/lowerTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:text="Descriere bicicleta" />
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="Descriere bicicleta"
+                    android:textColor="@color/black" />
 
 
             </LinearLayout>
