@@ -8,6 +8,7 @@ public class Bike {
     private String Model;
     private String Weight;
     private String Year;
+    private String SerialNumber;
     private String Details;
     private String Owner;
     private String BikePhotoUrl;
@@ -16,16 +17,25 @@ public class Bike {
 
     }
 
-    public Bike(String nick_name, String type, String brand, String model, String weight, String year, String details, String owner, String bikePhotoUrl) {
+    public Bike(String nick_name, String type, String brand, String model, String weight, String year, String serialNumber, String details, String owner, String bikePhotoUrl) {
         Nick_name = nick_name;
         Type = type;
         Brand = brand;
         Model = model;
         Weight = weight;
         Year = year;
+        SerialNumber = serialNumber;
         Details = details;
         Owner = owner;
         BikePhotoUrl = bikePhotoUrl;
+    }
+
+    public String getSerialNumber() {
+        return SerialNumber;
+    }
+
+    public void setSerialNumber(String serialNumber) {
+        SerialNumber = serialNumber;
     }
 
     public String getNick_name() {

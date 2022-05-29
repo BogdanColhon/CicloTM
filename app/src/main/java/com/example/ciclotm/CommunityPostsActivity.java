@@ -176,9 +176,11 @@ public class CommunityPostsActivity extends AppCompatActivity implements mygener
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Report myFurturiPost = snapshot.getValue(Report.class);
                 if (myFurturiPost != null) {
-                    furturiLayout.setVisibility(View.VISIBLE);
-                    myFurturiPosts.add(0, myFurturiPost);
-                    furturiAdapter.notifyDataSetChanged();
+                    if (myFurturiPost.getStatus() == 0) {
+                        furturiLayout.setVisibility(View.VISIBLE);
+                        myFurturiPosts.add(0, myFurturiPost);
+                        furturiAdapter.notifyDataSetChanged();
+                    }
                 }
             }
 
@@ -213,17 +215,19 @@ public class CommunityPostsActivity extends AppCompatActivity implements mygener
 
     @Override
     public void onPostClick(int position) {
-        System.out.println("pressed item "+position);
+        System.out.println("pressed item " + position);
         Intent intent = new Intent(CommunityPostsActivity.this, ExpandedGeneralPostActivity.class);
         intent.putExtra("clicked_post", myGeneralPosts.get(position));
         startActivity(intent);
     }
+
     @Override
     public void onPostTureClick(int position) {
         Intent intent = new Intent(CommunityPostsActivity.this, ExpandedTurePostActivity.class);
         intent.putExtra("clicked_post", myTurePosts.get(position));
         startActivity(intent);
     }
+
     @Override
     public void onPostFurturiClick(int position) {
         Intent intent = new Intent(CommunityPostsActivity.this, ExpandedFurturiPostActivity.class);

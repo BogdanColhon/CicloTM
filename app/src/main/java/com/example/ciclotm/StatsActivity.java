@@ -21,9 +21,11 @@ public class StatsActivity extends AppCompatActivity {
 
     private DatabaseReference reference;
     private ArrayList<Report> postsList = new ArrayList<>();
+    private ArrayList<Report> foundList = new ArrayList<>();
     private TextView totalBikesTextView;
     private TextView topTypeTextView;
     private TextView topColorTextView;
+    private TextView totalBikesRecoveredTextView;
     private String topType;
     private String topColor;
     private int topTypeCount=0;
@@ -31,6 +33,7 @@ public class StatsActivity extends AppCompatActivity {
     private HashMap hashMapType;
     private HashMap hashMapColor;
     private int total;
+    private int foundTotal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,17 +51,24 @@ public class StatsActivity extends AppCompatActivity {
         hashMapType.put("Fat bike", 0);
 
         hashMapColor = new HashMap();
-        hashMapColor.put("Neagră", 0);
-        hashMapColor.put("Albă", 0);
+        hashMapColor.put("Alb", 0);
+        hashMapColor.put("Crem", 0);
+        hashMapColor.put("Galben", 0);
+        hashMapColor.put("Portocaliu", 0);
         hashMapColor.put("Roșie", 0);
-        hashMapColor.put("Verde", 0);
-        hashMapColor.put("Albastră", 0);
         hashMapColor.put("Roz", 0);
-        hashMapColor.put("Portocalie", 0);
-        hashMapColor.put("Galbenă", 0);
+        hashMapColor.put("Mov", 0);
+        hashMapColor.put("Verde", 0);
+        hashMapColor.put("Turcoaz", 0);
+        hashMapColor.put("Albastru", 0);
+        hashMapColor.put("Vișiniu", 0);
+        hashMapColor.put("Maro", 0);
+        hashMapColor.put("Argintiu", 0);
         hashMapColor.put("Gri", 0);
+        hashMapColor.put("Negru", 0);
 
         totalBikesTextView = (TextView) findViewById(R.id.totalBikesTextView);
+        totalBikesRecoveredTextView = (TextView) findViewById(R.id.totalBikesRecoveredTextView);
         topTypeTextView = (TextView) findViewById(R.id.typeTopTextView);
         topColorTextView = (TextView) findViewById(R.id.colorTopTextView);
 
@@ -69,7 +79,13 @@ public class StatsActivity extends AppCompatActivity {
                 Report newPost = snapshot.getValue(Report.class);
                 postsList.add(newPost);
                 total = postsList.size();
+                if(newPost.getStatus() == 1)
+                {
+                    foundList.add(newPost);
+                    foundTotal = foundList.size();
+                }
                 totalBikesTextView.setText(String.valueOf(total));
+                totalBikesRecoveredTextView.setText(String.valueOf(foundTotal));
                 String type = newPost.getBike_model();
                 String color = newPost.getBike_color();
                 int countType = (int) hashMapType.get(type);

@@ -80,6 +80,9 @@ public class RecordFragment extends Fragment {
     private FloatingActionButton addLiveEventButton;
     private LinearLayout startLinear;
     private LinearLayout finishLinear;
+    public static double maxDistance;
+    public static com.example.ciclotm.Models.Location maxPoint;
+    public static com.example.ciclotm.Models.Location startPoint;
 
     private LocationListener locationListener = null;
     private LocationManager locationManager;
@@ -468,6 +471,7 @@ public class RecordFragment extends Fragment {
                                 point.setLatitude(latLng.latitude);
                                 point.setLongitude(latLng.longitude);
                                 routePoints.add(point);
+                                startPoint = point;
                                 MarkerOptions options = new MarkerOptions().position(latLng).icon(bitmapDescriptorFromVector(getContext(), R.drawable.black_dot_icon_resized));
                                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
                                 startMarker = mMap.addMarker(options);

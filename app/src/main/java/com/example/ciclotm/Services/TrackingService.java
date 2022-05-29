@@ -235,10 +235,17 @@ public class TrackingService extends Service implements LifecycleOwner {
             samples++;
 
 
+
             if (serRoutePoints.get(serRoutePoints.size() - 2) != null) {
                 LatLng firstPoint = new LatLng(serRoutePoints.get(serRoutePoints.size() - 2).getLatitude(), serRoutePoints.get(serRoutePoints.size() - 2).getLongitude());
                 LatLng secondPoint = new LatLng(serRoutePoints.get(serRoutePoints.size() - 1).getLatitude(), serRoutePoints.get(serRoutePoints.size() - 1).getLongitude());
 
+                double distance = DistanceCalculation(RecordFragment.startPoint.getLatitude(),RecordFragment.startPoint.getLatitude(), secondPoint.latitude, secondPoint.longitude);
+                if(distance > RecordFragment.maxDistance) {
+                    RecordFragment.maxDistance = distance;
+                    RecordFragment.maxPoint.setLatitude(secondPoint.latitude);
+                    RecordFragment.maxPoint.setLongitude(secondPoint.longitude);
+                }
                 double pointsDistance = DistanceCalculation(firstPoint.latitude, firstPoint.longitude, secondPoint.latitude, secondPoint.longitude);
                 totalDistance = totalDistance + pointsDistance;
                 speed = pointsDistance / (double) (5.0 / 3600.0);

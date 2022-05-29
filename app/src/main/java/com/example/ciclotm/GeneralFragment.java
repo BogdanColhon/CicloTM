@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ciclotm.Admin.adminGeneralRecycleViewAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,6 +37,8 @@ import dagger.multibindings.ElementsIntoSet;
 public class GeneralFragment extends Fragment implements generalRecycleViewAdapter.OnPostListener , adminGeneralRecycleViewAdapter.OnPostListener{
 
     private ArrayList<generalPost> postsList = new ArrayList<>();
+    private FirebaseUser user;
+    public static String userID;
     TextView generalPostsNumberTextView;
     private RecyclerView recyclerView;
     generalRecycleViewAdapter adapter;
@@ -101,6 +105,7 @@ public class GeneralFragment extends Fragment implements generalRecycleViewAdapt
             recyclerView.setAdapter(adminAdapter);
 
         fetchPostsInfo();
+        getCurrentUser();
         System.out.println(postsList.size());
         ImageButton addPost = (ImageButton) view.findViewById(R.id.addPostImageButton);
         addPost.setOnClickListener(new View.OnClickListener() {
@@ -122,6 +127,12 @@ public class GeneralFragment extends Fragment implements generalRecycleViewAdapt
     }
 
 
+    private void getCurrentUser(){
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users");
+        userID = user.getUid();
+
+    }
     private void setAdapter() {
         generalRecycleViewAdapter adapter = new generalRecycleViewAdapter(getActivity().getApplicationContext(), postsList, this);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getContext());

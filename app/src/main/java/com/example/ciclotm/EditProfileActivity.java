@@ -288,7 +288,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 HashMap hashMap = new HashMap();
                 hashMap.put("FirstName", firstname);
                 hashMap.put("LastName", lastname);
-                hashMap.put("Bio", bio);
+                hashMap.put("bio", bio);
                 hashMap.put("Gender", gender);
                 hashMap.put("PhoneNumber", phone);
 

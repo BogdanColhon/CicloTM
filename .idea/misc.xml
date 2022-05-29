@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/drawable-v24/login_button_shape.xml" value="0.3828125" />
+        <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/drawable/color_blob.xml" value="0.2078125" />
         <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/drawable/custom_border.xml" value="0.3828125" />
         <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/drawable/custom_comment_border.xml" value="0.3828125" />
         <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/drawable/custom_linear_layout.xml" value="0.3828125" />
@@ -19,6 +20,7 @@
         <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/drawable/ic_baseline_add_circle_24.xml" value="0.24166666666666667" />
         <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/drawable/ic_baseline_dot.xml" value="0.378125" />
         <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/drawable/ic_baseline_image_24.xml" value="0.30052083333333335" />
+        <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/drawable/ic_baseline_info_24.xml" value="0.2078125" />
         <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/drawable/ic_baseline_insert_photo_24.xml" value="0.30052083333333335" />
         <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/drawable/ic_baseline_pedal_bike_24.xml" value="0.24166666666666667" />
         <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/drawable/ic_baseline_photo_24.xml" value="0.3828125" />
@@ -29,6 +31,7 @@
         <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/drawable/login_edit_text.xml" value="0.3828125" />
         <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/drawable/normal.xml" value="0.3828125" />
         <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/drawable/pressed.xml" value="0.3828125" />
+        <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/drawable/spinner_shape.xml" value="0.22135416666666666" />
         <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/drawable/transparent_card.xml" value="0.24166666666666667" />
         <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/layout-v26/activity_dotari_obligatorii.xml" value="0.36231884057971014" />
         <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/layout/activity_admin_dotari_obligatorii.xml" value="0.25052083333333336" />
@@ -74,6 +77,8 @@
         <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/layout/bicycles_action_bar.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/layout/bike_post_action_bar.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/layout/camera_gallery_dialog.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/layout/color_spinner_bg.xml" value="0.19166666666666668" />
+        <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/layout/color_spinner_item.xml" value="0.19166666666666668" />
         <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/layout/comment_card_layout.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/layout/community_admin_general_card_layout.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/nbat1/AndroidStudioProjects/CicloTM/app/src/main/res/layout/community_furturi_card_layout.xml" value="0.33" />

@@ -9,7 +9,9 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.Image;
@@ -59,7 +61,9 @@ public class BicyclePostActivity extends AppCompatActivity implements AdapterVie
     private EditText weightEditText;
     private EditText descriptionEditText;
     private EditText modelEditText;
+    private EditText serialNumberEditText;
     private ImageView bikeImageView;
+    private ImageView serialNoInfoImage;
     private Spinner typeSpinner;
     private FirebaseUser user;
     private DatabaseReference reference;
@@ -89,6 +93,7 @@ public class BicyclePostActivity extends AppCompatActivity implements AdapterVie
         weightEditText = (EditText) findViewById(R.id.weightEditText);
         descriptionEditText = (EditText) findViewById(R.id.descriptionEditText);
         modelEditText = (EditText) findViewById(R.id.modelEditText);
+        serialNumberEditText = (EditText) findViewById(R.id.serialNumberEditText);
 
         bikeImageView = (ImageView) findViewById(R.id.bike_image);
         bikeImageView.setOnClickListener(new View.OnClickListener() {
@@ -101,6 +106,16 @@ public class BicyclePostActivity extends AppCompatActivity implements AdapterVie
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            }
+        });
+
+        serialNoInfoImage = (ImageView) findViewById(R.id.serialNoInfoImageView);
+        serialNoInfoImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog alertDialog = new AlertDialog.Builder(BicyclePostActivity.this).create();
+                alertDialog.setMessage(getResources().getString(R.string.serial_no_info));
+                alertDialog.show();
             }
         });
 
@@ -171,11 +186,12 @@ public class BicyclePostActivity extends AppCompatActivity implements AdapterVie
                 String weight = weightEditText.getText().toString();
                 String year = yearEditText.getText().toString();
                 String description = descriptionEditText.getText().toString();
+                String serialNo = serialNumberEditText.getText().toString();
 
                 user = FirebaseAuth.getInstance().getCurrentUser();
                 reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users");
                 owner = user.getUid();
-                Bike bike = new Bike(nick_name, type, brand, model, weight, year, description, owner, bikeImageLink);
+                Bike bike = new Bike(nick_name, type, brand, model, weight, year,serialNo, description, owner, bikeImageLink);
 
                 FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users").child(owner).child("BikeCollection").child(nick_name)
                         .setValue(bike).addOnCompleteListener(new OnCompleteListener<Void>() {

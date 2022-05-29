@@ -151,4 +151,9 @@
         \u2022 Dacă este aglomerat și s-a format coloană de mașini pe banda 1, încearcă să circuli cu atenție, mai ales că există situații în care oamenii pot coborî din mașină și te poți lovi de ușă.\n\n
         \u2022 Circulă cu atenție dacă te afli în apropiere de camioane și tiruri, deoarece acestea au zone mai mari care nu sunt acoperite de oglinda retrovizoare și soferul nu o să vadă că ești în apropiere de mașină.
     </string>
+
+    <string name="serial_no_info">
+        \t Este recomandat să îți știi seria cadrului deoarece, în cazul unui furt, poți să dovedești foarte ușor că tu ești proprietarul. De asemenea, pe lângă acest număr, este bine să ai și poze cu bicicleta.
+        \n\t Seria cadrului se găsește de obicei pe partea inferioară a acestuia.
+    </string>
 </resources>

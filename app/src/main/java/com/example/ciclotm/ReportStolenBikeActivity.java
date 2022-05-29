@@ -33,6 +33,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.example.ciclotm.Models.MapMarker;
 import com.example.ciclotm.Models.Report;
@@ -53,6 +54,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -78,6 +80,9 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
     FloatingActionButton sendReportButton;
     LatLng theftMarker;
 
+    private ArrayList<ColorObject> mColorList;
+    private ColorSpinnerAdapter mAdapter;
+
 
     private FirebaseUser user;
     private FirebaseStorage storage;
@@ -86,6 +91,7 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
     Date currentTime;
     String user_Id;
     String bikeModel;
+    String bikeColor;
     String bikeImageLink = "";
     String locationImageLink = "";
     Calendar calendar = Calendar.getInstance();
@@ -96,6 +102,7 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report_stolen_bike);
+        initList();
         modelReportSpinner = (Spinner) findViewById(R.id.modelReportSpinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(ReportStolenBikeActivity.this,
                 android.R.layout.simple_spinner_item,
@@ -103,6 +110,23 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         modelReportSpinner.setAdapter(adapter);
         modelReportSpinner.setOnItemSelectedListener(this);
+
+        Spinner spinnerColors = findViewById(R.id.spinner_color);
+        mAdapter = new ColorSpinnerAdapter(this,mColorList);
+        spinnerColors.setAdapter(mAdapter);
+        spinnerColors.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ColorObject clickedItem = (ColorObject) parent.getItemAtPosition(position);
+                bikeColor = clickedItem.getName();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         sendReportButton = (FloatingActionButton) findViewById(R.id.sendReportButton);
 
@@ -194,7 +218,7 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
                 String address = addressReportTextView.getText().toString().trim();
                 String phone = phoneReportEditText.getText().toString().trim();
                 String bike_brand = brandReportEditText.getText().toString().trim();
-                String bike_color = colorReportEditText.getText().toString().trim();
+                String bike_color = bikeColor;
                 String bike_model = bikeModel;
                 String bike_description = bikeDescriptionEditText.getText().toString().trim();
                 String thief_description = thiefDescriptionEditText.getText().toString().trim();
@@ -273,6 +297,27 @@ public class ReportStolenBikeActivity extends AppCompatActivity implements Adapt
 
             }
         });
+
+    }
+
+    private void initList(){
+        mColorList = new ArrayList<>();
+        mColorList.add(new ColorObject("Alb",ResourcesCompat.getColor(getResources(), R.color.white, null)));
+        mColorList.add(new ColorObject("Crem",ResourcesCompat.getColor(getResources(), R.color.crem, null)));
+        mColorList.add(new ColorObject("Galben",ResourcesCompat.getColor(getResources(), R.color.yellow, null)));
+        mColorList.add(new ColorObject("Portocaliu",ResourcesCompat.getColor(getResources(), R.color.orange, null)));
+        mColorList.add(new ColorObject("Roșie",ResourcesCompat.getColor(getResources(), R.color.red, null)));
+        mColorList.add(new ColorObject("Roz",ResourcesCompat.getColor(getResources(), R.color.pink, null)));
+        mColorList.add(new ColorObject("Mov",ResourcesCompat.getColor(getResources(), R.color.purple, null)));
+        mColorList.add(new ColorObject("Verde", ResourcesCompat.getColor(getResources(), R.color.green, null)));
+        mColorList.add(new ColorObject("Turcoaz",ResourcesCompat.getColor(getResources(), R.color.teal, null)));
+        mColorList.add(new ColorObject("Albastru",ResourcesCompat.getColor(getResources(), R.color.blue, null)));
+        mColorList.add(new ColorObject("Vișiniu",ResourcesCompat.getColor(getResources(), R.color.burgundy, null)));
+        mColorList.add(new ColorObject("Maro",ResourcesCompat.getColor(getResources(), R.color.brown, null)));
+        mColorList.add(new ColorObject("Argintiu",ResourcesCompat.getColor(getResources(), R.color.silver, null)));
+        mColorList.add(new ColorObject("Gri",ResourcesCompat.getColor(getResources(), R.color.gray, null)));
+        mColorList.add(new ColorObject("Negru",ResourcesCompat.getColor(getResources(), R.color.black, null)));
+
 
     }
 

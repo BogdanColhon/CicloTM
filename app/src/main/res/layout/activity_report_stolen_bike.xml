@@ -201,17 +201,26 @@
                     android:orientation="horizontal">
 
 
-                    <EditText
-                        android:id="@+id/colorReportEditText"
-                        android:layout_width="0dp"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:background="@null"
                         android:fontFamily="@font/roboto_medium"
-                        android:hint="Culoare"
+                        android:text="Culoare"
                         android:textColor="@color/black"
                         android:textSize="@dimen/report_text_size"
+                        android:layout_marginEnd="10dp"
                         android:textStyle="bold" />
+                    <Spinner
+                        android:id="@+id/spinner_color"
+                        android:layout_width="95dp"
+                        android:layout_height="25dp"
+                        android:textAlignment="center"
+                        android:gravity="center"
+                        android:spinnerMode="dialog"
+                        android:textColor="@color/black"
+                        />
+
 
                     <Spinner
                         android:id="@+id/modelReportSpinner"

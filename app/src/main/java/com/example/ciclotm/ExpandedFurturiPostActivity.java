@@ -172,29 +172,11 @@ public class ExpandedFurturiPostActivity extends AppCompatActivity {
                 Toast.makeText(ExpandedFurturiPostActivity.this,"Raport eliminat",Toast.LENGTH_SHORT).show();
                 DatabaseReference PostReference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference()
                         .child("furturiPosts").child(String.valueOf(clicked_report.getPublishDate()));
-                PostReference.removeValue();
+                PostReference.child("status").setValue(1);
+
                 DatabaseReference LocalPostsReference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference()
                         .child("Users").child(currentUser).child("Furturi").child(String.valueOf(clicked_report.getPublishDate()));
-                LocalPostsReference.removeValue();
-
-                DatabaseReference furturiStatsReference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference()
-                        .child("FurturiStats").child("BikesFound");
-
-                DatabaseReference rootRef = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference();
-                DatabaseReference furturiStatsRef = rootRef.child("FurturiStats");
-                ValueEventListener eventListener = new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        bikesFound= dataSnapshot.child("BikesFound").getValue(int.class);
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {}
-                };
-                furturiStatsRef.addListenerForSingleValueEvent(eventListener);
-
-                int newValue = bikesFound + 1;
-                furturiStatsRef.child("BikesFound").setValue(newValue);
+                LocalPostsReference.child("status").setValue(1);
                 finish();
                 break;
         }

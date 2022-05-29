@@ -127,11 +127,15 @@ public class FurturiFragment extends Fragment implements furturiRecycleViewAdapt
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Report newPost = snapshot.getValue(Report.class);
-                postsList.add(0, newPost);
-                if (MainActivity.role.equals("0"))
-                    adapter.notifyDataSetChanged();
-                else
-                    adminAdapter.notifyDataSetChanged();
+                if (newPost != null) {
+                    if (newPost.getStatus() == 0) {
+                        postsList.add(0, newPost);
+                        if (MainActivity.role.equals("0"))
+                            adapter.notifyDataSetChanged();
+                        else
+                            adminAdapter.notifyDataSetChanged();
+                    }
+                }
             }
 
             @Override
@@ -179,9 +183,11 @@ public class FurturiFragment extends Fragment implements furturiRecycleViewAdapt
     }
 
     @Override
-    public void OnDeleteFurturiClick(int position) {removeFurturiItem(position);
+    public void OnDeleteFurturiClick(int position) {
+        removeFurturiItem(position);
 
     }
+
     public void removeFurturiItem(int position) {
         System.out.println("Removed position: " + position);
         DatabaseReference PostReference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference()

@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class ExpandedGeneralPostActivity extends AppCompatActivity {
+public class ExpandedGeneralPostActivity extends AppCompatActivity implements generalCommentsRecyclerViewAdapter.OnPostListener{
 
     TextView titlePostTextView;
     TextView datePostTextView;
@@ -58,6 +58,7 @@ public class ExpandedGeneralPostActivity extends AppCompatActivity {
     private String userID;
     private DatabaseReference reference;
     private DatabaseReference reference2;
+    private DatabaseReference CommentReference;
     private StorageReference storageReference;
 
     @Override
@@ -80,7 +81,7 @@ public class ExpandedGeneralPostActivity extends AppCompatActivity {
 
         layoutManager = new LinearLayoutManager(ExpandedGeneralPostActivity.this);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new generalCommentsRecyclerViewAdapter(ExpandedGeneralPostActivity.this, commentsList);
+        adapter = new generalCommentsRecyclerViewAdapter(ExpandedGeneralPostActivity.this, commentsList,this);
         recyclerView.setAdapter(adapter);
 
         today = Calendar.getInstance().getTime();
@@ -155,12 +156,14 @@ public class ExpandedGeneralPostActivity extends AppCompatActivity {
         sendCommentImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                today = Calendar.getInstance().getTime();
                 String commentContent = commentInputEditText.getText().toString().trim();
                 Comment comment = new Comment(commentContent, today, userID);
                 FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("GeneralPosts").child(String.valueOf(post.getDate())).child("comments").child(String.valueOf(today))
                         .setValue(comment).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
+                        commentInputEditText.setText("");
                         Toast.makeText(ExpandedGeneralPostActivity.this, "Comentariu adăugat", Toast.LENGTH_SHORT).show();
                     }
 
@@ -242,5 +245,18 @@ public class ExpandedGeneralPostActivity extends AppCompatActivity {
         if (!profileImageUrl.equals("")) {
             Glide.with(this).load(profileImageUrl).into(commentUserProfileImageView);
         }
+    }
+
+    @Override
+    public void OnDeleteClick(int position) {
+        removeCommentItem(position);
+    }
+
+    private void removeCommentItem(int position){
+        CommentReference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference()
+                .child("GeneralPosts").child(String.valueOf(post.getDate())).child("comments").child(String.valueOf(commentsList.get(position).getDate()));
+        CommentReference.removeValue();
+        commentsList.remove(position);
+        adapter.notifyItemRemoved(position);
     }
 }

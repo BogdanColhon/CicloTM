@@ -35,6 +35,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -93,6 +94,8 @@ public class ExpandedRecordedRouteActivity extends AppCompatActivity {
     int i = -1;
     int index = 0;
     boolean fetched = false;
+    double maxDistance;
+    LatLng maxPoint;
 
     private final int PERMISSION_REQUEST_CODE = 100;
     private Route openedRoute;
@@ -264,18 +267,22 @@ public class ExpandedRecordedRouteActivity extends AppCompatActivity {
                 map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
                 LatLng startLatLng = new LatLng(RoutePostsActivity.expandedRoutePoints.get(0).getLatitude(), RoutePostsActivity.expandedRoutePoints.get(0).getLongitude());
-                MarkerOptions options = new MarkerOptions().position(startLatLng).icon(bitmapDescriptorFromVector(ExpandedRecordedRouteActivity.this, R.drawable.black_dot_icon_resized));
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(startLatLng, 16));
-                Marker startMarker = mMap.addMarker(options);
 
-                LatLng finishLatLng = new LatLng(RoutePostsActivity.expandedRoutePoints.get(RoutePostsActivity.expandedRoutePoints.size() - 1).getLatitude(), RoutePostsActivity.expandedRoutePoints.get(RoutePostsActivity.expandedRoutePoints.size() - 1).getLongitude());
-                options = new MarkerOptions().position(startLatLng).icon(bitmapDescriptorFromVector(ExpandedRecordedRouteActivity.this, R.drawable.black_dot_icon_resized));
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(startLatLng, 16));
-                Marker finishMarker = mMap.addMarker(options);
 
                 for (int y = 1; y < RoutePostsActivity.expandedRoutePoints.size(); y++) {
                     LatLng firstPoint = new LatLng(RoutePostsActivity.expandedRoutePoints.get(y - 1).getLatitude(), RoutePostsActivity.expandedRoutePoints.get(y - 1).getLongitude());
                     LatLng secondPoint = new LatLng(RoutePostsActivity.expandedRoutePoints.get(y).getLatitude(), RoutePostsActivity.expandedRoutePoints.get(y).getLongitude());
+
+                     Location currentPoint = new Location();
+                    currentPoint.setLatitude(secondPoint.latitude);
+                    currentPoint.setLongitude(secondPoint.longitude);
+
+                    double currentDistance =DistanceCalculation(startLatLng.latitude, startLatLng.longitude, secondPoint.latitude,secondPoint.longitude);
+                    if(currentDistance > maxDistance)
+                    {
+                        maxDistance = currentDistance;
+                        maxPoint = secondPoint;
+                    }
 
                     PolylineOptions polylineOptions = new PolylineOptions()
                             .add(firstPoint)
@@ -285,9 +292,20 @@ public class ExpandedRecordedRouteActivity extends AppCompatActivity {
 
                     Polyline polyline = map.addPolyline(polylineOptions);
                 }
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom( LatLngBounds.builder().include(startLatLng).include(maxPoint).build().getCenter(), 14));
+
 
             }
         });
+    }
+
+    private double DistanceCalculation(double lat1, double lon1, double lat2, double lon2) {
+        double Radius = Constants.EARTH_RADIUS;
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        double c = 2 * Math.asin(Math.sqrt(a));
+        return Radius * c;
     }
 
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {

@@ -51,12 +51,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_medium"
-                    android:singleLine="true"
                     android:text="―"
                     android:textColor="#3A3A3A"
                     android:textSize="15sp" />
 
             </LinearLayout>
+            <ImageView
+                android:id="@+id/deleteImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:srcCompat="@drawable/ic_baseline_delete_24" />
 
         </LinearLayout>
 

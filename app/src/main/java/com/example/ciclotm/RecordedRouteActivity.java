@@ -24,6 +24,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
+import com.example.ciclotm.Models.Location;
 import com.example.ciclotm.Models.Photo;
 import com.example.ciclotm.Models.Route;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -34,6 +35,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -99,6 +101,8 @@ public class RecordedRouteActivity extends AppCompatActivity {
     int gallery_counter=0;
     int i = 0;
     int index= 0;
+    double maxDistance;
+    LatLng maxPoint;
 
     private final int PERMISSION_REQUEST_CODE = 100;
 
@@ -230,18 +234,26 @@ public class RecordedRouteActivity extends AppCompatActivity {
                 map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
                 LatLng startLatLng = new LatLng(RecordFragment.routePoints.get(0).getLatitude(), RecordFragment.routePoints.get(0).getLongitude());
-                MarkerOptions options = new MarkerOptions().position(startLatLng).icon(bitmapDescriptorFromVector(RecordedRouteActivity.this, R.drawable.black_dot_icon_resized));
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(startLatLng, 16));
-                Marker startMarker = mMap.addMarker(options);
+                Location startPoint = new Location();
+                startPoint.setLatitude(startLatLng.latitude);
+                startPoint.setLongitude(startLatLng.longitude);
 
-                LatLng finishLatLng = new LatLng(RecordFragment.routePoints.get(RecordFragment.routePoints.size() - 1).getLatitude(), RecordFragment.routePoints.get(RecordFragment.routePoints.size() - 1).getLongitude());
-                options = new MarkerOptions().position(startLatLng).icon(bitmapDescriptorFromVector(RecordedRouteActivity.this, R.drawable.black_dot_icon_resized));
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(startLatLng, 16));
-                Marker finishMarker = mMap.addMarker(options);
+
 
                 for (int i = 1; i < RecordFragment.routePoints.size(); i++) {
                     LatLng firstPoint = new LatLng(RecordFragment.routePoints.get(i - 1).getLatitude(), RecordFragment.routePoints.get(i - 1).getLongitude());
                     LatLng secondPoint = new LatLng(RecordFragment.routePoints.get(i).getLatitude(), RecordFragment.routePoints.get(i).getLongitude());
+
+                    Location currentPoint = new Location();
+                    currentPoint.setLatitude(secondPoint.latitude);
+                    currentPoint.setLongitude(secondPoint.longitude);
+
+                    double currentDistance =DistanceCalculation(startLatLng.latitude, startLatLng.longitude, secondPoint.latitude,secondPoint.longitude);
+                    if(currentDistance > maxDistance)
+                    {
+                        maxDistance = currentDistance;
+                        maxPoint = secondPoint;
+                    }
 
                     PolylineOptions polylineOptions = new PolylineOptions()
                             .add(firstPoint)
@@ -251,6 +263,8 @@ public class RecordedRouteActivity extends AppCompatActivity {
 
                     Polyline polyline = map.addPolyline(polylineOptions);
                 }
+
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom( LatLngBounds.builder().include(startLatLng).include(maxPoint).build().getCenter(), 14));
 
                 map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
                     @Override
@@ -263,6 +277,15 @@ public class RecordedRouteActivity extends AppCompatActivity {
             }
         });
     }
+    private double DistanceCalculation(double lat1, double lon1, double lat2, double lon2) {
+        double Radius = Constants.EARTH_RADIUS;
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        double c = 2 * Math.asin(Math.sqrt(a));
+        return Radius * c;
+    }
+
 
     public void snapShot() {
 
