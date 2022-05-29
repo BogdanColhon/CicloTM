@@ -129,6 +129,7 @@ public class RecordedRouteActivity extends AppCompatActivity {
         addPhotosLayout = findViewById(R.id.recordedRouteAddPhotosLayout);
         mapView = findViewById(R.id.routeMapView);
         mapView.onCreate(savedInstanceState);
+        today = Calendar.getInstance().getTime();
 
         initActionBar();
         initFirebaseUser();
@@ -196,7 +197,6 @@ public class RecordedRouteActivity extends AppCompatActivity {
                 if (userProfile != null) {
                     String firstname = userProfile.getFirstName().toString();
                     String lastname = userProfile.getLastName().toString();
-                    today = Calendar.getInstance().getTime();
 
                     userNameText.setText(firstname + " " + lastname);
 
@@ -237,7 +237,7 @@ public class RecordedRouteActivity extends AppCompatActivity {
                 Location startPoint = new Location();
                 startPoint.setLatitude(startLatLng.latitude);
                 startPoint.setLongitude(startLatLng.longitude);
-
+                maxPoint = startLatLng;
 
 
                 for (int i = 1; i < RecordFragment.routePoints.size(); i++) {

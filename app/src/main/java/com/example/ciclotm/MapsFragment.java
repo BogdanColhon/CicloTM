@@ -55,10 +55,12 @@ import com.google.maps.android.heatmaps.Gradient;
 import com.google.maps.android.heatmaps.HeatmapTileProvider;
 import com.google.maps.android.heatmaps.WeightedLatLng;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -159,7 +161,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
                     args.putDouble("markerLng", newMarkerPosition.longitude);
                     myDialogFragment.putArguments(args);
                 } else {
-                    Toast.makeText(getContext(), "Trebuie sa confirmatia locatia curenta", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Trebuie să confirmația locația curentă!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -525,7 +527,9 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
                             TextView t2 = (TextView) v.findViewById(R.id.liveEventsMarkerInfoTimeTextView);
                             TextView t3 = (TextView) v.findViewById(R.id.liveEventsMarkerContentTextView);
                             t1.setText(newMarker.getTitle());
-                            t2.setText(newMarker.getPublishDate().toString());
+                            SimpleDateFormat df = new SimpleDateFormat("HH:mm  dd/MM/yyyy", Locale.getDefault());
+                            String output = df.format(newMarker.getPublishDate());
+                            t2.setText(output);
                             t3.setText(newMarker.getDescription());
                             return v;
                         }

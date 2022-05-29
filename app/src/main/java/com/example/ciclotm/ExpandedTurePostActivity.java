@@ -96,16 +96,13 @@ public class ExpandedTurePostActivity extends AppCompatActivity {
             }
         });
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(post.getDate());
-        int month = calendar.get(Calendar.MONTH) + 1;
-        dateTextView.setText(calendar.get(Calendar.DAY_OF_MONTH)
-                + "." + month
-                + "." + calendar.get(Calendar.YEAR));
+        SimpleDateFormat df = new SimpleDateFormat("HH:mm  dd/MM/yyyy", Locale.getDefault());
+        String output = df.format(post.getDate());
+        dateTextView.setText(output);
 
         Date dateComment = post.getActivityDate();
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        String output = df.format(dateComment);
+        df = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        output = df.format(dateComment);
 
         activityDateTextView.setText(output);
         titleTextView.setText(post.getTitle());

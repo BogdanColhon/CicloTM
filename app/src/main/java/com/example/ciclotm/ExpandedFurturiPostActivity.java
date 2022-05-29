@@ -37,14 +37,12 @@ public class ExpandedFurturiPostActivity extends AppCompatActivity {
     DatabaseReference reference;
     FirebaseUser user;
     String currentUser;
-    private int bikesFound;
     private Report clicked_report;
     private TextView usernameTextView;
     private TextView publishDateTextView;
     private TextView theftDateTextView;
     private TextView addressTextView;
     private TextView bikeBrandTextView;
-    private TextView bikeModelTextView;
     private TextView bikeTypeTextView;
     private TextView bikeColorTextView;
     private TextView bikeDescriptionTextView;
@@ -73,7 +71,6 @@ public class ExpandedFurturiPostActivity extends AppCompatActivity {
         placeImage = findViewById(R.id.placeImage);
 
         bikeBrandTextView = findViewById(R.id.theftBikeBrandTextView);
-        bikeModelTextView = findViewById(R.id.theftBikeModelTextView);
         bikeTypeTextView = findViewById(R.id.theftBikeTypeTextView);
         bikeColorTextView = findViewById(R.id.theftBikeColorTextView);
         bikeDescriptionTextView = findViewById(R.id.theftBikeDescriptionTextView);
@@ -169,7 +166,7 @@ public class ExpandedFurturiPostActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.found:
-                Toast.makeText(ExpandedFurturiPostActivity.this,"Raport eliminat",Toast.LENGTH_SHORT).show();
+                Toast.makeText(ExpandedFurturiPostActivity.this,"Modificări efectuate",Toast.LENGTH_SHORT).show();
                 DatabaseReference PostReference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference()
                         .child("furturiPosts").child(String.valueOf(clicked_report.getPublishDate()));
                 PostReference.child("status").setValue(1);

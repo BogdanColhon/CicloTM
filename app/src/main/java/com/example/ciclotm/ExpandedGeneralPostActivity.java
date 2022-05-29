@@ -30,9 +30,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class ExpandedGeneralPostActivity extends AppCompatActivity implements generalCommentsRecyclerViewAdapter.OnPostListener{
 
@@ -108,12 +110,9 @@ public class ExpandedGeneralPostActivity extends AppCompatActivity implements ge
             }
         });
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(post.getDate());
-        int month = calendar.get(Calendar.MONTH) + 1;
-        datePostTextView.setText(calendar.get(Calendar.DAY_OF_MONTH)
-                + "." + month
-                + "." + calendar.get(Calendar.YEAR));
+        SimpleDateFormat df = new SimpleDateFormat("HH:mm  dd/MM/yyyy", Locale.getDefault());
+        String output = df.format(post.getDate());
+        datePostTextView.setText(output);
 
         titlePostTextView.setText(post.getTitle());
         contentPostTextView.setText(post.getContent());

@@ -14,14 +14,6 @@
 
 
         <EditText
-            android:id="@+id/liveEventTitleEditText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_medium"
-            android:hint="Titlu"
-            android:textColor="#3A3A3A"></EditText>
-
-        <EditText
             android:id="@+id/liveEventDescriptionEditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

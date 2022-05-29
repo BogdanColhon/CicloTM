@@ -49,7 +49,8 @@
                         android:singleLine="true"
                         android:text="username"
                         android:textColor="@color/black"
-                        android:textSize="20dp" />
+                        android:textSize="20dp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/lowerTextView"
@@ -69,10 +70,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/custom_linear_layout_expanded_theft"
-                android:padding="20dp"
                 android:layout_marginBottom="20dp"
-                android:orientation="vertical">
+                android:background="@drawable/custom_border"
+                android:orientation="vertical"
+                android:padding="20dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -97,6 +98,7 @@
                         android:layout_marginEnd="5dp"
                         android:fontFamily="@font/roboto_medium"
                         android:text="Data furtului: "
+                        android:textColor="@color/black"
                         android:textSize="@dimen/expanded_report_description" />
 
                     <TextView
@@ -104,10 +106,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_medium"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/expanded_report_content"
                         android:textStyle="bold" />
 
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -120,6 +124,7 @@
                         android:layout_marginEnd="5dp"
                         android:fontFamily="@font/roboto_medium"
                         android:text="Locul: "
+                        android:textColor="@color/black"
                         android:textSize="@dimen/expanded_report_description" />
 
                     <TextView
@@ -127,6 +132,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_medium"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/expanded_report_content"
                         android:textStyle="bold" />
 
@@ -147,9 +153,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
-                android:padding="20dp"
-                android:background="@drawable/custom_linear_layout_expanded_theft"
-                android:orientation="vertical">
+                android:background="@drawable/custom_border"
+                android:orientation="vertical"
+                android:padding="20dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -174,6 +180,7 @@
                         android:layout_marginEnd="5dp"
                         android:fontFamily="@font/roboto_medium"
                         android:text="Marca: "
+                        android:textColor="@color/black"
                         android:textSize="@dimen/expanded_report_description" />
 
                     <TextView
@@ -181,32 +188,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_medium"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/expanded_report_content"
                         android:textStyle="bold" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="10dp"
-                    android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="5dp"
-                        android:fontFamily="@font/roboto_medium"
-                        android:text="Model: "
-                        android:textSize="@dimen/expanded_report_description" />
-
-                    <TextView
-                        android:id="@+id/theftBikeModelTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/roboto_medium"
-                        android:textSize="@dimen/expanded_report_content"
-                        android:textStyle="bold" />
-                </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -219,6 +206,7 @@
                         android:layout_marginEnd="5dp"
                         android:fontFamily="@font/roboto_medium"
                         android:text="Tip: "
+                        android:textColor="@color/black"
                         android:textSize="@dimen/expanded_report_description" />
 
                     <TextView
@@ -226,9 +214,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_medium"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/expanded_report_content"
                         android:textStyle="bold" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -241,6 +231,7 @@
                         android:layout_marginEnd="5dp"
                         android:fontFamily="@font/roboto_medium"
                         android:text="Culoare: "
+                        android:textColor="@color/black"
                         android:textSize="@dimen/expanded_report_description" />
 
                     <TextView
@@ -248,9 +239,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_medium"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/expanded_report_content"
                         android:textStyle="bold" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -263,6 +256,7 @@
                         android:layout_marginEnd="5dp"
                         android:fontFamily="@font/roboto_medium"
                         android:text="Descriere: "
+                        android:textColor="@color/black"
                         android:textSize="@dimen/expanded_report_description" />
 
                     <TextView
@@ -270,6 +264,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_medium"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/expanded_report_content"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -288,9 +283,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/custom_linear_layout_expanded_theft"
-                android:padding="20dp"
-                android:orientation="vertical">
+                android:background="@drawable/custom_border"
+                android:orientation="vertical"
+                android:padding="20dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -315,6 +310,7 @@
                         android:layout_marginEnd="5dp"
                         android:fontFamily="@font/roboto_medium"
                         android:text="Descriere: "
+                        android:textColor="@color/black"
                         android:textSize="@dimen/expanded_report_description" />
 
                     <TextView
@@ -322,22 +318,24 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_medium"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/expanded_report_content"
                         android:textStyle="bold" />
 
                 </LinearLayout>
 
 
-           </LinearLayout>
+            </LinearLayout>
+
             <Button
                 android:id="@+id/expandedFurturiPostContactButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Contactează proprietarul"
                 android:layout_marginTop="10dp"
+                android:text="Contactează proprietarul"
                 android:textAllCaps="false"
-                android:textSize="16sp"/>
-            </LinearLayout>
+                android:textSize="16sp" />
+        </LinearLayout>
 
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

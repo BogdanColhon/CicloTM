@@ -33,7 +33,7 @@
                 android:justificationMode="inter_word"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                android:text="TextView"
+                android:text="―"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
         </LinearLayout>

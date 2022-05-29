@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.ciclotm.Models.LiveEventsMarker;
-import com.example.ciclotm.Models.PointOfInterestMarker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.FirebaseDatabase;
@@ -26,7 +25,6 @@ public class DialogFragmentLive extends androidx.fragment.app.DialogFragment {
     private RadioGroup radioGroup;
     private RadioButton radioButton;
     private Button addButton;
-    private EditText titleEditText;
     private EditText descriptionEditText;
     private Double markerLat;
     private Double markerLng;
@@ -39,32 +37,25 @@ public class DialogFragmentLive extends androidx.fragment.app.DialogFragment {
         View view = inflater.inflate(R.layout.custom_live_event_dialog, null);
         radioGroup = view.findViewById(R.id.radioGroup);
         addButton = view.findViewById(R.id.addButton);
-        titleEditText = view.findViewById(R.id.liveEventTitleEditText);
         descriptionEditText = view.findViewById(R.id.liveEventDescriptionEditText);
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String val1, val2, val3;
-                Double val4, val5;
-                val1 = titleEditText.getText().toString().trim();
+                String val1, val2;
+                Double val3, val4;
+                val1 = markerCat;
                 val2 = descriptionEditText.getText().toString().trim();
-                val3 = markerCat;
-                val4 = markerLat;
-                val5 = markerLng;
+                val3 = markerLat;
+                val4 = markerLng;
                 Date currentTime = Calendar.getInstance().getTime();
                 Date expiringTime = new Date();
-                expiringTime.setTime(System.currentTimeMillis() + (6*60*60*1000));
+                expiringTime.setTime(System.currentTimeMillis() + (6 * 60 * 60 * 1000));
 
-                if (val1.isEmpty()) {
-                    titleEditText.setError("Câmp obligatoriu!");
-                    titleEditText.requestFocus();
-                    return;
-                }
 
-                LiveEventsMarker marker = new LiveEventsMarker(val1,val3,val2,currentTime,expiringTime,val4,val5,0);
+                LiveEventsMarker marker = new LiveEventsMarker(val1, val1, val2, currentTime, expiringTime, val3, val4, 0);
 
-                FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("LiveEventsMarkers").child(val1)
+                FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("LiveEventsMarkers").child(String.valueOf(currentTime))
                         .setValue(marker).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {

@@ -58,6 +58,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -342,7 +343,9 @@ public class RecordFragment extends Fragment {
         Date currentTime = Calendar.getInstance().getTime();
         Date expiringTime = new Date();
         expiringTime.setTime(System.currentTimeMillis() + (6 * 60 * 60 * 1000));
-        dialogDate.setText(String.valueOf(currentTime));
+        SimpleDateFormat df = new SimpleDateFormat("HH:mm  dd/MM/yyyy", Locale.getDefault());
+        String output = df.format(currentTime);
+        dialogDate.setText(output);
         String dialogDescription = dialogDescriptionEditText.getText().toString().trim();
         dialogPostButton.setOnClickListener(new View.OnClickListener() {
             @Override
