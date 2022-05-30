@@ -11,10 +11,8 @@ import androidx.core.content.FileProvider;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -31,7 +29,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.ciclotm.Models.Bike;
+import com.example.ciclotm.Models.Objects.Bike;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -63,7 +61,6 @@ public class BicyclePostActivity extends AppCompatActivity implements AdapterVie
     private EditText modelEditText;
     private EditText serialNumberEditText;
     private ImageView bikeImageView;
-    private ImageView serialNoInfoImage;
     private Spinner typeSpinner;
     private FirebaseUser user;
     private DatabaseReference reference;
@@ -81,12 +78,22 @@ public class BicyclePostActivity extends AppCompatActivity implements AdapterVie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bicycle_post);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Bicicletă");
-        actionBar.setDisplayHomeAsUpEnabled(true);
 
         currentTime = Calendar.getInstance().getTime();
 
+        initActionBar();
+        initLayout();
+        initBikeModelSpinner();
+
+    }
+
+    private void initActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("Bicicletă");
+        actionBar.setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void initLayout() {
         nick_nameEditText = (EditText) findViewById(R.id.nicknameEditText);
         brandEditText = (EditText) findViewById(R.id.brandEditText);
         yearEditText = (EditText) findViewById(R.id.yearEditText);
@@ -94,32 +101,28 @@ public class BicyclePostActivity extends AppCompatActivity implements AdapterVie
         descriptionEditText = (EditText) findViewById(R.id.descriptionEditText);
         modelEditText = (EditText) findViewById(R.id.modelEditText);
         serialNumberEditText = (EditText) findViewById(R.id.serialNumberEditText);
-
         bikeImageView = (ImageView) findViewById(R.id.bike_image);
-        bikeImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    checkCameraPermission();
-                    chooseOption(100);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        serialNoInfoImage = (ImageView) findViewById(R.id.serialNoInfoImageView);
-        serialNoInfoImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog alertDialog = new AlertDialog.Builder(BicyclePostActivity.this).create();
-                alertDialog.setMessage(getResources().getString(R.string.serial_no_info));
-                alertDialog.show();
-            }
-        });
-
         typeSpinner = (Spinner) findViewById(R.id.typeSpinner);
+
+    }
+
+    public void cameraClick(View v) {
+        try {
+            checkCameraPermission();
+            chooseOption(100);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void serialClick(View v) {
+        AlertDialog alertDialog = new AlertDialog.Builder(BicyclePostActivity.this).create();
+        alertDialog.setMessage(getResources().getString(R.string.serial_no_info));
+        alertDialog.show();
+    }
+
+    private void initBikeModelSpinner() {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(BicyclePostActivity.this,
                 android.R.layout.simple_spinner_item,
                 getResources().getStringArray(R.array.bike_models));
@@ -150,7 +153,7 @@ public class BicyclePostActivity extends AppCompatActivity implements AdapterVie
             public void onClick(View v) {
                 Intent pickPhoto = new Intent(Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(pickPhoto,1);
+                startActivityForResult(pickPhoto, 1);
                 dialog.dismiss();
             }
         });
@@ -191,7 +194,7 @@ public class BicyclePostActivity extends AppCompatActivity implements AdapterVie
                 user = FirebaseAuth.getInstance().getCurrentUser();
                 reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users");
                 owner = user.getUid();
-                Bike bike = new Bike(nick_name, type, brand, model, weight, year,serialNo, description, owner, bikeImageLink);
+                Bike bike = new Bike(nick_name, type, brand, model, weight, year, serialNo, description, owner, bikeImageLink);
 
                 FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users").child(owner).child("BikeCollection").child(nick_name)
                         .setValue(bike).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -246,6 +249,7 @@ public class BicyclePostActivity extends AppCompatActivity implements AdapterVie
             }
         }
     }
+
     @Override
     public boolean onSupportNavigateUp() {
         finish();

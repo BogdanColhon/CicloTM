@@ -7,9 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.ciclotm.Models.Route;
+import com.example.ciclotm.Models.Objects.Route;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -22,11 +21,11 @@ import java.util.ArrayList;
 
 public class BikeStatsActivity extends AppCompatActivity {
 
-    DatabaseReference reference;
-    FirebaseUser user;
-    String owner;
-    double biggestRide = 0.0;
-    double fastestRide = 0.0;
+    private DatabaseReference reference;
+    private FirebaseUser user;
+    private String owner;
+    private double biggestRide = 0.0;
+    private double fastestRide = 0.0;
 
     private TextView totalRoutes;
     private TextView biggestRideTV;
@@ -39,16 +38,23 @@ public class BikeStatsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bike_stats);
 
+        initActionBar();
+        initLayout();
+        fetchAllRoutes();
+
+    }
+
+    private void initActionBar() {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("Statistici");
         actionBar.setDisplayHomeAsUpEnabled(true);
+    }
 
+
+    private void initLayout() {
         totalRoutes = (TextView) findViewById(R.id.totalRoutesTextView);
         biggestRideTV = (TextView) findViewById(R.id.biggestRideTextView);
         fastestRideTV = (TextView) findViewById(R.id.fastestRideTextView);
-
-        fetchAllRoutes();
-
     }
 
     private void fetchAllRoutes() {
@@ -63,13 +69,11 @@ public class BikeStatsActivity extends AppCompatActivity {
                 if (route != null) {
                     allRouteList.add(0, route);
                     totalRoutes.setText(String.valueOf(allRouteList.size()));
-                    if(route.getDistance() > biggestRide)
-                    {
+                    if (route.getDistance() > biggestRide) {
                         biggestRide = route.getDistance();
                         biggestRideTV.setText(String.format("%.2f", biggestRide) + " km");
                     }
-                    if(route.getAvgSpeed() > fastestRide)
-                    {
+                    if (route.getAvgSpeed() > fastestRide) {
                         fastestRide = route.getAvgSpeed();
                         fastestRideTV.setText(String.format("%.2f", fastestRide) + " km/h");
                     }

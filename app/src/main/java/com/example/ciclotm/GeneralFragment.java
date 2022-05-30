@@ -9,70 +9,43 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.ciclotm.Admin.adminGeneralRecycleViewAdapter;
+import com.example.ciclotm.Adapters.generalRecycleViewAdapter;
+import com.example.ciclotm.Adapters.adminGeneralRecycleViewAdapter;
+import com.example.ciclotm.Models.Posts.generalPost;
+import com.example.ciclotm.ViewModels.GeneralFragmentViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-import dagger.multibindings.ElementsIntoSet;
-
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link TureFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class GeneralFragment extends Fragment implements generalRecycleViewAdapter.OnPostListener , adminGeneralRecycleViewAdapter.OnPostListener{
 
     private ArrayList<generalPost> postsList = new ArrayList<>();
     private FirebaseUser user;
     public static String userID;
-    TextView generalPostsNumberTextView;
+    private TextView generalPostsNumberTextView;
     private RecyclerView recyclerView;
-    generalRecycleViewAdapter adapter;
-    adminGeneralRecycleViewAdapter adminAdapter;
-    RecyclerView.LayoutManager layoutManager;
+    private ImageButton addPost;
+    private generalRecycleViewAdapter adapter;
+    private adminGeneralRecycleViewAdapter adminAdapter;
+    private RecyclerView.LayoutManager layoutManager;
     private DatabaseReference reference;
-    private int counter = 0;
-
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-
-    private String mParam1;
-    private String mParam2;
+    private GeneralFragmentViewModel mGeneralFragmentViewModel;
 
     public GeneralFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment TureFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static GeneralFragment newInstance(String param1, String param2) {
+    public static GeneralFragment newInstance() {
         GeneralFragment fragment = new GeneralFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -80,10 +53,7 @@ public class GeneralFragment extends Fragment implements generalRecycleViewAdapt
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
@@ -91,23 +61,24 @@ public class GeneralFragment extends Fragment implements generalRecycleViewAdapt
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_general, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.generalRView);
-        generalPostsNumberTextView = (TextView) view.findViewById(R.id.generalPostsNumberTextView);
-        layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new generalRecycleViewAdapter(getContext(), postsList, this);
-        adminAdapter = new adminGeneralRecycleViewAdapter(getContext(), postsList, this);
+        initLayout(view);
+        mGeneralFragmentViewModel = ViewModelProviders.of(this).get(GeneralFragmentViewModel.class);
+        mGeneralFragmentViewModel.init();
+        mGeneralFragmentViewModel.getGeneralPosts().observe(getViewLifecycleOwner(), new Observer<ArrayList<generalPost>>() {
+            @Override
+            public void onChanged(ArrayList<generalPost> generalPosts) {
+                if (MainActivity.role.equals("0"))
+                    adapter.updateGeneralPostList(generalPosts);
+                else
+                    adminAdapter.updateAdminGeneralPostList(generalPosts);
 
-        if (MainActivity.role.equals("0"))
-            recyclerView.setAdapter(adapter);
-        else
-            recyclerView.setAdapter(adminAdapter);
+            }
+        });
 
-        fetchPostsInfo();
+        initRecyclerView();
         getCurrentUser();
-        System.out.println(postsList.size());
-        ImageButton addPost = (ImageButton) view.findViewById(R.id.addPostImageButton);
+
         addPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,6 +97,26 @@ public class GeneralFragment extends Fragment implements generalRecycleViewAdapt
         return view;
     }
 
+    private void initLayout(View view) {
+        recyclerView = (RecyclerView) view.findViewById(R.id.generalRView);
+        generalPostsNumberTextView = (TextView) view.findViewById(R.id.generalPostsNumberTextView);
+        addPost = (ImageButton) view.findViewById(R.id.addPostImageButton);
+
+    }
+
+    private void initRecyclerView() {
+        layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+
+        adapter = new generalRecycleViewAdapter(getContext(), postsList, this);
+        adminAdapter = new adminGeneralRecycleViewAdapter(getContext(), postsList, this);
+
+        if (MainActivity.role.equals("0"))
+            recyclerView.setAdapter(adapter);
+        else
+            recyclerView.setAdapter(adminAdapter);
+    }
+
 
     private void getCurrentUser(){
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -133,48 +124,7 @@ public class GeneralFragment extends Fragment implements generalRecycleViewAdapt
         userID = user.getUid();
 
     }
-    private void setAdapter() {
-        generalRecycleViewAdapter adapter = new generalRecycleViewAdapter(getActivity().getApplicationContext(), postsList, this);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getContext());
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
-    }
 
-    private void fetchPostsInfo() {
-        reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("GeneralPosts");
-        reference.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                generalPost newPost = snapshot.getValue(generalPost.class);
-                postsList.add(0, newPost);
-                if (MainActivity.role.equals("0"))
-                adapter.notifyDataSetChanged();
-                else
-                    adminAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
 
 
     private void fetchPostsNumber() {

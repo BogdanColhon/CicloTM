@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.ciclotm.Models.Route;
+import com.example.ciclotm.Models.Objects.Route;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

@@ -24,9 +24,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
-import com.example.ciclotm.Models.Location;
-import com.example.ciclotm.Models.Photo;
-import com.example.ciclotm.Models.Route;
+import com.example.ciclotm.Models.Objects.Location;
+import com.example.ciclotm.Models.Objects.Photo;
+import com.example.ciclotm.Models.Objects.Route;
+import com.example.ciclotm.Models.Users.User;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -36,8 +37,6 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -102,7 +101,7 @@ public class ExpandedRecordedRouteActivity extends AppCompatActivity {
     ArrayList<File> fAux = new ArrayList<>();
     String uri;
     ArrayList<Uri> contentUriAux = new ArrayList<>();
-    private ArrayList<com.example.ciclotm.Models.Location> expandedRoutePoints = new ArrayList<Location>();
+    private ArrayList<Location> expandedRoutePoints = new ArrayList<Location>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

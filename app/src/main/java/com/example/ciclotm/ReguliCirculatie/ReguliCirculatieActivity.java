@@ -8,11 +8,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.view.Menu;
 
+import com.example.ciclotm.Models.Legislation.CategorieReguli;
 import com.example.ciclotm.R;
-import com.example.ciclotm.turePost;
-import com.example.ciclotm.tureRecycleViewAdapter;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

@@ -7,29 +7,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.ciclotm.BicyclePostActivity;
-import com.example.ciclotm.BicyclesActivity;
-import com.example.ciclotm.EditProfileActivity;
-import com.example.ciclotm.GeneralPostActivity;
 import com.example.ciclotm.R;
-import com.example.ciclotm.ReguliCirculatie.CategorieReguli;
-import com.example.ciclotm.User;
-import com.example.ciclotm.generalPost;
+import com.example.ciclotm.Models.Legislation.CategorieReguli;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;

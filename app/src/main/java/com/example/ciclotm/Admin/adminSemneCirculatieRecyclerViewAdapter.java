@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.ciclotm.R;
-import com.example.ciclotm.SemnCirculatie;
+import com.example.ciclotm.Models.Legislation.SemnCirculatie;
 
 import java.util.ArrayList;
 

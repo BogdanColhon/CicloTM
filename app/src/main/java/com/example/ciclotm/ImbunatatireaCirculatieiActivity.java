@@ -6,11 +6,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.widget.ImageButton;
-import android.widget.TextView;
 
-import com.example.ciclotm.ReguliCirculatie.CategorieReguli;
-import com.google.firebase.database.DatabaseReference;
+import com.example.ciclotm.Models.Legislation.ImbunatatireCirculatieItem;
 
 import java.util.ArrayList;
 

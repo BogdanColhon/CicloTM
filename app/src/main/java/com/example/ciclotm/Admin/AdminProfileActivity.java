@@ -19,7 +19,7 @@ import com.example.ciclotm.BicyclesActivity;
 import com.example.ciclotm.CommunityPostsActivity;
 import com.example.ciclotm.R;
 import com.example.ciclotm.StatsActivity;
-import com.example.ciclotm.User;
+import com.example.ciclotm.Models.Users.User;
 import com.example.ciclotm.profileListViewAdapter;
 import com.example.ciclotm.profileListViewButton;
 

@@ -10,9 +10,8 @@ import android.widget.ImageButton;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.ciclotm.MyViewHolder;
 import com.example.ciclotm.R;
-import com.example.ciclotm.ReguliCirculatie.CategorieReguli;
+import com.example.ciclotm.Models.Legislation.CategorieReguli;
 
 import java.util.ArrayList;
 

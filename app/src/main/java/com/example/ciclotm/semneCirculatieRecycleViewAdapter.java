@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.w3c.dom.Text;
+import com.example.ciclotm.Models.Legislation.SemnCirculatie;
 
 import java.util.ArrayList;
 

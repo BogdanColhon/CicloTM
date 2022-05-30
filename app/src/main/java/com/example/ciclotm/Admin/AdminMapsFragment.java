@@ -21,7 +21,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.ciclotm.AdminMenuActivity2;
 import com.example.ciclotm.DialogFragment;
-import com.example.ciclotm.Models.PointOfInterestMarker;
+import com.example.ciclotm.Models.Markers.PointOfInterestMarker;
 import com.example.ciclotm.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;

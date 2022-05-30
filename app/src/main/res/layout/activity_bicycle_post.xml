@@ -57,12 +57,15 @@
             android:text="Poză:"
             android:textColor="@color/black"
             android:textStyle="bold" />
+
         <ImageView
             android:id="@+id/bike_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
             android:layout_marginBottom="20dp"
+            android:adjustViewBounds="true"
+            android:clickable="true"
+            android:onClick="cameraClick"
             app:srcCompat="@drawable/ic_baseline_insert_photo_24" />
 
 
@@ -243,10 +246,12 @@
 
             <ImageView
                 android:id="@+id/serialNoInfoImageView"
-                android:layout_marginStart="10dp"
                 android:layout_width="20dp"
-                android:layout_marginBottom="5dp"
                 android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="5dp"
+                android:clickable="true"
+                android:onClick="serialClick"
                 android:src="@drawable/ic_baseline_info_24"></ImageView>
         </LinearLayout>
         <LinearLayout

@@ -16,7 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.ciclotm.Admin.AdminProfileActivity;
-import com.example.ciclotm.Models.Comment;
+import com.example.ciclotm.Models.Objects.Comment;
+import com.example.ciclotm.Models.Posts.generalPost;
+import com.example.ciclotm.Models.Users.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;

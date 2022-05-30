@@ -10,6 +10,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ciclotm.Models.Posts.furturiPost;
+import com.example.ciclotm.Models.Posts.generalPost;
+import com.example.ciclotm.Models.Posts.turePost;
+
 import java.util.ArrayList;
 
 public class communityPostsRecyclerViewAdapter extends RecyclerView.Adapter<communityPostsRecyclerViewAdapter.MyViewHolder> {

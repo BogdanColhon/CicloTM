@@ -3,10 +3,9 @@ package com.example.ciclotm;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,71 +14,39 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.ciclotm.Admin.adminFurturiRecyclerViewAdapter;
-import com.example.ciclotm.Models.Report;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.example.ciclotm.Adapters.adminFurturiRecyclerViewAdapter;
+import com.example.ciclotm.Adapters.furturiRecycleViewAdapter;
+import com.example.ciclotm.Models.Objects.Report;
+import com.example.ciclotm.ViewModels.FurturiFragmentViewModel;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FurturiFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class FurturiFragment extends Fragment implements furturiRecycleViewAdapter.OnPostListener, adminFurturiRecyclerViewAdapter.OnPostListener {
     private ArrayList<Report> postsList = new ArrayList<>();
-    TextView furturiPostsNumberTextView;
-    TextView statsClickableTextView;
+    private TextView furturiPostsNumberTextView;
+    private TextView statsClickableTextView;
     private RecyclerView recyclerView;
-
-    furturiRecycleViewAdapter adapter;
-    adminFurturiRecyclerViewAdapter adminAdapter;
-
-    RecyclerView.LayoutManager layoutManager;
-    private DatabaseReference reference;
-
-
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
+    private furturiRecycleViewAdapter adapter;
+    private adminFurturiRecyclerViewAdapter adminAdapter;
+    private RecyclerView.LayoutManager layoutManager;
+    private FurturiFragmentViewModel mFurturiFragmentViewModel;
 
     public FurturiFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FurturiFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FurturiFragment newInstance(String param1, String param2) {
+
+    public static FurturiFragment newInstance() {
         FurturiFragment fragment = new FurturiFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -87,19 +54,22 @@ public class FurturiFragment extends Fragment implements furturiRecycleViewAdapt
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_furturi, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.furturiRView);
-        furturiPostsNumberTextView = (TextView) view.findViewById(R.id.furturiPostsNumberTextView);
-        statsClickableTextView = (TextView) view.findViewById(R.id.furturiStatsClickableTextView);
-        layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new furturiRecycleViewAdapter(getContext(), postsList, this);
-        adminAdapter = new adminFurturiRecyclerViewAdapter(getContext(), postsList, this);
+        initLayout(view);
+        mFurturiFragmentViewModel = ViewModelProviders.of(this).get(FurturiFragmentViewModel.class);
+        mFurturiFragmentViewModel.init();
+        mFurturiFragmentViewModel.getFurturiPosts().observe(getViewLifecycleOwner(), new Observer<ArrayList<Report>>() {
+            @Override
+            public void onChanged(ArrayList<Report> reports) {
+                if (MainActivity.role.equals("0"))
+                    adapter.updateFurturiPostList(reports);
+                else
+                    adminAdapter.updateAdminFurturiPostList(reports);
+            }
+        });
 
-        if (MainActivity.role.equals("0"))
-            recyclerView.setAdapter(adapter);
-        else
-            recyclerView.setAdapter(adminAdapter);
+        initRecyclerView();
+
 
         statsClickableTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,7 +78,8 @@ public class FurturiFragment extends Fragment implements furturiRecycleViewAdapt
                 startActivity(intent);
             }
         });
-        fetchPostsInfo();
+
+
         final Handler handler = new Handler();
         Runnable refresh = new Runnable() {
             @Override
@@ -121,44 +92,25 @@ public class FurturiFragment extends Fragment implements furturiRecycleViewAdapt
         return view;
     }
 
-    private void fetchPostsInfo() {
-        reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("furturiPosts");
-        reference.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                Report newPost = snapshot.getValue(Report.class);
-                if (newPost != null) {
-                    if (newPost.getStatus() == 0) {
-                        postsList.add(0, newPost);
-                        if (MainActivity.role.equals("0"))
-                            adapter.notifyDataSetChanged();
-                        else
-                            adminAdapter.notifyDataSetChanged();
-                    }
-                }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+    private void initLayout(View view) {
+        recyclerView = (RecyclerView) view.findViewById(R.id.furturiRView);
+        furturiPostsNumberTextView = (TextView) view.findViewById(R.id.furturiPostsNumberTextView);
+        statsClickableTextView = (TextView) view.findViewById(R.id.furturiStatsClickableTextView);
     }
+
+    private void initRecyclerView() {
+        layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+
+        adapter = new furturiRecycleViewAdapter(getContext(), postsList, this);
+        adminAdapter = new adminFurturiRecyclerViewAdapter(getContext(), postsList, this);
+
+        if (MainActivity.role.equals("0"))
+            recyclerView.setAdapter(adapter);
+        else
+            recyclerView.setAdapter(adminAdapter);
+    }
+
 
     private void fetchPostsNumber() {
         if (MainActivity.role.equals("0"))

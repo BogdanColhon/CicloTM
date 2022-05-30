@@ -31,7 +31,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
-import com.example.ciclotm.Models.LiveEventsMarker;
+import com.example.ciclotm.Models.Markers.LiveEventsMarker;
 import com.example.ciclotm.Services.TrackingService;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -64,11 +64,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link RecordFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class RecordFragment extends Fragment {
 
     public static TextView elapsedTime;
@@ -82,8 +77,8 @@ public class RecordFragment extends Fragment {
     private LinearLayout startLinear;
     private LinearLayout finishLinear;
     public static double maxDistance;
-    public static com.example.ciclotm.Models.Location maxPoint;
-    public static com.example.ciclotm.Models.Location startPoint;
+    public static com.example.ciclotm.Models.Objects.Location maxPoint;
+    public static com.example.ciclotm.Models.Objects.Location startPoint;
 
     private LocationListener locationListener = null;
     private LocationManager locationManager;
@@ -93,7 +88,7 @@ public class RecordFragment extends Fragment {
 
     private MapView mapView;
     public static GoogleMap map;
-    public static ArrayList<com.example.ciclotm.Models.Location> routePoints = new ArrayList<com.example.ciclotm.Models.Location>();
+    public static ArrayList<com.example.ciclotm.Models.Objects.Location> routePoints = new ArrayList<com.example.ciclotm.Models.Objects.Location>();
     public static ArrayList<Marker> routeMarker = new ArrayList<Marker>();
     private static ArrayList<LiveEventsMarker> liveEventsMarker = new ArrayList<LiveEventsMarker>();
     LatLng newMarkerPosition;
@@ -104,7 +99,7 @@ public class RecordFragment extends Fragment {
     private static double maxSpeed = 0;
     private static double speedSum = 0;
     private static int samples = 1;
-    public static com.example.ciclotm.Models.Location point;
+    public static com.example.ciclotm.Models.Objects.Location point;
     public static Marker startMarker;
 
     public static Fragment terminator;
@@ -118,45 +113,19 @@ public class RecordFragment extends Fragment {
     public static boolean isFirst = true;
     private boolean firstEvent = true;
     static int i = 0;
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-
-    // TODO: Rename parameter arguments, choose names that match
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public RecordFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment StoreFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static RecordFragment newInstance(String param1, String param2) {
         RecordFragment fragment = new RecordFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -470,7 +439,7 @@ public class RecordFragment extends Fragment {
                                 map = mMap;
                                 map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                                point = new com.example.ciclotm.Models.Location();
+                                point = new com.example.ciclotm.Models.Objects.Location();
                                 point.setLatitude(latLng.latitude);
                                 point.setLongitude(latLng.longitude);
                                 routePoints.add(point);
@@ -490,7 +459,7 @@ public class RecordFragment extends Fragment {
         }
     }
 
-    public static void setData(double rfDistance, double rfSpeed, int rfSamples, com.example.ciclotm.Models.Location rfPoint, Marker rfMarker, PolylineOptions rfPolylineOptions) {
+    public static void setData(double rfDistance, double rfSpeed, int rfSamples, com.example.ciclotm.Models.Objects.Location rfPoint, Marker rfMarker, PolylineOptions rfPolylineOptions) {
 
         distanceText.setText(String.format("%.2f km", rfDistance));
         speedText.setText(String.format("%.2f km/h", rfSpeed));
@@ -646,7 +615,7 @@ public class RecordFragment extends Fragment {
         resumeButton.setVisibility(View.INVISIBLE);
         addLiveEventButton.setVisibility(View.INVISIBLE);
         routeMarker = new ArrayList<Marker>();
-        routePoints = new ArrayList<com.example.ciclotm.Models.Location>();
+        routePoints = new ArrayList<com.example.ciclotm.Models.Objects.Location>();
         totalDistance = 0.0;
         distanceText.setText("0.0 km");
         time = "0:00:00";

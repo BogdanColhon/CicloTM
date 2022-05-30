@@ -11,8 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.ciclotm.Models.Comment;
-import com.google.firebase.auth.FirebaseUser;
+import com.example.ciclotm.Models.Objects.Comment;
+import com.example.ciclotm.Models.Users.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -45,10 +45,10 @@ public class generalCommentsRecyclerViewAdapter extends RecyclerView.Adapter<gen
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.comment_card_layout, viewGroup, false);
-        return new generalCommentsRecyclerViewAdapter.MyViewHolder(view,mOnPostListener);
+        return new generalCommentsRecyclerViewAdapter.MyViewHolder(view, mOnPostListener);
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener {
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView comment;
         TextView date;
@@ -93,8 +93,7 @@ public class generalCommentsRecyclerViewAdapter extends RecyclerView.Adapter<gen
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int i) {
-        if(GeneralFragment.userID.equals(commentsList.get(i).getUid()))
-        {
+        if (GeneralFragment.userID.equals(commentsList.get(i).getUid())) {
             holder.delete.setVisibility(View.VISIBLE);
         }
         String userId = commentsList.get(i).getUid();
@@ -132,6 +131,7 @@ public class generalCommentsRecyclerViewAdapter extends RecyclerView.Adapter<gen
         });
 
     }
+
     public interface OnPostListener {
         void OnDeleteClick(int position);
     }

@@ -4,17 +4,15 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ciclotm.Models.Legislation.CategorieReguli;
 import com.example.ciclotm.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class CategorieReguliAdapter extends RecyclerView.Adapter<CategorieReguliAdapter.CategorieReguliVH> {
 

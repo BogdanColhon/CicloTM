@@ -2,7 +2,6 @@ package com.example.ciclotm.Services;
 
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -35,7 +34,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
@@ -58,9 +56,9 @@ public class TrackingService extends Service implements LifecycleOwner {
     public static Intent intent;
     Notification notificationBuilder;
     NotificationManager notificationManager;
-    public static ArrayList<com.example.ciclotm.Models.Location> serRoutePoints = new ArrayList<com.example.ciclotm.Models.Location>();
+    public static ArrayList<com.example.ciclotm.Models.Objects.Location> serRoutePoints = new ArrayList<com.example.ciclotm.Models.Objects.Location>();
     public static ArrayList<Marker> serRouteMarker = new ArrayList<Marker>();
-    com.example.ciclotm.Models.Location pointx;
+    com.example.ciclotm.Models.Objects.Location pointx;
     Marker markerx;
 
     @Nullable
@@ -267,7 +265,7 @@ public class TrackingService extends Service implements LifecycleOwner {
 
 
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        pointx = new com.example.ciclotm.Models.Location();
+        pointx = new com.example.ciclotm.Models.Objects.Location();
         pointx.setLatitude(latLng.latitude);
         pointx.setLongitude(latLng.longitude);
         serRoutePoints.add(pointx);

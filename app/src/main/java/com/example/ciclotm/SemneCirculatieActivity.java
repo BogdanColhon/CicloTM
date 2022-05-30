@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
+import com.example.ciclotm.Models.Legislation.SemnCirculatie;
+
 import java.util.ArrayList;
 
 public class SemneCirculatieActivity extends AppCompatActivity {

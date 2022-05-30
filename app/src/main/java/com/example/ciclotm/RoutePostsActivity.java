@@ -9,11 +9,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
-import com.example.ciclotm.Models.Bike;
-import com.example.ciclotm.Models.Location;
-import com.example.ciclotm.Models.Route;
+import com.example.ciclotm.Models.Objects.Location;
+import com.example.ciclotm.Models.Objects.Route;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -34,7 +32,7 @@ public class RoutePostsActivity extends AppCompatActivity implements routePostsR
     private DatabaseReference reference;
     private DatabaseReference reference2;
     String owner;
-    public static ArrayList<com.example.ciclotm.Models.Location> expandedRoutePoints = new ArrayList<Location>();
+    public static ArrayList<Location> expandedRoutePoints = new ArrayList<Location>();
 
 
 
@@ -114,7 +112,7 @@ public class RoutePostsActivity extends AppCompatActivity implements routePostsR
         reference2.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                com.example.ciclotm.Models.Location point = snapshot.getValue(com.example.ciclotm.Models.Location.class);
+                Location point = snapshot.getValue(Location.class);
                 if (point != null) {
                     expandedRoutePoints.add(point);
                     System.out.println(point.getLatitude());
