@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.example.ciclotm.Action;
 import com.example.ciclotm.Models.Objects.Report;
+import com.example.ciclotm.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,5 +45,14 @@ public class FurturiFragmentRepository {
 
             }
         });
+    }
+
+    public void removeFurtPost(Report report){
+        DatabaseReference PostReference = FirebaseDatabase.getInstance("https://ciclotm-default-rtdb.europe-west1.firebasedatabase.app").getReference()
+                .child("furturiPosts").child(String.valueOf(report.getPublishDate()));
+        PostReference.removeValue();
+        DatabaseReference LocalPostsReference = FirebaseDatabase.getInstance("https://ciclotm-default-rtdb.europe-west1.firebasedatabase.app").getReference()
+                .child("Users").child(report.getUser_id()).child("Furturi").child(String.valueOf(report.getPublishDate()));
+        LocalPostsReference.removeValue();
     }
 }

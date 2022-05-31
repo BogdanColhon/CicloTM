@@ -34,6 +34,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.core.content.res.ResourcesCompat;
 
+import com.example.ciclotm.Adapters.ColorSpinnerAdapter;
 import com.example.ciclotm.Models.Markers.MapMarker;
 import com.example.ciclotm.Models.Objects.ColorObject;
 import com.example.ciclotm.Models.Objects.Report;

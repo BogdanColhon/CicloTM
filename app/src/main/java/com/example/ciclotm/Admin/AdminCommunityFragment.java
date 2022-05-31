@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 import com.example.ciclotm.AdminMenuActivity2;
 import com.example.ciclotm.R;
-import com.example.ciclotm.ViewPagerAdapter;
+import com.example.ciclotm.Adapters.ViewPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 

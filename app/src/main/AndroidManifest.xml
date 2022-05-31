@@ -29,31 +29,31 @@
             android:name=".Admin.AdminReguliCirculatieActivity"
             android:exported="false" />
         <activity
-            android:name=".BikeStatsActivity"
+            android:name=".Views.BikeStatsActivity"
             android:exported="false" />
         <activity
             android:name=".ExpandedRecordedRouteActivity"
             android:exported="false" />
         <activity
-            android:name=".RoutePostsActivity"
+            android:name=".Views.RoutePostsActivity"
             android:exported="false" />
         <activity
             android:name=".RecordedRouteActivity"
             android:exported="false" />
         <activity
-            android:name=".GalleryActivity"
+            android:name=".Views.GalleryActivity"
             android:exported="false" />
         <activity
-            android:name=".SemneCirculatieActivity"
+            android:name=".Views.SemneCirculatieActivity"
             android:exported="false" />
         <activity
-            android:name=".DotariObligatoriiActivity"
+            android:name=".Views.DotariObligatoriiActivity"
             android:exported="false" />
         <activity
-            android:name=".ImbunatatireaCirculatieiActivity"
+            android:name=".Views.ImbunatatireaCirculatieiActivity"
             android:exported="false" />
         <activity
-            android:name=".ReguliCirculatie.ReguliCirculatieActivity"
+            android:name=".Views.ReguliCirculatieActivity"
             android:exported="false" />
         <activity
             android:name=".ExpandedFurturiPostActivity"
@@ -97,10 +97,10 @@
             android:name=".ExpandedTurePostActivity"
             android:exported="false" />
         <activity
-            android:name=".ExpandedGeneralPostActivity"
+            android:name=".Views.ExpandedGeneralPostActivity"
             android:exported="false" />
         <activity
-            android:name=".BicyclePostActivity"
+            android:name=".Views.BicyclePostActivity"
             android:exported="false" />
 
         <meta-data
@@ -114,7 +114,7 @@
             android:name=".ReportStolenBikeActivity"
             android:exported="false" />
         <activity
-            android:name=".GeneralPostActivity"
+            android:name=".Views.GeneralPostActivity"
             android:exported="false" />
         <activity
             android:name=".ForgotPasswordActivity"
@@ -137,10 +137,10 @@
             android:name=".StatsActivity"
             android:exported="false" />
         <activity
-            android:name=".BicyclesActivity"
+            android:name=".Views.BicyclesActivity"
             android:exported="false" />
         <activity
-            android:name=".TurePostActivity"
+            android:name=".Views.TurePostActivity"
             android:exported="false" />
         <activity
             android:name=".MenuActivity"

@@ -28,4 +28,8 @@ public class GeneralFragmentViewModel extends ViewModel {
     public LiveData<ArrayList<generalPost>> getGeneralPosts() {
         return postList;
     }
+
+    public void removeGeneralPost(generalPost post){
+        mGeneralFragmentRepo.removeGeneralPost(post);
+    }
 }

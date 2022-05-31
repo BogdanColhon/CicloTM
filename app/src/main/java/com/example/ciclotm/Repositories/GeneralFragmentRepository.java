@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.example.ciclotm.Action;
 import com.example.ciclotm.Models.Posts.generalPost;
+import com.example.ciclotm.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,6 +43,11 @@ public class GeneralFragmentRepository {
 
             }
         });
+    }
+
+    public void removeGeneralPost(generalPost post){
+        reference = FirebaseDatabase.getInstance("https://ciclotm-default-rtdb.europe-west1.firebasedatabase.app").getReference("GeneralPosts").child(String.valueOf(post.getDate()));
+        reference.removeValue();
     }
 
 

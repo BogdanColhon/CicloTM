@@ -26,8 +26,6 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         terminator = this;
-        Intent intent = getIntent();
-        navigateToTrackingFragmentIfNeeded(intent);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         navController = Navigation.findNavController(this, R.id.fragment);
@@ -44,16 +42,6 @@ public class MenuActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        navigateToTrackingFragmentIfNeeded(intent);
-    }
-
-    private void navigateToTrackingFragmentIfNeeded(Intent intent) {
-        //if(intent.getAction() == Constants.ACTION_SHOW_TRACKING_FRAGMENT)
-        //   navController.navigate(R.id.action_global_trackingFragment);
-    }
 
     public void setActionBarTitle(String title) {
         getSupportActionBar().setTitle(title);

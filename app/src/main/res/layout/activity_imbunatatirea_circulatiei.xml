@@ -10,7 +10,7 @@
     android:paddingStart="10dp"
     android:layout_marginStart="10dp"
     android:layout_marginEnd="10dp"
-    tools:context=".ImbunatatireaCirculatieiActivity">
+    tools:context=".Views.ImbunatatireaCirculatieiActivity">
 
   <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/ImbunatatireRView"

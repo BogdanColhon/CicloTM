@@ -28,4 +28,8 @@ public class TureFragmentViewModel extends ViewModel {
     public LiveData<ArrayList<turePost>> getTurePosts() {
         return postList;
     }
+
+    public void removeTurePost(turePost post){
+        mTureFragmentRepo.removeTurePost(post);
+    }
 }

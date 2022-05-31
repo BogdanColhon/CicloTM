@@ -27,4 +27,7 @@ public class FurturiFragmentViewModel extends ViewModel {
     public LiveData<ArrayList<Report>> getFurturiPosts(){
         return postList;
     }
+    public void removeFurtPost(Report report){
+        mFurturiFragmentRepo.removeFurtPost(report);
+    }
 }

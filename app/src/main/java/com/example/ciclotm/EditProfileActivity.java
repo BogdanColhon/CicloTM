@@ -47,23 +47,20 @@ import java.util.HashMap;
 
 public class EditProfileActivity extends AppCompatActivity {
 
-    ImageView profileImage;
-    String currentPhotoPath;
-    String user_id;
-    String genderString;
+    private ImageView profileImage;
+    private String currentPhotoPath;
+    private String user_id;
     private File f;
     private StorageReference Folder;
     private DatabaseReference reference;
-    private StorageReference storageReference;
     private Uri contentUri;
     private final int PERMISSION_REQUEST_CODE = 100;
 
-    EditText firstNameEW;
-    EditText lastNameEW;
-    EditText bioEW;
-    EditText birthDateEW;
-    EditText phoneET;
-    EditText genderET;
+    private EditText firstNameEW;
+    private EditText lastNameEW;
+    private EditText bioEW;
+    private EditText phoneET;
+    private EditText genderET;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

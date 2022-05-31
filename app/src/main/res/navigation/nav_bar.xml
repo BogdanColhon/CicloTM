@@ -68,7 +68,7 @@
     </fragment>
     <fragment
         android:id="@+id/rulesFragment"
-        android:name="com.example.ciclotm.RulesFragment"
+        android:name="com.example.ciclotm.Views.RulesFragment"
         android:label="fragment_rules"
         tools:layout="@layout/fragment_rules" >
         <action

@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-public class galleryRecycleViewAdapter extends RecyclerView.Adapter<galleryRecycleViewAdapter.MyViewHolder>{
+public class galleryRecycleViewAdapter extends RecyclerView.Adapter<galleryRecycleViewAdapter.MyViewHolder> {
 
     Context context;
     private ArrayList<Photo> items;
@@ -31,9 +31,15 @@ public class galleryRecycleViewAdapter extends RecyclerView.Adapter<galleryRecyc
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        LayoutInflater inflater= LayoutInflater.from(context);
-        View itemView =inflater.inflate(R.layout.gallery_card_layout, viewGroup, false);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View itemView = inflater.inflate(R.layout.gallery_card_layout, viewGroup, false);
         return new galleryRecycleViewAdapter.MyViewHolder(itemView);
+    }
+
+    public void updatePhotoList(ArrayList<Photo> photos) {
+        items.clear();
+        items.addAll(photos);
+        this.notifyDataSetChanged();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements com.example.ciclotm.MyViewHolder {

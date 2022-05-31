@@ -44,4 +44,9 @@ public class TureFragmentRepository {
             }
         });
     }
+
+    public void removeTurePost(turePost post){
+        reference = FirebaseDatabase.getInstance("https://ciclotm-default-rtdb.europe-west1.firebasedatabase.app").getReference("TurePosts").child(String.valueOf(post.getDate()));
+        reference.removeValue();
+    }
 }

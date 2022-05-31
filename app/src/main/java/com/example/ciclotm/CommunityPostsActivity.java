@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import com.example.ciclotm.Models.Objects.Report;
 import com.example.ciclotm.Models.Posts.generalPost;
 import com.example.ciclotm.Models.Posts.turePost;
+import com.example.ciclotm.Views.ExpandedGeneralPostActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;

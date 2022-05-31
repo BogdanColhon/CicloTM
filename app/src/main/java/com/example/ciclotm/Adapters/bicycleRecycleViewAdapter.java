@@ -85,6 +85,7 @@ public class bicycleRecycleViewAdapter extends RecyclerView.Adapter<bicycleRecyc
 
     public void updateBikeList(ArrayList<Bike> x)
     {
+        x.removeAll(bikeList);
         bikeList.clear();
         bikeList.addAll(x);
         this.notifyDataSetChanged();

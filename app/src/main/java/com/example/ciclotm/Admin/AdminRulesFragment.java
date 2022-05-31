@@ -12,12 +12,12 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.example.ciclotm.AdminMenuActivity2;
-import com.example.ciclotm.DotariObligatoriiActivity;
-import com.example.ciclotm.GridAdapter;
-import com.example.ciclotm.ImbunatatireaCirculatieiActivity;
+import com.example.ciclotm.Views.DotariObligatoriiActivity;
+import com.example.ciclotm.Adapters.GridAdapter;
+import com.example.ciclotm.Views.ImbunatatireaCirculatieiActivity;
 import com.example.ciclotm.R;
-import com.example.ciclotm.ReguliCirculatie.ReguliCirculatieActivity;
-import com.example.ciclotm.SemneCirculatieActivity;
+import com.example.ciclotm.Views.ReguliCirculatieActivity;
+import com.example.ciclotm.Views.SemneCirculatieActivity;
 
 /**
  * A simple {@link Fragment} subclass.

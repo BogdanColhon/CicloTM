@@ -30,6 +30,12 @@ public class routePostsRecycleViewAdapter extends RecyclerView.Adapter<routePost
         this.mOnPostListener = onPostListener;
     }
 
+    public void updateRoutePostsList(ArrayList<Route> routes) {
+        routeList.clear();
+        routeList.addAll(routes);
+        this.notifyDataSetChanged();
+    }
+
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView dateText;
         TextView distanceText;

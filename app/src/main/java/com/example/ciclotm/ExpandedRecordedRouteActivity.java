@@ -28,6 +28,7 @@ import com.example.ciclotm.Models.Objects.Location;
 import com.example.ciclotm.Models.Objects.Photo;
 import com.example.ciclotm.Models.Objects.Route;
 import com.example.ciclotm.Models.Users.User;
+import com.example.ciclotm.Views.RoutePostsActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
