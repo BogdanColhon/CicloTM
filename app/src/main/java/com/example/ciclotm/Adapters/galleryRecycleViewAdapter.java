@@ -1,4 +1,4 @@
-package com.example.ciclotm;
+package com.example.ciclotm.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.ciclotm.Models.Objects.Photo;
+import com.example.ciclotm.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

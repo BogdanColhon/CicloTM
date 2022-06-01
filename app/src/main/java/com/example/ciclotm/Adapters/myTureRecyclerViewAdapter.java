@@ -1,4 +1,4 @@
-package com.example.ciclotm;
+package com.example.ciclotm.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.ciclotm.Models.Posts.turePost;
+import com.example.ciclotm.R;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -64,6 +65,13 @@ public class myTureRecyclerViewAdapter extends RecyclerView.Adapter<myTureRecycl
         storageReference = FirebaseStorage.getInstance().getReference().child(userProfilePicture);
         String userImageUrl = postsList.get(position).getUserImageUrl();
         Glide.with(context).load(userImageUrl).into(holder.user_photo);
+    }
+
+    public void updateTurePosts(ArrayList<turePost> x) {
+        x.removeAll(postsList);
+        postsList.clear();
+        postsList.addAll(x);
+        this.notifyDataSetChanged();
     }
 
 

@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.ciclotm.Models.Objects.Photo;
 import com.example.ciclotm.R;
 import com.example.ciclotm.ViewModels.GalleryActivityViewModel;
-import com.example.ciclotm.galleryRecycleViewAdapter;
+import com.example.ciclotm.Adapters.galleryRecycleViewAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 

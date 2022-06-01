@@ -1,4 +1,4 @@
-package com.example.ciclotm;
+package com.example.ciclotm.Views;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,14 +11,10 @@ import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProviders;
 
-import com.example.ciclotm.Models.Markers.LiveEventsMarker;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.Calendar;
-import java.util.Date;
+import com.example.ciclotm.R;
+import com.example.ciclotm.ViewModels.DialogFragmentLiveViewModel;
 
 public class DialogFragmentLive extends androidx.fragment.app.DialogFragment {
 
@@ -29,15 +25,17 @@ public class DialogFragmentLive extends androidx.fragment.app.DialogFragment {
     private Double markerLat;
     private Double markerLng;
     private String markerCat;
+    private DialogFragmentLiveViewModel mDialogFragmentLiveViewModel;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.custom_live_event_dialog, null);
-        radioGroup = view.findViewById(R.id.radioGroup);
-        addButton = view.findViewById(R.id.addButton);
-        descriptionEditText = view.findViewById(R.id.liveEventDescriptionEditText);
+
+        initLayout(view);
+
+        mDialogFragmentLiveViewModel = ViewModelProviders.of(this).get(DialogFragmentLiveViewModel.class);
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,21 +46,8 @@ public class DialogFragmentLive extends androidx.fragment.app.DialogFragment {
                 val2 = descriptionEditText.getText().toString().trim();
                 val3 = markerLat;
                 val4 = markerLng;
-                Date currentTime = Calendar.getInstance().getTime();
-                Date expiringTime = new Date();
-                expiringTime.setTime(System.currentTimeMillis() + (6 * 60 * 60 * 1000));
 
-
-                LiveEventsMarker marker = new LiveEventsMarker(val1, val1, val2, currentTime, expiringTime, val3, val4, 0);
-
-                FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("LiveEventsMarkers").child(String.valueOf(currentTime))
-                        .setValue(marker).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                        }
-                    }
-                });
+                mDialogFragmentLiveViewModel.setMarker(val1, val2, val3, val4);
                 dismiss();
             }
         });
@@ -98,6 +83,12 @@ public class DialogFragmentLive extends androidx.fragment.app.DialogFragment {
         });
         return view;
 
+    }
+
+    private void initLayout(View view) {
+        radioGroup = view.findViewById(R.id.radioGroup);
+        addButton = view.findViewById(R.id.addButton);
+        descriptionEditText = view.findViewById(R.id.liveEventDescriptionEditText);
     }
 
     public void putArguments(Bundle args) {

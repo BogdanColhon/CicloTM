@@ -1,4 +1,4 @@
-package com.example.ciclotm;
+package com.example.ciclotm.Views;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.example.ciclotm.Models.Users.User;
+import com.example.ciclotm.R;
 
 public class ProfileActivity extends AppCompatActivity {
 

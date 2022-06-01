@@ -1,4 +1,4 @@
-package com.example.ciclotm;
+package com.example.ciclotm.Views;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,11 +11,10 @@ import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProviders;
 
-import com.example.ciclotm.Models.Markers.PointOfInterestMarker;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.FirebaseDatabase;
+import com.example.ciclotm.R;
+import com.example.ciclotm.ViewModels.DialogFragmentViewModel;
 
 public class DialogFragment extends androidx.fragment.app.DialogFragment {
 
@@ -27,15 +26,18 @@ public class DialogFragment extends androidx.fragment.app.DialogFragment {
     private Double markerLat;
     private Double markerLng;
     private String markerCat;
+    private DialogFragmentViewModel mDialogFragmentViewModel;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.custom_point_of_interest_dialog, null);
-        radioGroup = view.findViewById(R.id.radioGroup);
-        addButton = view.findViewById(R.id.addButton);
-        placeNameEditText = view.findViewById(R.id.placeName);
+
+        initActionBar(view);
+
+        mDialogFragmentViewModel = ViewModelProviders.of(this).get(DialogFragmentViewModel.class);
+
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,16 +54,7 @@ public class DialogFragment extends androidx.fragment.app.DialogFragment {
                     return;
                 }
 
-                PointOfInterestMarker marker = new PointOfInterestMarker(val1, val2, val3, val4);
-
-                FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("PointsOfInterestMarkers").child(val1)
-                        .setValue(marker).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                        }
-                    }
-                });
+                mDialogFragmentViewModel.setMarker(val1, val2, val3, val4);
                 dismiss();
             }
         });
@@ -85,6 +78,12 @@ public class DialogFragment extends androidx.fragment.app.DialogFragment {
         });
         return view;
 
+    }
+
+    private void initActionBar(View view) {
+        radioGroup = view.findViewById(R.id.radioGroup);
+        addButton = view.findViewById(R.id.addButton);
+        placeNameEditText = view.findViewById(R.id.placeName);
     }
 
     public void putArguments(Bundle args) {

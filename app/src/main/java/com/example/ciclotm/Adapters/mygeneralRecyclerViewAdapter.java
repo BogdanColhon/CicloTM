@@ -1,4 +1,4 @@
-package com.example.ciclotm;
+package com.example.ciclotm.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.ciclotm.Models.Posts.generalPost;
+import com.example.ciclotm.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -50,6 +51,13 @@ public class mygeneralRecyclerViewAdapter extends RecyclerView.Adapter<mygeneral
         holder.data.setText(output);
         String userImageUrl = postsList.get(position).getUserImageUrl();
         Glide.with(context).load(userImageUrl).into(holder.user_photo);
+    }
+
+    public void updateGeneralPosts(ArrayList<generalPost> x) {
+        x.removeAll(postsList);
+        postsList.clear();
+        postsList.addAll(x);
+        this.notifyDataSetChanged();
     }
 
 

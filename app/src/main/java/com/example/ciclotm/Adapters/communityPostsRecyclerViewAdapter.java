@@ -1,4 +1,4 @@
-package com.example.ciclotm;
+package com.example.ciclotm.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.ciclotm.Models.Posts.furturiPost;
 import com.example.ciclotm.Models.Posts.generalPost;
 import com.example.ciclotm.Models.Posts.turePost;
+import com.example.ciclotm.R;
 
 import java.util.ArrayList;
 

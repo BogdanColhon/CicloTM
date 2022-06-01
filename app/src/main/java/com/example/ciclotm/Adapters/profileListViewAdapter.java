@@ -1,4 +1,4 @@
-package com.example.ciclotm;
+package com.example.ciclotm.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,13 +12,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
+import com.example.ciclotm.Models.Objects.profileListViewButton;
+import com.example.ciclotm.R;
 
 import java.util.ArrayList;
 
 public class profileListViewAdapter extends ArrayAdapter<profileListViewButton> {
 
     public profileListViewAdapter(@NonNull Context context, @NonNull ArrayList<profileListViewButton> objects) {
-        super(context,R.layout.profile_listview_button_layout, objects);
+        super(context, R.layout.profile_listview_button_layout, objects);
 
     }
 

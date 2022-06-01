@@ -26,11 +26,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.example.ciclotm.Adapters.profileListViewAdapter;
 import com.example.ciclotm.Models.Objects.Photo;
+import com.example.ciclotm.Models.Objects.profileListViewButton;
 import com.example.ciclotm.Models.Users.User;
 import com.example.ciclotm.Views.BicyclesActivity;
 import com.example.ciclotm.Views.BikeStatsActivity;
+import com.example.ciclotm.Views.CommunityPostsActivity;
 import com.example.ciclotm.Views.GalleryActivity;
+import com.example.ciclotm.Views.MenuActivity;
 import com.example.ciclotm.Views.RoutePostsActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

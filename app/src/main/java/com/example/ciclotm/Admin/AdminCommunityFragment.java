@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.ciclotm.AdminMenuActivity2;
+import com.example.ciclotm.Views.AdminMenuActivity2;
 import com.example.ciclotm.R;
 import com.example.ciclotm.Adapters.ViewPagerAdapter;
 import com.google.android.material.tabs.TabLayout;

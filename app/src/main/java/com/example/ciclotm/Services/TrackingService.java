@@ -25,7 +25,7 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 
 import com.example.ciclotm.Constants;
-import com.example.ciclotm.MenuActivity;
+import com.example.ciclotm.Views.MenuActivity;
 import com.example.ciclotm.R;
 import com.example.ciclotm.RecordFragment;
 import com.google.android.gms.location.FusedLocationProviderClient;

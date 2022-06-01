@@ -1,4 +1,4 @@
-package com.example.ciclotm;
+package com.example.ciclotm.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.ciclotm.Models.Objects.Report;
+import com.example.ciclotm.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -49,6 +50,13 @@ public class myFurturiRecyclerViewAdapter extends RecyclerView.Adapter<myFurturi
         String link = postsList.get(position).getBikeImageUrl();
         if (!link.equals(""))
             Glide.with(context).load(link).into(holder.bike_photo);
+    }
+
+    public void updateReportPosts(ArrayList<Report> x) {
+        x.removeAll(postsList);
+        postsList.clear();
+        postsList.addAll(x);
+        this.notifyDataSetChanged();
     }
 
 

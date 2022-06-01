@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ciclotm.Adapters.adminTureRecyclerViewAdapter;
 import com.example.ciclotm.Adapters.tureRecycleViewAdapter;
-import com.example.ciclotm.ExpandedTurePostActivity;
 import com.example.ciclotm.MainActivity;
 import com.example.ciclotm.Models.Posts.turePost;
 import com.example.ciclotm.R;

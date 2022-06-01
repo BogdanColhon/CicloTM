@@ -1,4 +1,4 @@
-package com.example.ciclotm;
+package com.example.ciclotm.Views;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -14,6 +14,7 @@ import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.ciclotm.R;
 import com.example.ciclotm.Services.TrackingService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 

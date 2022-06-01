@@ -128,29 +128,5 @@ public class RegisterActivity extends AppCompatActivity {
                         });
             }
         });
-
-  /*      InfoDialog.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showCustomDialog();
-            }
-        });
-    }
-
-    void showCustomDialog() {
-        final Dialog dialog = new Dialog(RegisterActivity.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(true);
-        dialog.setContentView(R.layout.custom_info_popup);
-
-        Button submitButton = dialog.findViewById(R.id.submit_button);
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-    }*/
     }
 }

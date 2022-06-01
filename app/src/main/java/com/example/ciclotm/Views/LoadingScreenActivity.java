@@ -1,4 +1,4 @@
-package com.example.ciclotm;
+package com.example.ciclotm.Views;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,9 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.VideoView;
+
+import com.example.ciclotm.MainActivity;
+import com.example.ciclotm.R;
 
 public class LoadingScreenActivity extends AppCompatActivity {
 
@@ -21,7 +24,7 @@ public class LoadingScreenActivity extends AppCompatActivity {
         videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                startActivity(new Intent(LoadingScreenActivity.this,MainActivity.class));
+                startActivity(new Intent(LoadingScreenActivity.this, MainActivity.class));
                 finish();
             }
         });

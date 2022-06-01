@@ -14,7 +14,7 @@
 
     <fragment
         android:id="@+id/communityFragment"
-        android:name="com.example.ciclotm.CommunityFragment"
+        android:name="com.example.ciclotm.Views.CommunityFragment"
         android:label="fragment_community"
         tools:layout="@layout/fragment_community" >
         <action

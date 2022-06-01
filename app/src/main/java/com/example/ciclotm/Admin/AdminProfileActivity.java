@@ -16,12 +16,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.ciclotm.Views.BicyclesActivity;
-import com.example.ciclotm.CommunityPostsActivity;
+import com.example.ciclotm.Views.CommunityPostsActivity;
 import com.example.ciclotm.R;
 import com.example.ciclotm.StatsActivity;
 import com.example.ciclotm.Models.Users.User;
-import com.example.ciclotm.profileListViewAdapter;
-import com.example.ciclotm.profileListViewButton;
+import com.example.ciclotm.Adapters.profileListViewAdapter;
+import com.example.ciclotm.Models.Objects.profileListViewButton;
 
 import java.io.IOException;
 import java.util.ArrayList;

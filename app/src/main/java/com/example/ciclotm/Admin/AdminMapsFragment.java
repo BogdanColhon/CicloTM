@@ -19,8 +19,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.example.ciclotm.AdminMenuActivity2;
-import com.example.ciclotm.DialogFragment;
+import com.example.ciclotm.Views.AdminMenuActivity2;
+import com.example.ciclotm.Views.DialogFragment;
 import com.example.ciclotm.Models.Markers.PointOfInterestMarker;
 import com.example.ciclotm.R;
 import com.google.android.gms.maps.CameraUpdateFactory;

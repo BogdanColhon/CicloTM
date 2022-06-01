@@ -32,6 +32,9 @@ import com.bumptech.glide.Glide;
 import com.example.ciclotm.Models.Markers.LiveEventsMarker;
 import com.example.ciclotm.Models.Markers.PointOfInterestMarker;
 import com.example.ciclotm.Models.Objects.Report;
+import com.example.ciclotm.Views.DialogFragmentLive;
+import com.example.ciclotm.Views.ExpandedFurturiPostActivity;
+import com.example.ciclotm.Views.MenuActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -156,7 +159,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
         return view;
     }
 
-    private void init(View view,Bundle savedInstanceState){
+    private void init(View view, Bundle savedInstanceState) {
         mapView = view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         reportButton = view.findViewById(R.id.reportFloatingButton);
@@ -466,59 +469,61 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
                 if (newMarker.getExpiringDate().after(currentTime)) {
                     LatLng latLng = new LatLng(newMarker.getLat(), newMarker.getLng());
 
-                    if (String.valueOf(newMarker.getType()).equals("Groapă")) {
-                        Marker marker = map.addMarker(new MarkerOptions()
-                                .position(latLng)
-                                .title(newMarker.getTitle())
-                                .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ground_hole_marker_2)));
-                    }
-                    if (String.valueOf(newMarker.getType()).equals("Gheață")) {
-                        Marker marker = map.addMarker(new MarkerOptions()
-                                .position(latLng)
-                                .title(newMarker.getTitle())
-                                .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.snowflake_2)));
-                    }
-                    if (String.valueOf(newMarker.getType()).equals("Cioburi")) {
-                        Marker marker = map.addMarker(new MarkerOptions()
-                                .position(latLng)
-                                .title(newMarker.getTitle())
-                                .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.broken_bottle_2)));
-                    }
-                    if (String.valueOf(newMarker.getType()).equals("Lucrări")) {
-                        Marker marker = map.addMarker(new MarkerOptions()
-                                .position(latLng)
-                                .title(newMarker.getTitle())
-                                .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.road_work_marker_4)));
-                    }
-                    if (String.valueOf(newMarker.getType()).equals("Accident")) {
-                        Marker marker = map.addMarker(new MarkerOptions()
-                                .position(latLng)
-                                .title(newMarker.getTitle())
-                                .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.accident_marker_3)));
-                    }
-
-                    map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-                        @Nullable
-                        @Override
-                        public View getInfoContents(@NonNull Marker marker) {
-                            View v = getLayoutInflater().inflate(R.layout.live_events_marker_info, null);
-                            TextView t1 = (TextView) v.findViewById(R.id.liveEventsMarkerInfoTitleTextView);
-                            TextView t2 = (TextView) v.findViewById(R.id.liveEventsMarkerInfoTimeTextView);
-                            TextView t3 = (TextView) v.findViewById(R.id.liveEventsMarkerContentTextView);
-                            t1.setText(newMarker.getTitle());
-                            SimpleDateFormat df = new SimpleDateFormat("HH:mm  dd/MM/yyyy", Locale.getDefault());
-                            String output = df.format(newMarker.getPublishDate());
-                            t2.setText(output);
-                            t3.setText(newMarker.getDescription());
-                            return v;
+                    if (getContext() != null) {
+                        if (String.valueOf(newMarker.getType()).equals("Groapă")) {
+                            Marker marker = map.addMarker(new MarkerOptions()
+                                    .position(latLng)
+                                    .title(newMarker.getTitle())
+                                    .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ground_hole_marker_2)));
+                        }
+                        if (String.valueOf(newMarker.getType()).equals("Gheață")) {
+                            Marker marker = map.addMarker(new MarkerOptions()
+                                    .position(latLng)
+                                    .title(newMarker.getTitle())
+                                    .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.snowflake_2)));
+                        }
+                        if (String.valueOf(newMarker.getType()).equals("Cioburi")) {
+                            Marker marker = map.addMarker(new MarkerOptions()
+                                    .position(latLng)
+                                    .title(newMarker.getTitle())
+                                    .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.broken_bottle_2)));
+                        }
+                        if (String.valueOf(newMarker.getType()).equals("Lucrări")) {
+                            Marker marker = map.addMarker(new MarkerOptions()
+                                    .position(latLng)
+                                    .title(newMarker.getTitle())
+                                    .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.road_work_marker_4)));
+                        }
+                        if (String.valueOf(newMarker.getType()).equals("Accident")) {
+                            Marker marker = map.addMarker(new MarkerOptions()
+                                    .position(latLng)
+                                    .title(newMarker.getTitle())
+                                    .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.accident_marker_3)));
                         }
 
-                        @Nullable
-                        @Override
-                        public View getInfoWindow(@NonNull Marker marker) {
-                            return null;
-                        }
-                    });
+                        map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                            @Nullable
+                            @Override
+                            public View getInfoContents(@NonNull Marker marker) {
+                                View v = getLayoutInflater().inflate(R.layout.live_events_marker_info, null);
+                                TextView t1 = (TextView) v.findViewById(R.id.liveEventsMarkerInfoTitleTextView);
+                                TextView t2 = (TextView) v.findViewById(R.id.liveEventsMarkerInfoTimeTextView);
+                                TextView t3 = (TextView) v.findViewById(R.id.liveEventsMarkerContentTextView);
+                                t1.setText(newMarker.getTitle());
+                                SimpleDateFormat df = new SimpleDateFormat("HH:mm  dd/MM/yyyy", Locale.getDefault());
+                                String output = df.format(newMarker.getPublishDate());
+                                t2.setText(output);
+                                t3.setText(newMarker.getDescription());
+                                return v;
+                            }
+
+                            @Nullable
+                            @Override
+                            public View getInfoWindow(@NonNull Marker marker) {
+                                return null;
+                            }
+                        });
+                    }
                 }
 
             }

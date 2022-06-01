@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.example.ciclotm.AdminMenuActivity2;
+import com.example.ciclotm.Views.AdminMenuActivity2;
 import com.example.ciclotm.Views.DotariObligatoriiActivity;
 import com.example.ciclotm.Adapters.GridAdapter;
 import com.example.ciclotm.Views.ImbunatatireaCirculatieiActivity;

@@ -14,6 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ciclotm.Models.Users.User;
+import com.example.ciclotm.Views.AdminMenuActivity2;
+import com.example.ciclotm.Views.MenuActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;

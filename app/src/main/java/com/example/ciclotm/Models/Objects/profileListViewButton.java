@@ -1,4 +1,4 @@
-package com.example.ciclotm;
+package com.example.ciclotm.Models.Objects;
 
 public class profileListViewButton {
     private String button_name;
