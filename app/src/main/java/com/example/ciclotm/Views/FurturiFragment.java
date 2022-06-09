@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ciclotm.Adapters.adminFurturiRecyclerViewAdapter;
 import com.example.ciclotm.Adapters.furturiRecycleViewAdapter;
-import com.example.ciclotm.MainActivity;
 import com.example.ciclotm.Models.Objects.Report;
 import com.example.ciclotm.R;
 import com.example.ciclotm.StatsActivity;

@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.widget.VideoView;
 
-import com.example.ciclotm.MainActivity;
 import com.example.ciclotm.R;
 
 public class LoadingScreenActivity extends AppCompatActivity {

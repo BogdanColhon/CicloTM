@@ -8,12 +8,7 @@ import com.example.ciclotm.Views.FurturiFragment;
 import com.example.ciclotm.Views.GeneralFragment;
 import com.example.ciclotm.Views.TureFragment;
 
-import java.util.ArrayList;
-
 public class ViewPagerAdapter extends FragmentStateAdapter {
-
-    ArrayList<Fragment> fragmentArrayList = new ArrayList<>();
-    ArrayList<String> fragmentTitle;
 
     public ViewPagerAdapter(@NonNull Fragment fragmentActivity) {
         super(fragmentActivity);

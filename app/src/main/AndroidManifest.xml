@@ -117,11 +117,11 @@
             android:name=".Views.GeneralPostActivity"
             android:exported="false" />
         <activity
-            android:name=".ForgotPasswordActivity"
+            android:name=".Views.ForgotPasswordActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
-            android:name=".RegisterActivity"
+            android:name=".Views.RegisterActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
@@ -147,7 +147,7 @@
             android:exported="false"
             android:launchMode="singleTask" />
         <activity
-            android:name=".MainActivity"
+            android:name=".Views.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
     </application>

@@ -34,6 +34,7 @@ import com.example.ciclotm.Views.BicyclesActivity;
 import com.example.ciclotm.Views.BikeStatsActivity;
 import com.example.ciclotm.Views.CommunityPostsActivity;
 import com.example.ciclotm.Views.GalleryActivity;
+import com.example.ciclotm.Views.MainActivity;
 import com.example.ciclotm.Views.MenuActivity;
 import com.example.ciclotm.Views.RoutePostsActivity;
 import com.google.firebase.auth.FirebaseAuth;

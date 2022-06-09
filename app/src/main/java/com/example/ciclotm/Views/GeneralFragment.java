@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ciclotm.Adapters.generalRecycleViewAdapter;
 import com.example.ciclotm.Adapters.adminGeneralRecycleViewAdapter;
-import com.example.ciclotm.MainActivity;
 import com.example.ciclotm.Models.Posts.generalPost;
 import com.example.ciclotm.R;
 import com.example.ciclotm.ViewModels.GeneralFragmentViewModel;

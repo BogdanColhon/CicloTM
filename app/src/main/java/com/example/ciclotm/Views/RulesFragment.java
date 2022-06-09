@@ -14,7 +14,6 @@ import android.widget.GridView;
 import com.example.ciclotm.Adapters.GridAdapter;
 import com.example.ciclotm.Admin.AdminDotariObligatoriiActivity;
 import com.example.ciclotm.Admin.AdminReguliCirculatieActivity;
-import com.example.ciclotm.MainActivity;
 import com.example.ciclotm.R;
 
 public class RulesFragment extends Fragment {

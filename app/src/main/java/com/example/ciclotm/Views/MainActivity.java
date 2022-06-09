@@ -1,7 +1,4 @@
-package com.example.ciclotm;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.ciclotm.Views;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,29 +10,28 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.example.ciclotm.Models.Users.User;
-import com.example.ciclotm.Views.AdminMenuActivity2;
-import com.example.ciclotm.Views.MenuActivity;
+import com.example.ciclotm.R;
+import com.example.ciclotm.ViewModels.MainActivityViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
 
     private EditText editTextEmail, editTextPassword;
     private TextView forgotPasswordTextView;
     private FirebaseAuth mAuth;
-    private DatabaseReference reference;
-    private User userProfile;
     private String email;
     public static String role;
+    private MainActivityViewModel mMainActivityViewModel;
 
     SharedPreferences sharedPreferences;
     public static final String fileName = "credentials";
@@ -47,29 +43,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        editTextEmail = (EditText) findViewById(R.id.editTextTextLoginEmail);
-        editTextPassword = (EditText) findViewById(R.id.editTextTextLoginPassword);
-        forgotPasswordTextView = (TextView) findViewById(R.id.forogtPasswordTextView);
+        initLayout();
+        checkIfLogged();
 
-        sharedPreferences = getSharedPreferences(fileName, Context.MODE_PRIVATE);
-        String check_email = sharedPreferences.getString(Email, null);
-        String check_role = sharedPreferences.getString(isAdmin,null);
-        System.out.println(check_email);
-        if (check_email != null) {
-            System.out.println(check_role);
-            if(check_role.equals("0")) {
-                role = "0";
-                Intent intent = new Intent(MainActivity.this, MenuActivity.class);
-                startActivity((intent));
-                finish();
-            }
-            if(check_role.equals("1")) {
-                role = "1";
-                Intent intent = new Intent(MainActivity.this, AdminMenuActivity2.class);
-                startActivity((intent));
-                finish();
-            }
-        }
+
         mAuth = FirebaseAuth.getInstance();
         forgotPasswordTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,9 +56,36 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void checkIfLogged() {
+        sharedPreferences = getSharedPreferences(fileName, Context.MODE_PRIVATE);
+        String check_email = sharedPreferences.getString(Email, null);
+        String check_role = sharedPreferences.getString(isAdmin, null);
+        System.out.println(check_email);
+        if (check_email != null) {
+            System.out.println(check_role);
+            if (check_role.equals("0")) {
+                role = "0";
+                Intent intent = new Intent(MainActivity.this, MenuActivity.class);
+                startActivity((intent));
+                finish();
+            }
+            if (check_role.equals("1")) {
+                role = "1";
+                Intent intent = new Intent(MainActivity.this, AdminMenuActivity2.class);
+                startActivity((intent));
+                finish();
+            }
+        }
+    }
+
+    private void initLayout() {
+        editTextEmail = (EditText) findViewById(R.id.editTextTextLoginEmail);
+        editTextPassword = (EditText) findViewById(R.id.editTextTextLoginPassword);
+        forgotPasswordTextView = (TextView) findViewById(R.id.forogtPasswordTextView);
+    }
+
     public void clickedLogin(View view) {
         userLogin();
-        // startActivity(new Intent(MainActivity.this, MenuActivity.class));
     }
 
     public void clickedRegister(View view) {
@@ -105,10 +109,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (password.isEmpty()) {
-            editTextPassword.setError("Introduceti parola!");
+            editTextPassword.setError("Introduceți parola!");
             editTextPassword.requestFocus();
             return;
         }
+
+        mMainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
 
 
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -117,13 +123,11 @@ public class MainActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                     if (user.isEmailVerified()) {
-                        reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users");
-                        reference.child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        mMainActivityViewModel.init(user);
+                        mMainActivityViewModel.getUser().observe(MainActivity.this, new Observer<User>() {
                             @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                userProfile = snapshot.getValue(User.class);
-                                role=userProfile.getIsAdmin();
-                                System.out.println(role);
+                            public void onChanged(User user) {
+                                role = user.getIsAdmin();
                                 if (role.equals("0")) {
 
                                     startActivity(new Intent(MainActivity.this, MenuActivity.class));
@@ -139,12 +143,8 @@ public class MainActivity extends AppCompatActivity {
                                 editor.apply();
 
                             }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-                            }
-
                         });
+
                     } else {
                         user.sendEmailVerification();
                         Toast.makeText(MainActivity.this, "Email-ul trebuie validat!", Toast.LENGTH_SHORT).show();

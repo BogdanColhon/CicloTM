@@ -77,12 +77,8 @@ public class RecordFragment extends Fragment {
     private FloatingActionButton addLiveEventButton;
     private LinearLayout startLinear;
     private LinearLayout finishLinear;
-    public static double maxDistance;
-    public static com.example.ciclotm.Models.Objects.Location maxPoint;
     public static com.example.ciclotm.Models.Objects.Location startPoint;
 
-    private LocationListener locationListener = null;
-    private LocationManager locationManager;
     private FusedLocationProviderClient client;
     private DatabaseReference reference;
     private static Context context;
@@ -112,7 +108,6 @@ public class RecordFragment extends Fragment {
 
     public static boolean shouldRefreshOnResume = false;
     public static boolean isFirst = true;
-    private boolean firstEvent = true;
     static int i = 0;
 
     public RecordFragment() {
@@ -152,7 +147,6 @@ public class RecordFragment extends Fragment {
 
         rfNavBar = getActivity().findViewById(R.id.bottomNavigationView);
 
-        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         alertDialog = new AlertDialog.Builder(getContext()).create();
 
 
