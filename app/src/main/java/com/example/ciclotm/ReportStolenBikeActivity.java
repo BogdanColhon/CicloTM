@@ -38,6 +38,7 @@ import com.example.ciclotm.Adapters.ColorSpinnerAdapter;
 import com.example.ciclotm.Models.Markers.MapMarker;
 import com.example.ciclotm.Models.Objects.ColorObject;
 import com.example.ciclotm.Models.Objects.Report;
+import com.example.ciclotm.Views.MapsFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
