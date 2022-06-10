@@ -11,13 +11,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class MainActivityRepository {
+public class MenuActivityRepository {
     private DatabaseReference reference;
-    public static MainActivityRepository instance;
+    public static MenuActivityRepository instance;
 
-    public static MainActivityRepository getInstance() {
+    public static MenuActivityRepository getInstance() {
         if (instance == null) {
-            instance = new MainActivityRepository();
+            instance = new MenuActivityRepository();
         }
         return instance;
     }

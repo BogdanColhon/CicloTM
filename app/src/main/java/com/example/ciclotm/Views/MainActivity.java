@@ -129,9 +129,13 @@ public class MainActivity extends AppCompatActivity {
                             public void onChanged(User user) {
                                 role = user.getIsAdmin();
                                 if (role.equals("0")) {
-
-                                    startActivity(new Intent(MainActivity.this, MenuActivity.class));
-                                    finish();
+                                    if (user.getStatus() == 0) {
+                                        startActivity(new Intent(MainActivity.this, MenuActivity.class));
+                                        finish();
+                                    }
+                                    if (user.getStatus() == 1) {
+                                        Toast.makeText(MainActivity.this, "Contul a fost suspendat", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
                                 if (role.equals("1")) {
                                     startActivity(new Intent(MainActivity.this, AdminMenuActivity2.class));

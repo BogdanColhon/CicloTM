@@ -15,11 +15,13 @@ public class User implements Serializable {
     private String profileImageUrl;
     private String isAdmin;
     private Date BirthDate;
+    private String UserId;
+    private int Status;
 
     public User() {
     }
 
-    public User(String LastName, String FirstName, Date BirthDate, String PhoneNumber, String PhoneId, String Email, String Bio, String Gender, String profileImageUrl,String isAdmin) {
+    public User(String LastName, String FirstName, Date BirthDate, String PhoneNumber, String PhoneId, String Email, String Bio, String Gender, String profileImageUrl, String isAdmin, String UserId, int Status) {
         this.LastName = LastName;
         this.FirstName = FirstName;
         this.BirthDate = BirthDate;
@@ -30,6 +32,8 @@ public class User implements Serializable {
         this.Gender = Gender;
         this.profileImageUrl = profileImageUrl;
         this.isAdmin = isAdmin;
+        this.UserId = UserId;
+        this.Status = Status;
     }
 
 
@@ -113,4 +117,19 @@ public class User implements Serializable {
         this.isAdmin = isAdmin;
     }
 
+    public String getUserId() {
+        return UserId;
+    }
+
+    public void setUserId(String userId) {
+        UserId = userId;
+    }
+
+    public int getStatus() {
+        return Status;
+    }
+
+    public void setStatus(int status) {
+        Status = status;
+    }
 }

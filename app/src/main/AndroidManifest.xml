@@ -74,7 +74,7 @@
             android:foregroundServiceType="location" />
 
         <activity
-            android:name=".Admin.AdminProfileActivity"
+            android:name=".Views.AdminProfileActivity"
             android:exported="false" />
         <activity
             android:name=".Views.ProfileActivity"

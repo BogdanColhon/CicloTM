@@ -31,9 +31,9 @@ public class RegisterActivityRepository {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             if (password.matches("admin23.*")) {
-                                user = new User(lastname, firstname, date, phonenumber, "", email, "Bio", "Sex", "", "1");
+                                user = new User(lastname, firstname, date, phonenumber, "", email, "Bio", "Sex", "", "1",FirebaseAuth.getInstance().getCurrentUser().getUid(),0);
                             } else {
-                                user = new User(lastname, firstname, date, phonenumber, "", email, "Bio", "Sex", "https://firebasestorage.googleapis.com/v0/b/ciclotm.appspot.com/o/Admin%2FScreenshot%202022-01-13%20185334.jpg?alt=media&token=f5c61f90-a0a1-4b5e-a1bf-048c5edcfb27", "0");
+                                user = new User(lastname, firstname, date, phonenumber, "", email, "Bio", "Sex", "", "0",FirebaseAuth.getInstance().getCurrentUser().getUid(),0);
                             }
                             FirebaseDatabase.getInstance("https://ciclotm-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Users")
                                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
