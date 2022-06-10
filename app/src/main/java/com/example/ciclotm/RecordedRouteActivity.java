@@ -87,6 +87,8 @@ public class RecordedRouteActivity extends AppCompatActivity {
     private double distance;
     private String time;
     private double avgSpeed;
+    private double speedSum;
+    private int samples;
     private double maxSpeed;
     private String postTime;
 
@@ -97,9 +99,9 @@ public class RecordedRouteActivity extends AppCompatActivity {
     private String userID;
     private Date today;
     ArrayList<ImageView> gallery = new ArrayList<>();
-    int gallery_counter=0;
+    int gallery_counter = 0;
     int i = 0;
-    int index= 0;
+    int index = 0;
     double maxDistance;
     LatLng maxPoint;
 
@@ -107,7 +109,7 @@ public class RecordedRouteActivity extends AppCompatActivity {
 
     ArrayList<File> f = new ArrayList<>();
     String uri;
-    ArrayList<Uri> contentUri= new ArrayList<>();
+    ArrayList<Uri> contentUri = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,8 +151,7 @@ public class RecordedRouteActivity extends AppCompatActivity {
                     Intent pickPhoto = new Intent(Intent.ACTION_PICK,
                             android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(pickPhoto, 2);
-                    if(gallery_counter==3)
-                    {
+                    if (gallery_counter == 3) {
                         addPhotosLayout.setVisibility(View.GONE);
                         imageView4.setVisibility(View.VISIBLE);
                     }
@@ -172,14 +173,15 @@ public class RecordedRouteActivity extends AppCompatActivity {
     public void getRouteData() {
         distance = (double) getIntent().getSerializableExtra("distanceRecorded");
         time = (String) getIntent().getSerializableExtra("timeRecorded");
-        avgSpeed = (double) getIntent().getSerializableExtra("avgSpeedRecorded");
+        speedSum = (double) getIntent().getSerializableExtra("speedSum");
+        samples = (int) getIntent().getSerializableExtra("samples");
         maxSpeed = (double) getIntent().getSerializableExtra("maxSpeedRecorded");
     }
 
     public void setRouteData() {
         elapsedTime.setText(time);
         distanceText.setText(String.format("%.2f", distance) + " km");
-        avgSpeedText.setText(String.format("%.2f", avgSpeed) + " km/h");
+        avgSpeedText.setText(String.format("%.2f", speedSum/(double) samples) + " km/h");
         maxSpeedText.setText(String.format("%.2f", maxSpeed) + " km/h");
     }
 
@@ -247,9 +249,8 @@ public class RecordedRouteActivity extends AppCompatActivity {
                     currentPoint.setLatitude(secondPoint.latitude);
                     currentPoint.setLongitude(secondPoint.longitude);
 
-                    double currentDistance =DistanceCalculation(startLatLng.latitude, startLatLng.longitude, secondPoint.latitude,secondPoint.longitude);
-                    if(currentDistance > maxDistance)
-                    {
+                    double currentDistance = DistanceCalculation(startLatLng.latitude, startLatLng.longitude, secondPoint.latitude, secondPoint.longitude);
+                    if (currentDistance > maxDistance) {
                         maxDistance = currentDistance;
                         maxPoint = secondPoint;
                     }
@@ -263,7 +264,7 @@ public class RecordedRouteActivity extends AppCompatActivity {
                     Polyline polyline = map.addPolyline(polylineOptions);
                 }
 
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom( LatLngBounds.builder().include(startLatLng).include(maxPoint).build().getCenter(), 14));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLngBounds.builder().include(startLatLng).include(maxPoint).build().getCenter(), 14));
 
                 map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
                     @Override
@@ -276,6 +277,7 @@ public class RecordedRouteActivity extends AppCompatActivity {
             }
         });
     }
+
     private double DistanceCalculation(double lat1, double lon1, double lat2, double lon2) {
         double Radius = Constants.EARTH_RADIUS;
         double dLat = Math.toRadians(lat2 - lat1);
@@ -397,15 +399,16 @@ public class RecordedRouteActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.add:
 
-
-                Route route = new Route(today, userID, distance, time, avgSpeed, maxSpeed, uri);
+                Route route = new Route(today, userID, distance, time, 0, maxSpeed, uri);
+                avgSpeed = route.calculateAverageSpeed(speedSum, samples);
+                route.setAvgSpeed(avgSpeed);
                 postTime = String.valueOf(today);
                 FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users").child(userID).child("routePosts").child(postTime)
                         .setValue(route).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         for (i = 0; i < contentUri.size(); i++) {
-                            uploadPhotos(contentUri.get(i),f.get(i));
+                            uploadPhotos(contentUri.get(i), f.get(i));
                         }
                         Toast.makeText(RecordedRouteActivity.this, "Tură adăugată", Toast.LENGTH_SHORT).show();
                         RecordFragment.shouldRefreshOnResume = true;
@@ -415,9 +418,8 @@ public class RecordedRouteActivity extends AppCompatActivity {
                     }
 
                 });
-                for( int j = 0 ;j < RecordFragment.routePoints.size();j++)
-                {
-                    FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users").child(userID).child("routePosts").child(postTime).child("coordinates").child("point"+ String.valueOf(System.currentTimeMillis())).setValue(RecordFragment.routePoints.get(j));
+                for (int j = 0; j < RecordFragment.routePoints.size(); j++) {
+                    FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users").child(userID).child("routePosts").child(postTime).child("coordinates").child("point" + String.valueOf(System.currentTimeMillis())).setValue(RecordFragment.routePoints.get(j));
                 }
 
 
@@ -439,42 +441,42 @@ public class RecordedRouteActivity extends AppCompatActivity {
 
     }
 
-    public void uploadPhotos(Uri contentUri,File f) {
+    public void uploadPhotos(Uri contentUri, File f) {
 
-            Folder = FirebaseStorage.getInstance().getReference().child(userID).child("RoutesImages");
-            if (f != null) {
-                StorageReference routePhotosImageName = Folder.child(f.getName());
-                if (contentUri != null) {
-                    routePhotosImageName.putFile(contentUri)
-                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                @Override
-                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                    routePhotosImageName.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                        @Override
-                                        public void onSuccess(Uri uri) {
-                                            Photo photo = new Photo(today, uri.toString());
-                                            FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users").child(userID).child("routePosts").child(postTime).child("Photos").child("Photo" + index).setValue(photo)
-                                                    .addOnSuccessListener(new OnSuccessListener() {
-                                                        @Override
-                                                        public void onSuccess(Object o) {
+        Folder = FirebaseStorage.getInstance().getReference().child(userID).child("RoutesImages");
+        if (f != null) {
+            StorageReference routePhotosImageName = Folder.child(f.getName());
+            if (contentUri != null) {
+                routePhotosImageName.putFile(contentUri)
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                routePhotosImageName.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        Photo photo = new Photo(today, uri.toString());
+                                        FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users").child(userID).child("routePosts").child(postTime).child("Photos").child("Photo" + index).setValue(photo)
+                                                .addOnSuccessListener(new OnSuccessListener() {
+                                                    @Override
+                                                    public void onSuccess(Object o) {
 
-                                                        }
-                                                    });
-                                            FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users").child(userID).child("Gallery").child(String.valueOf(-1*(today.getTime())))
-                                                    .setValue(photo);
-    index++;
-                                        }
-                                    });
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
+                                                    }
+                                                });
+                                        FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("Users").child(userID).child("Gallery").child(String.valueOf(-1 * (today.getTime())))
+                                                .setValue(photo);
+                                        index++;
+                                    }
+                                });
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
 
-                        }
-                    });
-                }
+                    }
+                });
             }
         }
+    }
 
 
     private void checkCameraPermission() {

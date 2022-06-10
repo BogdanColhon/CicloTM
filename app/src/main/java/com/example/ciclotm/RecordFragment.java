@@ -196,7 +196,8 @@ public class RecordFragment extends Fragment {
                                 Intent intent = new Intent(getContext(), RecordedRouteActivity.class);
                                 intent.putExtra("distanceRecorded", totalDistance);
                                 intent.putExtra("timeRecorded", time);
-                                intent.putExtra("avgSpeedRecorded", speedSum / (double) samples);
+                                intent.putExtra("speedSum", speedSum);
+                                intent.putExtra("samples", samples);
                                 intent.putExtra("maxSpeedRecorded", maxSpeed);
                                 startActivity(intent);
                                 dialog.dismiss();
