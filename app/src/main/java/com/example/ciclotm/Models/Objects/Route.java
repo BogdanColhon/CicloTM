@@ -24,6 +24,11 @@ public class Route implements Serializable {
         this.mapImageUrl = mapImageUrl;
     }
 
+    public double calculateAverageSpeed(double speed,int samples)
+    {
+        return speed/(double) samples;
+    }
+
     public Date getPublishDate() {
         return publishDate;
     }

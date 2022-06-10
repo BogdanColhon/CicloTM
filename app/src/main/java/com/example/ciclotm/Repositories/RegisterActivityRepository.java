@@ -31,13 +31,15 @@ public class RegisterActivityRepository {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             if (password.matches("admin23.*")) {
-                                user = new User(lastname, firstname, date, phonenumber, "", email, "Bio", "Sex", "", "1",FirebaseAuth.getInstance().getCurrentUser().getUid(),0);
+                                user = new User(lastname, firstname, date, phonenumber, "", email, "Bio", "Sex", "", "1", FirebaseAuth.getInstance().getCurrentUser().getUid(), 0);
                             } else {
-                                user = new User(lastname, firstname, date, phonenumber, "", email, "Bio", "Sex", "", "0",FirebaseAuth.getInstance().getCurrentUser().getUid(),0);
+                                user = new User(lastname, firstname, date, phonenumber, "", email, "Bio", "Sex", "", "0", FirebaseAuth.getInstance().getCurrentUser().getUid(), 0);
                             }
-                            FirebaseDatabase.getInstance("https://ciclotm-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Users")
-                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                    .setValue(user);
+                            if (user.userPhoneIsValid(phonenumber)) {
+                                FirebaseDatabase.getInstance("https://ciclotm-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Users")
+                                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                        .setValue(user);
+                            }
                         }
                     }
                 });

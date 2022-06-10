@@ -1,5 +1,8 @@
 package com.example.ciclotm.Models.Users;
 
+import android.telephony.PhoneNumberUtils;
+import android.util.Patterns;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -36,6 +39,18 @@ public class User implements Serializable {
         this.Status = Status;
     }
 
+    public boolean userEmailIsValid(String email) {
+        System.out.println(email);
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches())
+            return false;
+        return true;
+    }
+
+    public boolean userPhoneIsValid(String phone) {
+        if (phone.length() != 10)
+        return false;
+        return true;
+    }
 
     public String getLastName() {
         return LastName;
@@ -61,13 +76,6 @@ public class User implements Serializable {
         PhoneNumber = phoneNumber;
     }
 
-    public String getPhoneId() {
-        return PhoneId;
-    }
-
-    public void setPhoneId(String phoneId) {
-        PhoneId = phoneId;
-    }
 
     public String getEmail() {
         return Email;
