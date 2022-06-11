@@ -32,6 +32,8 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.ciclotm.Models.Markers.LiveEventsMarker;
+import com.example.ciclotm.Services.BitmapDescriptorUtil;
+import com.example.ciclotm.Services.DistanceCalculator;
 import com.example.ciclotm.Services.TrackingService;
 import com.example.ciclotm.Views.MenuActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -109,6 +111,8 @@ public class RecordFragment extends Fragment {
     public static boolean shouldRefreshOnResume = false;
     public static boolean isFirst = true;
     static int i = 0;
+    private BitmapDescriptorUtil bitmapDescriptorUtil = new BitmapDescriptorUtil();
+
 
     public RecordFragment() {
         // Required empty public constructor
@@ -333,10 +337,11 @@ public class RecordFragment extends Fragment {
     }
 
     public static void checkProximityLiveEvents(LatLng currentPoint) {
+        DistanceCalculator distanceCalculator = new DistanceCalculator();
         String text;
         int type = 0;
         for (i = 0; i < liveEventsMarker.size(); i++) {
-            if (TrackingService.DistanceCalculation(currentPoint.latitude, currentPoint.longitude, liveEventsMarker.get(i).getLat(), liveEventsMarker.get(i).getLng()) <= 0.05) {
+            if (distanceCalculator.DistanceCalculation(currentPoint.latitude, currentPoint.longitude, liveEventsMarker.get(i).getLat(), liveEventsMarker.get(i).getLng()) <= 0.05) {
                 LiveEventsMarker liveEvent = liveEventsMarker.get(i);
                 text = liveEvent.getType() + " în apropiere";
                 switch (liveEvent.getType()) {
@@ -440,7 +445,7 @@ public class RecordFragment extends Fragment {
                                 point.setLongitude(latLng.longitude);
                                 routePoints.add(point);
                                 startPoint = point;
-                                MarkerOptions options = new MarkerOptions().position(latLng).icon(bitmapDescriptorFromVector(getContext(), R.drawable.black_dot_icon_resized));
+                                MarkerOptions options = new MarkerOptions().position(latLng).icon(bitmapDescriptorUtil.bitmapDescriptorFromVector(getContext(), R.drawable.black_dot_icon_resized));
                                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
                                 startMarker = mMap.addMarker(options);
                                 routeMarker.add(startMarker);
@@ -474,17 +479,6 @@ public class RecordFragment extends Fragment {
 
     }
 
-
-    public static BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
-
-        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
-        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
-        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        vectorDrawable.draw(canvas);
-        return BitmapDescriptorFactory.fromBitmap(bitmap);
-    }
-
     private void fetchLiveEventsMarkers() {
         reference = FirebaseDatabase.getInstance(getResources().getString(R.string.db_instance)).getReference("LiveEventsMarkers");
         reference.addChildEventListener(new ChildEventListener() {
@@ -502,31 +496,31 @@ public class RecordFragment extends Fragment {
                             Marker marker = map.addMarker(new MarkerOptions()
                                     .position(latLng)
                                     .title(newMarker.getTitle())
-                                    .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ground_hole_marker_2)));
+                                    .icon(bitmapDescriptorUtil.bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ground_hole_marker_2)));
                         }
                         if (String.valueOf(newMarker.getType()).equals("Gheață")) {
                             Marker marker = map.addMarker(new MarkerOptions()
                                     .position(latLng)
                                     .title(newMarker.getTitle())
-                                    .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.snowflake_2)));
+                                    .icon(bitmapDescriptorUtil.bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.snowflake_2)));
                         }
                         if (String.valueOf(newMarker.getType()).equals("Cioburi")) {
                             Marker marker = map.addMarker(new MarkerOptions()
                                     .position(latLng)
                                     .title(newMarker.getTitle())
-                                    .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.broken_bottle_2)));
+                                    .icon(bitmapDescriptorUtil.bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.broken_bottle_2)));
                         }
                         if (String.valueOf(newMarker.getType()).equals("Lucrări")) {
                             Marker marker = map.addMarker(new MarkerOptions()
                                     .position(latLng)
                                     .title(newMarker.getTitle())
-                                    .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.road_work_marker_4)));
+                                    .icon(bitmapDescriptorUtil.bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.road_work_marker_4)));
                         }
                         if (String.valueOf(newMarker.getType()).equals("Accident")) {
                             Marker marker = map.addMarker(new MarkerOptions()
                                     .position(latLng)
                                     .title(newMarker.getTitle())
-                                    .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.accident_marker_3)));
+                                    .icon(bitmapDescriptorUtil.bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.accident_marker_3)));
                         }
 
                         map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {

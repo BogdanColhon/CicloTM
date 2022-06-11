@@ -6,10 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -36,6 +33,7 @@ import com.example.ciclotm.Models.Markers.LiveEventsMarker;
 import com.example.ciclotm.Models.Markers.PointOfInterestMarker;
 import com.example.ciclotm.Models.Objects.Report;
 import com.example.ciclotm.R;
+import com.example.ciclotm.Services.BitmapDescriptorUtil;
 import com.example.ciclotm.StolenBikeLocationActivity;
 import com.example.ciclotm.ViewModels.MapsFragmentViewModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -44,7 +42,6 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -52,7 +49,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.database.DatabaseReference;
 import com.google.maps.android.heatmaps.Gradient;
 import com.google.maps.android.heatmaps.HeatmapTileProvider;
 import com.google.maps.android.heatmaps.WeightedLatLng;
@@ -80,6 +76,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
     private Location city_center;
     private int i = 0;
     private MapsFragmentViewModel mMapsFragmentViewModel;
+    private BitmapDescriptorUtil bitmapDescriptor = new BitmapDescriptorUtil();
 
     int[] colors = {
             Color.rgb(102, 225, 0), // green
@@ -315,7 +312,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
                         .title("Furată pe " + calendar.get(Calendar.DAY_OF_MONTH)
                                 + "." + month
                                 + "." + calendar.get(Calendar.YEAR))
-                        .icon(bitmapDescriptorFromVector(getContext(), R.drawable.ic_baseline_dot)));
+                        .icon(bitmapDescriptor.bitmapDescriptorFromVector(getContext(), R.drawable.ic_baseline_dot)));
                 hash_markers.put(marker.getId(), reports.get(num));
                 map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
                     @Nullable
@@ -383,19 +380,19 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
                 Marker marker = map.addMarker(new MarkerOptions()
                         .position(latLng)
                         .title(potmList.get(num).getTitle())
-                        .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ic_baseline_service)));
+                        .icon(bitmapDescriptor.bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ic_baseline_service)));
             }
             if (String.valueOf(potmList.get(num).getType()).equals("Magazin")) {
                 Marker marker = map.addMarker(new MarkerOptions()
                         .position(latLng)
                         .title(potmList.get(num).getTitle())
-                        .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ic_baseline_store_24)));
+                        .icon(bitmapDescriptor.bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ic_baseline_store_24)));
             }
             if (String.valueOf(potmList.get(num).getType()).equals("Cafenea")) {
                 Marker marker = map.addMarker(new MarkerOptions()
                         .position(latLng)
                         .title(potmList.get(num).getTitle())
-                        .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ic_baseline_coffee_24)));
+                        .icon(bitmapDescriptor.bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ic_baseline_coffee_24)));
             }
 
         }
@@ -414,31 +411,31 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
                         Marker marker = map.addMarker(new MarkerOptions()
                                 .position(latLng)
                                 .title(lemList.get(num).getTitle())
-                                .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ground_hole_marker_2)));
+                                .icon(bitmapDescriptor.bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.ground_hole_marker_2)));
                     }
                     if (String.valueOf(lemList.get(num).getType()).equals("Gheață")) {
                         Marker marker = map.addMarker(new MarkerOptions()
                                 .position(latLng)
                                 .title(lemList.get(num).getTitle())
-                                .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.snowflake_2)));
+                                .icon(bitmapDescriptor.bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.snowflake_2)));
                     }
                     if (String.valueOf(lemList.get(num).getType()).equals("Cioburi")) {
                         Marker marker = map.addMarker(new MarkerOptions()
                                 .position(latLng)
                                 .title(lemList.get(num).getTitle())
-                                .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.broken_bottle_2)));
+                                .icon(bitmapDescriptor.bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.broken_bottle_2)));
                     }
                     if (String.valueOf(lemList.get(num).getType()).equals("Lucrări")) {
                         Marker marker = map.addMarker(new MarkerOptions()
                                 .position(latLng)
                                 .title(lemList.get(num).getTitle())
-                                .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.road_work_marker_4)));
+                                .icon(bitmapDescriptor.bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.road_work_marker_4)));
                     }
                     if (String.valueOf(lemList.get(num).getType()).equals("Accident")) {
                         Marker marker = map.addMarker(new MarkerOptions()
                                 .position(latLng)
                                 .title(lemList.get(num).getTitle())
-                                .icon(bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.accident_marker_3)));
+                                .icon(bitmapDescriptor.bitmapDescriptorFromVector(getActivity().getApplicationContext(), R.drawable.accident_marker_3)));
                     }
 
                     int finalNum = num;
@@ -468,17 +465,6 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
             }
 
         }
-    }
-
-
-    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
-
-        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
-        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
-        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        vectorDrawable.draw(canvas);
-        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
     @Override
