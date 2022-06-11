@@ -19,6 +19,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.ciclotm.Services.BitmapDescriptorUtil;
 import com.example.ciclotm.Views.AdminMenuActivity2;
 import com.example.ciclotm.Views.DialogFragment;
 import com.example.ciclotm.Models.Markers.PointOfInterestMarker;
@@ -65,6 +66,7 @@ public class AdminMapsFragment extends Fragment {
     private LatLng newPointOfInterestMarker;
     private String fulladdress = "-";
     private ArrayList<PointOfInterestMarker> markerList = new ArrayList<>();
+    private BitmapDescriptorUtil bitmapDescriptorUtil = new BitmapDescriptorUtil();
 
 
 
@@ -188,19 +190,19 @@ public class AdminMapsFragment extends Fragment {
                     Marker marker = map.addMarker(new MarkerOptions()
                             .position(latLng)
                             .title(newMarker.getTitle())
-                            .icon(bitmapDescriptorFromVector(getContext(), R.drawable.ic_baseline_service)));
+                            .icon(bitmapDescriptorUtil.bitmapDescriptorFromVector(getContext(), R.drawable.ic_baseline_service)));
                 }
                 if (String.valueOf(newMarker.getType()).equals("Magazin")) {
                     Marker marker = map.addMarker(new MarkerOptions()
                             .position(latLng)
                             .title(newMarker.getTitle())
-                            .icon(bitmapDescriptorFromVector(getContext(), R.drawable.ic_baseline_store_24)));
+                            .icon(bitmapDescriptorUtil.bitmapDescriptorFromVector(getContext(), R.drawable.ic_baseline_store_24)));
                 }
                 if (String.valueOf(newMarker.getType()).equals("Cafenea")) {
                     Marker marker = map.addMarker(new MarkerOptions()
                             .position(latLng)
                             .title(newMarker.getTitle())
-                            .icon(bitmapDescriptorFromVector(getContext(), R.drawable.ic_baseline_coffee_24)));
+                            .icon(bitmapDescriptorUtil.bitmapDescriptorFromVector(getContext(), R.drawable.ic_baseline_coffee_24)));
                 }
             }
 
@@ -232,15 +234,6 @@ public class AdminMapsFragment extends Fragment {
 
             }
         });
-    }
-
-    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
-        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
-        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
-        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        vectorDrawable.draw(canvas);
-        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
     private boolean checkPermission() {

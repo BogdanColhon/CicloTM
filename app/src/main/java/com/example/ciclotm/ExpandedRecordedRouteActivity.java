@@ -28,6 +28,7 @@ import com.example.ciclotm.Models.Objects.Location;
 import com.example.ciclotm.Models.Objects.Photo;
 import com.example.ciclotm.Models.Objects.Route;
 import com.example.ciclotm.Models.Users.User;
+import com.example.ciclotm.Services.DistanceCalculator;
 import com.example.ciclotm.Views.RoutePostsActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -96,6 +97,7 @@ public class ExpandedRecordedRouteActivity extends AppCompatActivity {
     boolean fetched = false;
     double maxDistance;
     LatLng maxPoint;
+    private DistanceCalculator distanceCalculator = new DistanceCalculator();
 
     private final int PERMISSION_REQUEST_CODE = 100;
     private Route openedRoute;
@@ -277,7 +279,7 @@ public class ExpandedRecordedRouteActivity extends AppCompatActivity {
                     currentPoint.setLatitude(secondPoint.latitude);
                     currentPoint.setLongitude(secondPoint.longitude);
 
-                    double currentDistance =DistanceCalculation(startLatLng.latitude, startLatLng.longitude, secondPoint.latitude,secondPoint.longitude);
+                    double currentDistance =distanceCalculator.DistanceCalculation(startLatLng.latitude, startLatLng.longitude, secondPoint.latitude,secondPoint.longitude);
                     if(currentDistance > maxDistance)
                     {
                         maxDistance = currentDistance;
@@ -298,26 +300,6 @@ public class ExpandedRecordedRouteActivity extends AppCompatActivity {
             }
         });
     }
-
-    private double DistanceCalculation(double lat1, double lon1, double lat2, double lon2) {
-        double Radius = Constants.EARTH_RADIUS;
-        double dLat = Math.toRadians(lat2 - lat1);
-        double dLon = Math.toRadians(lon2 - lon1);
-        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        double c = 2 * Math.asin(Math.sqrt(a));
-        return Radius * c;
-    }
-
-    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
-
-        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
-        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
-        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        vectorDrawable.draw(canvas);
-        return BitmapDescriptorFactory.fromBitmap(bitmap);
-    }
-
 
     @Override
     public void onStart() {

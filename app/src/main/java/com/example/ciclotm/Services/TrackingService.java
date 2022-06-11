@@ -60,6 +60,8 @@ public class TrackingService extends Service implements LifecycleOwner {
     public static ArrayList<Marker> serRouteMarker = new ArrayList<Marker>();
     com.example.ciclotm.Models.Objects.Location pointx;
     Marker markerx;
+    private DistanceCalculator distanceCalculator = new DistanceCalculator();
+    private BitmapDescriptorUtil bitmapDescriptorUtil = new BitmapDescriptorUtil();
 
     @Nullable
     @Override
@@ -237,7 +239,7 @@ public class TrackingService extends Service implements LifecycleOwner {
                 LatLng firstPoint = new LatLng(serRoutePoints.get(serRoutePoints.size() - 2).getLatitude(), serRoutePoints.get(serRoutePoints.size() - 2).getLongitude());
                 LatLng secondPoint = new LatLng(serRoutePoints.get(serRoutePoints.size() - 1).getLatitude(), serRoutePoints.get(serRoutePoints.size() - 1).getLongitude());
 
-                double pointsDistance = DistanceCalculation(firstPoint.latitude, firstPoint.longitude, secondPoint.latitude, secondPoint.longitude);
+                double pointsDistance = distanceCalculator.DistanceCalculation(firstPoint.latitude, firstPoint.longitude, secondPoint.latitude, secondPoint.longitude);;
                 totalDistance = totalDistance + pointsDistance;
                 speed = pointsDistance / (double) (5.0 / 3600.0);
 
@@ -269,21 +271,12 @@ public class TrackingService extends Service implements LifecycleOwner {
         pointx.setLatitude(latLng.latitude);
         pointx.setLongitude(latLng.longitude);
         serRoutePoints.add(pointx);
-        MarkerOptions options = new MarkerOptions().position(latLng).icon(RecordFragment.bitmapDescriptorFromVector(this, R.drawable.black_dot_icon_resized));
+        MarkerOptions options = new MarkerOptions().position(latLng).icon(bitmapDescriptorUtil.bitmapDescriptorFromVector(this, R.drawable.black_dot_icon_resized));
         RecordFragment.map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
         markerx = RecordFragment.map.addMarker(options);
         serRouteMarker.add(markerx);
 
 
-    }
-
-    public static double DistanceCalculation(double lat1, double lon1, double lat2, double lon2) {
-        double Radius = Constants.EARTH_RADIUS;
-        double dLat = Math.toRadians(lat2 - lat1);
-        double dLon = Math.toRadians(lon2 - lon1);
-        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        double c = 2 * Math.asin(Math.sqrt(a));
-        return Radius * c;
     }
 
     @Override
